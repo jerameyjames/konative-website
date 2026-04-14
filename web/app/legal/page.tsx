@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function LegalPage() {
   return (
-    <main className="min-h-[50vh] bg-[#0a0f14] py-10 sm:py-14">
-      <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-white shadow-xl">
+    <main className="min-h-[50vh] bg-[var(--stitch-page)] py-10 sm:py-14">
+      <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-[color:var(--stitch-line)] bg-[var(--stitch-card)] shadow-xl shadow-stone-900/10">
         <div className="relative aspect-[21/9] w-full">
           <Image
             src={stitchImages.services.src}

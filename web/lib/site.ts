@@ -2,7 +2,7 @@ export const site = {
   name: "Konative",
   title: "Konative — Modular data center development readiness",
   description:
-    "Decision-grade diligence and development orchestration for investment groups and Indigenous Development Corporations moving modular data center projects forward.",
+    "MW-scale development readiness: orchestrated diligence, interconnection realism, and capital-grade pro forma for investment groups and Indigenous Development Corporations moving modular capacity forward.",
   ctaLabel: "Request a Project Readiness Review",
 } as const;
 

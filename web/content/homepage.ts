@@ -8,9 +8,9 @@ export const homepageContent = {
   hero: {
     eyebrow: "Modular data center development readiness",
     headline:
-      "De-risk modular data center development before delays cost you another 6–12 months.",
+      "Turn modular MW ambition into a capital-ready story before the next interconnection slip costs you another year.",
     subhead:
-      "Konative helps investment groups and Indigenous Development Corporations make real go/no-go decisions faster by coordinating the front-end diligence that usually fragments across site, power, cooling, supply chain, and pro forma work.",
+      "Konative compresses time-to-decision for buyers who think in megawatts, basis points, and IC memos — by owning the integrated diligence path across site, grid headroom, thermal reality, long-lead procurement, and the pro forma bridge that ties assumptions to evidence.",
     aside:
       "If your program is already in motion — land secured, capital engaged, interconnection in flight — the risk is not ‘whether modular works.’ The risk is whether your team can integrate assumptions fast enough to keep the schedule credible with lenders, vendors, and communities.",
     bullets: [

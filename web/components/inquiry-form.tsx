@@ -9,6 +9,9 @@ type FormState =
   | { status: "success" }
   | { status: "error"; message: string };
 
+const field =
+  "mt-1 w-full rounded-md border border-[color:var(--stitch-line)] bg-white px-3 py-2 text-sm text-[var(--stitch-ink)] shadow-sm outline-none placeholder:text-[var(--stitch-faint)] focus:border-[color:var(--stitch-accent-2)] focus:ring-2 focus:ring-[color:var(--stitch-accent-2)]/20";
+
 export function InquiryForm() {
   const [state, setState] = useState<FormState>({ status: "idle" });
 
@@ -67,7 +70,7 @@ export function InquiryForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-8 grid gap-4 sm:grid-cols-2 [&_option]:bg-[#0f1720] [&_option]:text-slate-100"
+      className="mt-8 grid gap-4 sm:grid-cols-2 [&_option]:bg-white [&_option]:text-[var(--stitch-ink)]"
       noValidate
     >
       <div className="hidden" aria-hidden="true">
@@ -76,8 +79,8 @@ export function InquiryForm() {
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="name" className="block text-sm font-medium text-slate-200">
-          Full name <span className="text-red-400">*</span>
+        <label htmlFor="name" className="block text-sm font-medium text-[var(--stitch-ink)]">
+          Full name <span className="text-red-600">*</span>
         </label>
         <input
           id="name"
@@ -85,13 +88,13 @@ export function InquiryForm() {
           type="text"
           required
           autoComplete="name"
-          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none placeholder:text-slate-500 focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
+          className={field}
         />
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="email" className="block text-sm font-medium text-slate-200">
-          Work email <span className="text-red-400">*</span>
+        <label htmlFor="email" className="block text-sm font-medium text-[var(--stitch-ink)]">
+          Work email <span className="text-red-600">*</span>
         </label>
         <input
           id="email"
@@ -99,20 +102,15 @@ export function InquiryForm() {
           type="email"
           required
           autoComplete="email"
-          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none placeholder:text-slate-500 focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
+          className={field}
         />
       </div>
 
       <div>
-        <label htmlFor="orgType" className="block text-sm font-medium text-slate-200">
+        <label htmlFor="orgType" className="block text-sm font-medium text-[var(--stitch-ink)]">
           Organization type
         </label>
-        <select
-          id="orgType"
-          name="orgType"
-          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
-          defaultValue=""
-        >
+        <select id="orgType" name="orgType" className={field} defaultValue="">
           <option value="" disabled>
             Select one
           </option>
@@ -125,28 +123,23 @@ export function InquiryForm() {
       </div>
 
       <div>
-        <label htmlFor="geography" className="block text-sm font-medium text-slate-200">
+        <label htmlFor="geography" className="block text-sm font-medium text-[var(--stitch-ink)]">
           Geography / site context
         </label>
         <input
           id="geography"
           name="geography"
           type="text"
-          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
+          className={field}
           placeholder="Province, region, or site description"
         />
       </div>
 
       <div>
-        <label htmlFor="projectStage" className="block text-sm font-medium text-slate-200">
+        <label htmlFor="projectStage" className="block text-sm font-medium text-[var(--stitch-ink)]">
           Project stage
         </label>
-        <select
-          id="projectStage"
-          name="projectStage"
-          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
-          defaultValue=""
-        >
+        <select id="projectStage" name="projectStage" className={field} defaultValue="">
           <option value="" disabled>
             Select one
           </option>
@@ -159,16 +152,11 @@ export function InquiryForm() {
       <div>
         <label
           htmlFor="timelineUrgency"
-          className="block text-sm font-medium text-slate-200"
+          className="block text-sm font-medium text-[var(--stitch-ink)]"
         >
           Timeline urgency
         </label>
-        <select
-          id="timelineUrgency"
-          name="timelineUrgency"
-          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
-          defaultValue=""
-        >
+        <select id="timelineUrgency" name="timelineUrgency" className={field} defaultValue="">
           <option value="" disabled>
             Select one
           </option>
@@ -179,22 +167,25 @@ export function InquiryForm() {
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="projectNote" className="block text-sm font-medium text-slate-200">
+        <label htmlFor="projectNote" className="block text-sm font-medium text-[var(--stitch-ink)]">
           Project note
         </label>
         <textarea
           id="projectNote"
           name="projectNote"
           rows={4}
-          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none placeholder:text-slate-500 focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
-          placeholder="What are you trying to decide in the next 60–90 days?"
+          className={field}
+          placeholder="MW target, interconnection stage, capital stack, or what you need to decide in 60–90 days"
         />
       </div>
 
       <div className="sm:col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs leading-relaxed text-slate-400">
+        <p className="text-xs leading-relaxed text-[var(--stitch-muted)]">
           By submitting, you agree we may contact you about your project. See{" "}
-          <a href="/privacy" className="font-medium text-[#00E5FF] underline underline-offset-2 hover:text-[#33ebff]">
+          <a
+            href="/privacy"
+            className="font-medium text-[color:var(--stitch-accent)] underline underline-offset-2 hover:text-[color:var(--stitch-accent-2)]"
+          >
             Privacy
           </a>
           .
@@ -202,20 +193,20 @@ export function InquiryForm() {
         <button
           type="submit"
           disabled={state.status === "submitting"}
-          className="inline-flex items-center justify-center rounded-md bg-[#00E5FF] px-5 py-2.5 text-sm font-semibold text-[#0a0f14] shadow-sm transition hover:bg-[#33ebff] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00E5FF]"
+          className="inline-flex items-center justify-center rounded-md bg-[var(--stitch-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--stitch-cta-text)] shadow-sm transition hover:bg-[#151d33] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--stitch-accent-2)]"
         >
           {state.status === "submitting" ? "Sending…" : site.ctaLabel}
         </button>
       </div>
 
       {state.status === "success" ? (
-        <p className="sm:col-span-2 rounded-md border border-emerald-500/40 bg-emerald-950/50 px-3 py-2 text-sm text-emerald-200">
+        <p className="sm:col-span-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
           Thank you. We will review fit and follow up shortly.
         </p>
       ) : null}
 
       {state.status === "error" ? (
-        <p className="sm:col-span-2 rounded-md border border-red-500/40 bg-red-950/40 px-3 py-2 text-sm text-red-200">
+        <p className="sm:col-span-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">
           {state.message}
         </p>
       ) : null}

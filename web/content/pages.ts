@@ -6,7 +6,7 @@ export const pageLeads = {
     eyebrow: "How Konative runs the front end",
     title: "A playbook built for compressed schedules",
     body:
-      "Most modular programs do not fail on ambition — they fail on sequencing. Interconnection queues slip, long-lead switchgear moves, and cooling assumptions change while capital is already watching the clock. This playbook is how Konative keeps diligence, procurement narrative, and governance cadence aligned so your team can say “go” or “no-go” with evidence instead of hope.",
+      "Most modular programs do not fail on ambition — they fail on sequencing. Interconnection queues slip, long-lead switchgear moves, and cooling assumptions change while capital is already watching the clock. This playbook is how Konative keeps diligence, procurement narrative, and governance cadence aligned so your team can defend MW, capex timing, and downside cases in IC — not recycle the same open risks every Monday.",
     pullQuote:
       "If the story changes every week, the project does not need another vendor — it needs a single owner of the readiness narrative.",
     image: stitchImages.playbook,
@@ -33,7 +33,7 @@ export const pageLeads = {
     eyebrow: "What we coordinate",
     title: "From site reality to board-ready framing",
     body:
-      "Konative is not a general contractor and not a single-point vendor for one subsystem. We orchestrate the cross-disciplinary inputs that determine whether a modular data center program is real: land constraints, grid headroom and upgrade path, thermal envelope and water posture, procurement critical path, and the pro forma bridge that ties assumptions to evidence. The output is not a stack of siloed PDFs — it is a single narrative your leadership can act on.",
+      "Konative is not a general contractor and not a single-point vendor for one subsystem. We orchestrate the cross-disciplinary inputs that determine whether a modular data center program is real: land constraints, grid headroom and upgrade path, thermal envelope and water posture, procurement critical path, and the pro forma bridge that ties assumptions to evidence — the same threads lenders and strategic partners stress-test first. The output is not a stack of siloed PDFs; it is one narrative where MW, dollars, and schedule line up.",
     pullQuote:
       "We translate ‘everyone agrees in the room’ into ‘everyone agrees in the memo’.",
     image: stitchImages.services,

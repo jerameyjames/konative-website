@@ -1,11 +1,27 @@
 @import "tailwindcss";
 
+/* Konative “Stitch” — warm institutional paper, ink, brass (capital + engineering) */
 :root {
-  --background: #0a0f14;
-  --foreground: #f1f5f9;
-  --surface: rgba(15, 23, 32, 0.92);
-  --muted: #94a3b8;
-  --accent: #00e5ff;
+  --background: #f3efe7;
+  --foreground: #2f3a4c;
+  --surface: rgba(255, 252, 247, 0.94);
+  --muted: #5c6678;
+  --accent: #a67c00;
+
+  --stitch-page: #f3efe7;
+  --stitch-card: #fffcf7;
+  --stitch-band: #e8dfd2;
+  --stitch-ink: #0b1020;
+  --stitch-body: #3d4d63;
+  --stitch-muted: #5c6b7d;
+  --stitch-faint: #7a8799;
+  --stitch-line: rgba(11, 16, 32, 0.11);
+  --stitch-accent: #8a6511;
+  --stitch-accent-2: #c9a227;
+  --stitch-cta: #0b1020;
+  --stitch-cta-text: #faf6ef;
+  --stitch-footer: #06090f;
+  --stitch-footer-muted: #9aa3b5;
 }
 
 @theme inline {
@@ -28,4 +44,23 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* Subtle architectural grid on main canvas */
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(11, 16, 32, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 16, 32, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
 }
