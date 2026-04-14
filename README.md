@@ -18,7 +18,7 @@ npm run dev
 ```
 
 - Production build: `npm run build` then `npm run start`
-- Vercel: set the project root directory to `web` (or deploy from that folder)
+- Vercel: first-time setup is **not** automatic from Git alone. Run **`./scripts/vercel-bootstrap.sh`** (see root **`CLAUDE.md`**). In the Vercel project, set **Root Directory** to **`web`**, then add **konative.com** and DNS as documented there.
 - Optional: set `INQUIRY_WEBHOOK_URL` to POST inquiry JSON to your automation (see `web/.env.example`)
 
 - [`docs/founder-os-konative.md`](docs/founder-os-konative.md) — operating model (vision → workstreams → rhythm)

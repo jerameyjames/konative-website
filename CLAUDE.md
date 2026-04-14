@@ -8,7 +8,8 @@ Agent context for the monorepo: app code lives in **`web/`** (Next.js). See `web
 - **Production URL:** https://konative.com
 - **Git remote:** https://github.com/jerameyjames/konative-website (`main`)
 - **Vercel project root:** set **Root Directory** to `web` in the Vercel project settings (this repo is not only the Next app at the filesystem root).
-- **Deploy workflow:** Auto-deploy on push to `main`; preview deployments on PRs (default Vercel Git integration).
+- **No Vercel project yet:** Nothing in Git creates the Vercel project automatically. Run **`./scripts/vercel-bootstrap.sh`** from the repo root (after `npm i -g vercel` and `vercel login`). That script builds `web/`, runs **`vercel link`** to create or attach a project, prints **`vercel git connect`** for the GitHub remote, and optionally **`./scripts/vercel-bootstrap.sh --deploy`** for a first production deploy. Until a project exists and Git is connected (or you deploy from CLI), **pushing to GitHub does not deploy**.
+- **Deploy workflow:** After the project exists and **Git is connected** with **Root Directory = `web`**, auto-deploy on push to `main`; preview deployments on PRs (default Vercel Git integration).
 - **Deploy status command:** `vercel ls --prod` (from `web/` after `vercel link`), or use the Vercel dashboard **Deployments** tab.
 - **Merge method:** Per repo preference (GitHub default or team convention).
 - **Project type:** Web app (marketing site + `/api/inquiry`).
