@@ -8,11 +8,9 @@ export const site = {
 
 export const navItems = [
   { href: "#hero", label: "Overview" },
-  { href: "#window", label: "Why now" },
-  { href: "#status-quo", label: "The gap" },
-  { href: "#what-we-do", label: "What we do" },
-  { href: "#who-we-serve", label: "Who we serve" },
+  { href: "#playbook", label: "Playbook" },
+  { href: "#problem", label: "Problem" },
+  { href: "#comparison", label: "Compare" },
   { href: "#engagement", label: "Engagement" },
-  { href: "#trust", label: "Trust" },
-  { href: "#contact", label: "Request review" },
+  { href: "#contact", label: "Request" },
 ] as const;

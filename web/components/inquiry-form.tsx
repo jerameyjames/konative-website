@@ -67,7 +67,7 @@ export function InquiryForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-8 grid gap-4 sm:grid-cols-2"
+      className="mt-8 grid gap-4 sm:grid-cols-2 [&_option]:bg-[#0f1720] [&_option]:text-slate-100"
       noValidate
     >
       <div className="hidden" aria-hidden="true">
@@ -76,8 +76,8 @@ export function InquiryForm() {
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="name" className="block text-sm font-medium text-slate-800">
-          Full name <span className="text-red-600">*</span>
+        <label htmlFor="name" className="block text-sm font-medium text-slate-200">
+          Full name <span className="text-red-400">*</span>
         </label>
         <input
           id="name"
@@ -85,13 +85,13 @@ export function InquiryForm() {
           type="text"
           required
           autoComplete="name"
-          className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-slate-900/10 placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
+          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none placeholder:text-slate-500 focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
         />
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="email" className="block text-sm font-medium text-slate-800">
-          Work email <span className="text-red-600">*</span>
+        <label htmlFor="email" className="block text-sm font-medium text-slate-200">
+          Work email <span className="text-red-400">*</span>
         </label>
         <input
           id="email"
@@ -99,18 +99,18 @@ export function InquiryForm() {
           type="email"
           required
           autoComplete="email"
-          className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-slate-900/10 placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
+          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none placeholder:text-slate-500 focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
         />
       </div>
 
       <div>
-        <label htmlFor="orgType" className="block text-sm font-medium text-slate-800">
+        <label htmlFor="orgType" className="block text-sm font-medium text-slate-200">
           Organization type
         </label>
         <select
           id="orgType"
           name="orgType"
-          className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
+          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
           defaultValue=""
         >
           <option value="" disabled>
@@ -125,26 +125,26 @@ export function InquiryForm() {
       </div>
 
       <div>
-        <label htmlFor="geography" className="block text-sm font-medium text-slate-800">
+        <label htmlFor="geography" className="block text-sm font-medium text-slate-200">
           Geography / site context
         </label>
         <input
           id="geography"
           name="geography"
           type="text"
-          className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
+          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
           placeholder="Province, region, or site description"
         />
       </div>
 
       <div>
-        <label htmlFor="projectStage" className="block text-sm font-medium text-slate-800">
+        <label htmlFor="projectStage" className="block text-sm font-medium text-slate-200">
           Project stage
         </label>
         <select
           id="projectStage"
           name="projectStage"
-          className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
+          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
           defaultValue=""
         >
           <option value="" disabled>
@@ -159,14 +159,14 @@ export function InquiryForm() {
       <div>
         <label
           htmlFor="timelineUrgency"
-          className="block text-sm font-medium text-slate-800"
+          className="block text-sm font-medium text-slate-200"
         >
           Timeline urgency
         </label>
         <select
           id="timelineUrgency"
           name="timelineUrgency"
-          className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
+          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
           defaultValue=""
         >
           <option value="" disabled>
@@ -179,22 +179,22 @@ export function InquiryForm() {
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="projectNote" className="block text-sm font-medium text-slate-800">
+        <label htmlFor="projectNote" className="block text-sm font-medium text-slate-200">
           Project note
         </label>
         <textarea
           id="projectNote"
           name="projectNote"
           rows={4}
-          className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
+          className="mt-1 w-full rounded-md border border-white/15 bg-[#0a0f14] px-3 py-2 text-sm text-white shadow-sm outline-none placeholder:text-slate-500 focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/25"
           placeholder="What are you trying to decide in the next 60–90 days?"
         />
       </div>
 
       <div className="sm:col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs leading-relaxed text-slate-600">
+        <p className="text-xs leading-relaxed text-slate-400">
           By submitting, you agree we may contact you about your project. See{" "}
-          <a href="/privacy" className="font-medium text-slate-800 underline underline-offset-2">
+          <a href="/privacy" className="font-medium text-[#00E5FF] underline underline-offset-2 hover:text-[#33ebff]">
             Privacy
           </a>
           .
@@ -202,20 +202,20 @@ export function InquiryForm() {
         <button
           type="submit"
           disabled={state.status === "submitting"}
-          className="inline-flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+          className="inline-flex items-center justify-center rounded-md bg-[#00E5FF] px-5 py-2.5 text-sm font-semibold text-[#0a0f14] shadow-sm transition hover:bg-[#33ebff] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00E5FF]"
         >
           {state.status === "submitting" ? "Sending…" : site.ctaLabel}
         </button>
       </div>
 
       {state.status === "success" ? (
-        <p className="sm:col-span-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+        <p className="sm:col-span-2 rounded-md border border-emerald-500/40 bg-emerald-950/50 px-3 py-2 text-sm text-emerald-200">
           Thank you. We will review fit and follow up shortly.
         </p>
       ) : null}
 
       {state.status === "error" ? (
-        <p className="sm:col-span-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">
+        <p className="sm:col-span-2 rounded-md border border-red-500/40 bg-red-950/40 px-3 py-2 text-sm text-red-200">
           {state.message}
         </p>
       ) : null}
