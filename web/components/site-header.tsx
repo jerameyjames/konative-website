@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { LogoPlaceholder } from "@/components/stitch/logo-placeholder";
+import { KonativeLogo } from "@/components/stitch/konative-logo";
 import { navItems, navMoreItems, site } from "@/lib/site";
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[color:var(--surface)] backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <LogoPlaceholder />
+        <KonativeLogo />
         <nav
           aria-label="Primary"
           className="ml-auto hidden min-w-0 flex-1 items-center justify-end gap-x-0.5 overflow-x-auto md:flex lg:gap-x-1"
