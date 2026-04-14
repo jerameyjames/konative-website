@@ -1,7 +1,10 @@
 # Konative — konative.com
 
-Source repository for the Konative marketing site: [https://konative.com](https://konative.com).
+| What | URL |
+|------|-----|
+| **Production** | [https://konative.com](https://konative.com) |
+| **Git repository** | [github.com/jerameyjames/konative-website](https://github.com/jerameyjames/konative-website) (`main`) |
 
-Related venture site: [tolowa-pacific-website](https://github.com/jerameyjames/tolowa-pacific-website) → [https://tolowapacific.com](https://tolowapacific.com).
+**Related venture site:** [Tolowa Pacific](https://github.com/jerameyjames/tolowa-pacific-website) → [tolowapacific.com](https://tolowapacific.com).
 
-Stack and deploy details belong in this repo as the site is implemented.
+Stack, content workflow, and deploy notes will live in this repository as the site is implemented.
