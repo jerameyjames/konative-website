@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageLeadBlock, SegmentsBlock } from "@/components/stitch/blocks";
+import { PageLeadBlock, QualificationBlock, SegmentsBlock } from "@/components/stitch/blocks";
 import { BottomCtaBand, StitchMain } from "@/components/stitch/ui";
 import { homepageContent as c } from "@/content/homepage";
 
@@ -13,6 +13,7 @@ export default function SegmentsPage() {
     <StitchMain>
       <PageLeadBlock slug="segments" />
       <SegmentsBlock />
+      <QualificationBlock />
       <BottomCtaBand headline={c.bottomCta.headline} sub={c.bottomCta.sub} />
     </StitchMain>
   );

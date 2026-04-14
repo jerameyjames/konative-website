@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ComparisonBlock, PageLeadBlock } from "@/components/stitch/blocks";
+import { ComparisonBlock, PageLeadBlock, StalledBlock } from "@/components/stitch/blocks";
 import { BottomCtaBand, StitchMain } from "@/components/stitch/ui";
 import { homepageContent as c } from "@/content/homepage";
 
@@ -13,6 +13,7 @@ export default function ComparePage() {
     <StitchMain>
       <PageLeadBlock slug="compare" />
       <ComparisonBlock />
+      <StalledBlock />
       <BottomCtaBand headline={c.bottomCta.headline} sub={c.bottomCta.sub} />
     </StitchMain>
   );

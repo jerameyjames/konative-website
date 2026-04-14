@@ -2,9 +2,11 @@
 
 ## Hub (canonical)
 
-[konative.com — Notion hub](https://www.notion.so/konative-com-34132e0a547481489537d232018bbbb0)
+**Primary (Notion source of truth):** [Konative.com — Project Hub](https://www.notion.so/34232e0a547481b39bc1e081765d6df6) — strategy, status, execution; `docs/` and `web/` mirror it for git and agents.
 
-Child pages include:
+**Legacy:** [konative.com — Founder OS HUB](https://www.notion.so/34132e0a547481489537d232018bbbb0) (superseded for site work; keep for historical links if needed).
+
+Child pages under the legacy hub (still useful) include:
 
 | Page | URL |
 |------|-----|

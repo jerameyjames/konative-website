@@ -5,6 +5,31 @@
 import { stitchImages } from "@/content/media";
 
 export const homepageContent = {
+  exploreSection: {
+    eyebrow: "Capability map",
+    title: "The same readiness spine, route by route",
+    sub:
+      "Each page is built like a brokerage offering memorandum: full-bleed infrastructure photography, tight copy, and a single thread from constraint to decision — so capital, community, and delivery teams read one story.",
+  },
+
+  marketWindow: {
+    eyebrow: "Why now",
+    title: "This market is moving — the build path is still too slow.",
+    body:
+      "Data center demand is real, capital is ready to deploy, and viable land exists. Traditional timelines cannot absorb today’s interconnection, long-lead equipment, and cooling realities. When those commitments slip, programs do not inch — they can lose another six to twelve months while assumptions silently diverge.",
+    bullets: [
+      "Capital and land can align quickly; execution clarity is the bottleneck",
+      "Power, cooling, and procurement windows punish delay more than imperfect information",
+      "Fragmented specialists rarely reconcile themselves before the board meeting",
+    ],
+    stats: [
+      { value: "6–12 mo", label: "Typical cost of a missed procurement or IC window" },
+      { value: "MW-scale", label: "Programs we frame for modular capacity and grid reality" },
+      { value: "One spine", label: "Site, power, thermal, supply chain, pro forma — integrated" },
+      { value: "8–10 wk", label: "Phase-one cadence from kickoff to executive readout" },
+    ],
+  },
+
   hero: {
     eyebrow: "Modular data center development readiness",
     headline:
@@ -252,6 +277,8 @@ export const homepageContent = {
   engagement: {
     eyebrow: "Phase one",
     title: "Development Readiness Engagement.",
+    timeline:
+      "Typical phase one runs eight to ten weeks from kickoff to executive readout — long enough to be decision-grade, short enough to respect a live capital window.",
     body:
       "A decision-grade engagement designed to answer whether the project should move forward now, what the major risks are, and what commitments must be secured next. The intent is not to ‘study forever’ — it is to produce an executive-grade readout your leadership can act on with clear next steps.",
     deliverables: [
@@ -272,11 +299,11 @@ export const homepageContent = {
     body:
       "Trust comes from a clear read of the market, a disciplined engagement structure, and evidence that the team understands site, power, cooling, supply chain, and timing — not from marketing theater. Konative is built for buyers who have been burned by pretty decks that collapsed the first time a lender asked a boring technical question.",
     bullets: [
-      "Founder and team credentials (add specifics as approved for public use)",
-      "Canada, rural, remote, and Indigenous economic development context",
-      "Anonymized sample deliverable patterns where confidentiality allows",
-      "Clear privacy, legal, and contact posture — see /privacy and /legal",
-      "Direct communication: if we cannot add value, we will not consume your timeline",
+      "Founder-led orchestration with specialist coordination scoped to phase-one decisions",
+      "Canada, rural, remote, and Indigenous economic development contexts — governance cadence respected",
+      "Artifacts structured for IC memos, lender diligence, and council-facing readouts",
+      "Transparent privacy and legal posture — see /privacy and /legal",
+      "Direct communication: if we are not the right partner, we say so early",
     ],
   },
 

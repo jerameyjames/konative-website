@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { NextStepsBlock, PageLeadBlock, TrustBlock } from "@/components/stitch/blocks";
+import {
+  NextStepsBlock,
+  PageLeadBlock,
+  QualificationBlock,
+  TrustBlock,
+} from "@/components/stitch/blocks";
 import { BottomCtaBand, StitchMain } from "@/components/stitch/ui";
 import { homepageContent as c } from "@/content/homepage";
 
@@ -14,6 +19,7 @@ export default function TrustPage() {
       <PageLeadBlock slug="trust" />
       <TrustBlock />
       <NextStepsBlock />
+      <QualificationBlock />
       <BottomCtaBand headline={c.bottomCta.headline} sub={c.bottomCta.sub} />
     </StitchMain>
   );
