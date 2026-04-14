@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { DM_Sans, Fraunces } from "next/font/google";
+import { Inter, Syne } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { site } from "@/lib/site";
 
-const display = Fraunces({
+const display = Syne({
   variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
 });
 
-const body = DM_Sans({
+const body = Inter({
   variable: "--font-body",
   subsets: ["latin"],
   display: "swap",

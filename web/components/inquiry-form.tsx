@@ -10,7 +10,7 @@ type FormState =
   | { status: "error"; message: string };
 
 const field =
-  "mt-1 w-full rounded-md border border-[color:var(--stitch-line)] bg-white px-3 py-2 text-sm text-[var(--stitch-ink)] shadow-sm outline-none placeholder:text-[var(--stitch-faint)] focus:border-[color:var(--stitch-accent-2)] focus:ring-2 focus:ring-[color:var(--stitch-accent-2)]/20";
+  "mt-1 w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-2.5 text-sm text-slate-100 shadow-inner shadow-black/20 outline-none backdrop-blur-sm placeholder:text-slate-500 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20";
 
 export function InquiryForm() {
   const [state, setState] = useState<FormState>({ status: "idle" });
@@ -70,7 +70,7 @@ export function InquiryForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-8 grid gap-4 sm:grid-cols-2 [&_option]:bg-white [&_option]:text-[var(--stitch-ink)]"
+      className="mt-8 grid gap-5 sm:grid-cols-2 [&_option]:bg-slate-950 [&_option]:text-slate-100"
       noValidate
     >
       <div className="hidden" aria-hidden="true">
@@ -79,8 +79,8 @@ export function InquiryForm() {
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="name" className="block text-sm font-medium text-[var(--stitch-ink)]">
-          Full name <span className="text-red-600">*</span>
+        <label htmlFor="name" className="block text-sm font-medium text-slate-200">
+          Full name <span className="text-red-400">*</span>
         </label>
         <input
           id="name"
@@ -93,8 +93,8 @@ export function InquiryForm() {
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="email" className="block text-sm font-medium text-[var(--stitch-ink)]">
-          Work email <span className="text-red-600">*</span>
+        <label htmlFor="email" className="block text-sm font-medium text-slate-200">
+          Work email <span className="text-red-400">*</span>
         </label>
         <input
           id="email"
@@ -107,7 +107,7 @@ export function InquiryForm() {
       </div>
 
       <div>
-        <label htmlFor="orgType" className="block text-sm font-medium text-[var(--stitch-ink)]">
+        <label htmlFor="orgType" className="block text-sm font-medium text-slate-200">
           Organization type
         </label>
         <select id="orgType" name="orgType" className={field} defaultValue="">
@@ -123,7 +123,7 @@ export function InquiryForm() {
       </div>
 
       <div>
-        <label htmlFor="geography" className="block text-sm font-medium text-[var(--stitch-ink)]">
+        <label htmlFor="geography" className="block text-sm font-medium text-slate-200">
           Geography / site context
         </label>
         <input
@@ -136,7 +136,7 @@ export function InquiryForm() {
       </div>
 
       <div>
-        <label htmlFor="projectStage" className="block text-sm font-medium text-[var(--stitch-ink)]">
+        <label htmlFor="projectStage" className="block text-sm font-medium text-slate-200">
           Project stage
         </label>
         <select id="projectStage" name="projectStage" className={field} defaultValue="">
@@ -152,7 +152,7 @@ export function InquiryForm() {
       <div>
         <label
           htmlFor="timelineUrgency"
-          className="block text-sm font-medium text-[var(--stitch-ink)]"
+          className="block text-sm font-medium text-slate-200"
         >
           Timeline urgency
         </label>
@@ -167,7 +167,7 @@ export function InquiryForm() {
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="projectNote" className="block text-sm font-medium text-[var(--stitch-ink)]">
+        <label htmlFor="projectNote" className="block text-sm font-medium text-slate-200">
           Project note
         </label>
         <textarea
@@ -179,12 +179,12 @@ export function InquiryForm() {
         />
       </div>
 
-      <div className="sm:col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs leading-relaxed text-[var(--stitch-muted)]">
+      <div className="sm:col-span-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-xs leading-relaxed text-slate-400">
           By submitting, you agree we may contact you about your project. See{" "}
           <a
             href="/privacy"
-            className="font-medium text-[color:var(--stitch-accent)] underline underline-offset-2 hover:text-[color:var(--stitch-accent-2)]"
+            className="font-medium text-cyan-300 underline underline-offset-2 hover:text-cyan-200"
           >
             Privacy
           </a>
@@ -193,20 +193,20 @@ export function InquiryForm() {
         <button
           type="submit"
           disabled={state.status === "submitting"}
-          className="inline-flex items-center justify-center rounded-md bg-[var(--stitch-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--stitch-cta-text)] shadow-sm transition hover:bg-[#151d33] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--stitch-accent-2)]"
+          className="inline-flex items-center justify-center rounded-lg bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 shadow-[0_0_28px_rgba(34,211,238,0.35)] transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
         >
           {state.status === "submitting" ? "Sending…" : site.ctaLabel}
         </button>
       </div>
 
       {state.status === "success" ? (
-        <p className="sm:col-span-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+        <p className="sm:col-span-2 rounded-xl border border-emerald-500/30 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-100">
           Thank you. We will review fit and follow up shortly.
         </p>
       ) : null}
 
       {state.status === "error" ? (
-        <p className="sm:col-span-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">
+        <p className="sm:col-span-2 rounded-xl border border-red-500/30 bg-red-950/40 px-4 py-3 text-sm text-red-100">
           {state.message}
         </p>
       ) : null}

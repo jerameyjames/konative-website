@@ -9,47 +9,42 @@ import {
   Eyebrow,
   PrimaryCta,
   SecondaryCta,
+  StitchBleed,
   StitchContainer,
 } from "@/components/stitch/ui";
 
-const b = "border-[color:var(--stitch-line)]";
+const glass =
+  "rounded-3xl border border-white/10 bg-slate-950/55 p-8 shadow-2xl shadow-black/50 backdrop-blur-2xl md:p-10";
 
 export function PageLeadBlock({ slug }: { slug: PageLeadSlug }) {
   const p = pageLeads[slug];
   return (
-    <section
-      className={`border-b ${b} bg-gradient-to-br from-[var(--stitch-card)] via-[var(--stitch-page)] to-[var(--stitch-band)]`}
-    >
-      <StitchContainer className="py-14 sm:py-20">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-          <div>
-            <Eyebrow>{p.eyebrow}</Eyebrow>
-            <h1 className="font-[family-name:var(--font-display)] mt-4 text-3xl font-semibold tracking-tight text-[var(--stitch-ink)] sm:text-4xl sm:leading-tight">
-              {p.title}
-            </h1>
-            <p className="mt-5 text-base leading-relaxed text-[var(--stitch-body)] sm:text-lg">
-              {p.body}
-            </p>
-            <blockquote
-              className={`mt-8 border-l-4 border-[color:var(--stitch-accent-2)] pl-5 text-sm italic leading-relaxed text-[var(--stitch-muted)] sm:text-base`}
-            >
-              {p.pullQuote}
-            </blockquote>
-          </div>
-          <div
-            className={`relative aspect-[4/3] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)] shadow-xl shadow-stone-900/10`}
-          >
-            <StitchImage
-              src={p.image.src}
-              alt={p.image.alt}
-              priority
-              sizes="(max-width: 1024px) 100vw, 45vw"
-            />
-            <div
-              className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[var(--stitch-card)]/40 via-transparent to-transparent"
-              aria-hidden
-            />
-          </div>
+    <section className="border-b border-white/10 pb-12 md:pb-20">
+      <StitchBleed>
+        <div className="relative min-h-[56vh] sm:min-h-[60vh] md:min-h-[min(76vh,920px)]">
+          <StitchImage
+            src={p.image.src}
+            alt={p.image.alt}
+            fill
+            priority
+            sizes="100vw"
+            className="scale-105 brightness-[0.72] saturate-[1.08]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/55 to-slate-950/25 md:bg-gradient-to-r md:from-slate-950 md:via-slate-950/65 md:to-slate-950/20" />
+        </div>
+      </StitchBleed>
+      <StitchContainer className="relative z-10 -mt-28 sm:-mt-36 md:-mt-40">
+        <div className={`max-w-3xl ${glass}`}>
+          <Eyebrow>{p.eyebrow}</Eyebrow>
+          <h1 className="font-[family-name:var(--font-display)] mt-5 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.08]">
+            {p.title}
+          </h1>
+          <p className="mt-6 text-base leading-relaxed text-slate-200 sm:text-lg">
+            {p.body}
+          </p>
+          <blockquote className="mt-8 border-l-4 border-cyan-400/70 pl-5 text-sm italic leading-relaxed text-slate-300 sm:text-base">
+            {p.pullQuote}
+          </blockquote>
         </div>
       </StitchContainer>
     </section>
@@ -58,57 +53,50 @@ export function PageLeadBlock({ slug }: { slug: PageLeadSlug }) {
 
 export function HeroBlock() {
   return (
-    <section
-      className={`border-b ${b} bg-gradient-to-b from-[var(--stitch-card)] via-[var(--stitch-page)] to-[var(--stitch-band)]`}
-    >
-      <StitchContainer className="py-16 sm:py-20 lg:py-28">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          <div>
+    <section className="border-b border-white/10 pb-14 md:pb-24">
+      <StitchBleed>
+        <div className="relative min-h-[58vh] sm:min-h-[62vh] md:min-h-[min(88vh,980px)]">
+          <StitchImage
+            src={stitchImages.hero.src}
+            alt={stitchImages.hero.alt}
+            fill
+            priority
+            sizes="100vw"
+            className="scale-105 brightness-[0.68] saturate-[1.12]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-cyan-950/20 md:bg-gradient-to-r md:from-slate-950 md:via-slate-950/55 md:to-cyan-950/25" />
+        </div>
+      </StitchBleed>
+      <StitchContainer className="relative z-10 -mt-32 sm:-mt-40 md:-mt-48">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
+          <div className={`lg:col-span-7 ${glass}`}>
             <Eyebrow>{c.hero.eyebrow}</Eyebrow>
-            <h1 className="font-[family-name:var(--font-display)] mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-[var(--stitch-ink)] sm:text-5xl sm:leading-tight">
+            <h1 className="font-[family-name:var(--font-display)] mt-5 text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl md:leading-[1.05]">
               {c.hero.headline}
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--stitch-body)]">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-200">
               {c.hero.subhead}
             </p>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[var(--stitch-muted)] sm:text-base">
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
               {c.hero.aside}
             </p>
-            <ul className="mt-8 grid gap-2 text-sm text-[var(--stitch-muted)] sm:grid-cols-2">
+            <ul className="mt-8 grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
               {c.hero.bullets.map((bullet) => (
-                <li key={bullet} className="flex gap-2">
+                <li key={bullet} className="flex gap-3">
                   <span
-                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--stitch-accent-2)]"
+                    className="mt-1.5 h-2 w-2 shrink-0 rounded-sm bg-gradient-to-br from-cyan-400 to-violet-400 shadow-[0_0_12px_rgba(34,211,238,0.5)]"
                     aria-hidden
                   />
                   <span>{bullet}</span>
                 </li>
               ))}
             </ul>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
               <PrimaryCta href="/contact">{site.ctaLabel}</PrimaryCta>
-              <p className="max-w-xl text-sm leading-relaxed text-[var(--stitch-faint)]">
+              <p className="max-w-xl text-sm leading-relaxed text-slate-400">
                 {c.hero.ctaSupporting}
               </p>
             </div>
-          </div>
-          <div
-            className={`relative aspect-[5/4] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)] shadow-2xl shadow-stone-900/12 lg:aspect-[4/5]`}
-          >
-            <StitchImage
-              src={stitchImages.hero.src}
-              alt={stitchImages.hero.alt}
-              priority
-              sizes="(max-width: 1024px) 100vw, 42vw"
-            />
-            <div
-              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--stitch-card)]/90 via-transparent to-[var(--stitch-ink)]/10"
-              aria-hidden
-            />
-            <p className="absolute bottom-4 left-4 right-4 text-xs leading-relaxed text-[var(--stitch-ink)]/85 sm:text-sm">
-              Imagery evokes MW-scale delivery and institutional capital — swap
-              in owned program photography when available.
-            </p>
           </div>
         </div>
       </StitchContainer>
@@ -118,50 +106,44 @@ export function HeroBlock() {
 
 export function ExploreGridBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-page)]`}>
-      <StitchContainer className="py-16 sm:py-20">
+    <section className="border-t border-white/10 bg-slate-950/40 py-16 md:py-24">
+      <StitchContainer>
         <Eyebrow>Explore</Eyebrow>
-        <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
-          Capital-grade readiness, page by page
+        <h2 className="font-[family-name:var(--font-display)] mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
+          Image-first routes through the readiness stack
         </h2>
-        <p className="mt-4 max-w-2xl text-[var(--stitch-muted)]">
-          Every route is written for buyers who measure decisions in megawatts,
-          quarters, and IC memos — copy in{" "}
-          <code className="text-[color:var(--stitch-accent)]">web/content/homepage.ts</code>{" "}
-          and <code className="text-[color:var(--stitch-accent)]">web/content/pages.ts</code>
-          , photography in{" "}
-          <code className="text-[color:var(--stitch-accent)]">web/content/media.ts</code>.
+        <p className="mt-5 max-w-3xl text-lg text-slate-400">
+          Each page pairs large architectural or capital-market plates with dense
+          technical narrative — built for teams who think in MW, quarters, and
+          IC decks.
         </p>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {c.exploreScreens.map((card) => (
             <Link
               key={card.href}
               href={card.href}
-              className={`group flex flex-col overflow-hidden rounded-xl border ${b} bg-[var(--stitch-card)] shadow-sm shadow-stone-900/5 transition hover:border-[color:var(--stitch-accent-2)]/45 hover:shadow-md`}
+              className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50 shadow-xl shadow-black/40 transition hover:border-cyan-400/35 hover:shadow-cyan-500/10"
             >
-              <div className={`relative aspect-[16/10] overflow-hidden border-b ${b}`}>
+              <div className="relative min-h-[220px] sm:min-h-[260px] lg:min-h-[300px]">
                 <StitchImage
                   src={card.image.src}
                   alt={`${card.title} — ${card.image.alt}`}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className="transition duration-500 group-hover:scale-[1.03]"
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  className="transition duration-700 group-hover:scale-[1.04] group-hover:brightness-110"
                 />
-                <div
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--stitch-ink)]/25 to-transparent"
-                  aria-hidden
-                />
-              </div>
-              <div className="flex flex-1 flex-col p-5">
-                <h3
-                  className={`font-[family-name:var(--font-display)] text-lg font-semibold text-[color:var(--stitch-accent)] group-hover:text-[color:var(--stitch-accent-2)]`}
-                >
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90" />
+                <span className="absolute bottom-4 left-4 font-[family-name:var(--font-display)] text-2xl font-semibold tracking-tight text-white drop-shadow-lg md:text-3xl">
                   {card.title}
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--stitch-muted)]">
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col p-6 md:p-7">
+                <p className="flex-1 text-sm leading-relaxed text-slate-400 md:text-base">
                   {card.blurb}
                 </p>
-                <span className="mt-4 inline-block text-xs font-medium text-[var(--stitch-faint)] group-hover:text-[var(--stitch-body)]">
-                  Open page →
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-cyan-300/90 group-hover:text-cyan-200">
+                  Enter
+                  <span aria-hidden>→</span>
                 </span>
               </div>
             </Link>
@@ -174,41 +156,38 @@ export function ExploreGridBlock() {
 
 export function PlaybookTimelineBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-page)]`}>
-      <StitchContainer className="py-16 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-          <div
-            className={`relative aspect-[16/11] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)] lg:order-2`}
-          >
-            <StitchImage
-              src={stitchImages.playbook.src}
-              alt={stitchImages.playbook.alt}
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
-          </div>
-          <div className="lg:order-1">
-            <Eyebrow>{c.playbookTimeline.eyebrow}</Eyebrow>
-            <h2 className="font-[family-name:var(--font-display)] mt-3 max-w-3xl text-2xl font-semibold tracking-tight text-[var(--stitch-ink)] sm:text-3xl">
-              {c.playbookTimeline.title}
-            </h2>
-            <p className="mt-4 max-w-3xl text-[var(--stitch-body)]">
-              {c.playbookTimeline.intro}
-            </p>
-            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[var(--stitch-muted)] sm:text-base">
-              {c.playbookTimeline.secondaryIntro}
-            </p>
-          </div>
+    <section className="border-t border-white/10">
+      <StitchBleed>
+        <div className="relative min-h-[48vh] md:min-h-[min(58vh,640px)]">
+          <StitchImage
+            src={stitchImages.playbook.src}
+            alt={stitchImages.playbook.alt}
+            fill
+            sizes="100vw"
+            className="brightness-[0.7]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent" />
         </div>
-        <ol
-          className={`mt-12 space-y-6 border-l border-[color:var(--stitch-accent-2)]/50 pl-6 lg:mt-14`}
-        >
+      </StitchBleed>
+      <StitchContainer className="py-16 md:py-24">
+        <div className="max-w-3xl">
+          <Eyebrow>{c.playbookTimeline.eyebrow}</Eyebrow>
+          <h2 className="font-[family-name:var(--font-display)] mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
+            {c.playbookTimeline.title}
+          </h2>
+          <p className="mt-6 text-lg text-slate-300">{c.playbookTimeline.intro}</p>
+          <p className="mt-5 text-base leading-relaxed text-slate-400">
+            {c.playbookTimeline.secondaryIntro}
+          </p>
+        </div>
+        <ol className="mt-14 space-y-8 border-l border-cyan-400/40 pl-8 md:mt-20">
           {c.playbookTimeline.phases.map((phase) => (
             <li key={phase.phase} className="relative">
-              <span
-                className="absolute -left-[29px] top-1.5 h-3 w-3 rounded-full bg-[color:var(--stitch-accent-2)] ring-4 ring-[var(--stitch-page)]"
-              />
-              <p className="font-semibold text-[var(--stitch-ink)]">{phase.phase}</p>
-              <p className="mt-1 text-[var(--stitch-muted)]">{phase.detail}</p>
+              <span className="absolute -left-[39px] top-1.5 h-3.5 w-3.5 rounded-sm bg-gradient-to-br from-cyan-400 to-violet-500 shadow-[0_0_16px_rgba(34,211,238,0.45)] ring-4 ring-slate-950" />
+              <p className="font-[family-name:var(--font-display)] text-lg font-semibold text-white">
+                {phase.phase}
+              </p>
+              <p className="mt-2 max-w-3xl text-slate-400">{phase.detail}</p>
             </li>
           ))}
         </ol>
@@ -219,32 +198,33 @@ export function PlaybookTimelineBlock() {
 
 export function QualificationBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-band)]`}>
-      <StitchContainer className="py-14">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+    <section className="border-t border-white/10 bg-slate-950/35 py-16 md:py-24">
+      <StitchContainer>
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <Eyebrow>{c.qualificationCta.eyebrow}</Eyebrow>
-            <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
+            <h2 className="font-[family-name:var(--font-display)] mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
               {c.qualificationCta.title}
             </h2>
-            <p className="mt-4 max-w-3xl text-[var(--stitch-body)]">{c.qualificationCta.body}</p>
-            <ul className="mt-6 list-disc space-y-2 pl-5 text-[var(--stitch-muted)]">
+            <p className="mt-6 max-w-xl text-lg text-slate-300">{c.qualificationCta.body}</p>
+            <ul className="mt-8 list-disc space-y-3 pl-6 text-slate-400">
               {c.qualificationCta.bullets.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
-            <div className="mt-8">
+            <div className="mt-10">
               <SecondaryCta href="/contact">{site.ctaLabel}</SecondaryCta>
             </div>
           </div>
-          <div
-            className={`relative aspect-[16/10] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)] shadow-lg shadow-stone-900/8`}
-          >
+          <div className="relative min-h-[min(52vh,560px)] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50 lg:min-h-[min(64vh,720px)]">
             <StitchImage
               src={stitchImages.contact.src}
               alt={stitchImages.contact.alt}
-              sizes="(max-width: 1024px) 100vw, 38vw"
+              fill
+              sizes="(max-width: 1024px) 100vw, 45vw"
+              className="brightness-[0.75]"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
           </div>
         </div>
       </StitchContainer>
@@ -254,37 +234,34 @@ export function QualificationBlock() {
 
 export function SegmentsBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-page)]`}>
-      <StitchContainer className="py-16 sm:py-20">
+    <section className="border-t border-white/10 py-16 md:py-24">
+      <StitchContainer>
         <Eyebrow>{c.customerSegments.eyebrow}</Eyebrow>
-        <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
+        <h2 className="font-[family-name:var(--font-display)] mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
           {c.customerSegments.title}
         </h2>
-        <div className="mt-10 grid gap-8 lg:grid-cols-3">
+        <div className="mt-14 grid gap-8 lg:grid-cols-3">
           {c.customerSegments.segments.map((s) => (
             <article
               key={s.title}
-              className={`flex flex-col overflow-hidden rounded-xl border ${b} bg-[var(--stitch-card)] shadow-lg shadow-stone-900/8`}
+              className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950/40 shadow-xl shadow-black/40"
             >
-              <div className={`relative aspect-[16/10] border-b ${b}`}>
+              <div className="relative min-h-[min(38vh,420px)] sm:min-h-[320px]">
                 <StitchImage
                   src={s.image.src}
                   alt={s.image.alt}
+                  fill
                   sizes="(max-width: 1024px) 100vw, 33vw"
+                  className="brightness-[0.78]"
                 />
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <h3
-                  className={`font-[family-name:var(--font-display)] text-lg font-semibold text-[color:var(--stitch-accent)]`}
-                >
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+                <h3 className="absolute bottom-5 left-5 right-5 font-[family-name:var(--font-display)] text-2xl font-semibold text-white drop-shadow-md">
                   {s.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[var(--stitch-body)]">
-                  {s.value}
-                </p>
-                <p className="mt-4 text-sm leading-relaxed text-[var(--stitch-muted)]">
-                  {s.detail}
-                </p>
+              </div>
+              <div className="flex flex-1 flex-col p-7">
+                <p className="text-base leading-relaxed text-slate-300">{s.value}</p>
+                <p className="mt-5 text-sm leading-relaxed text-slate-500">{s.detail}</p>
               </div>
             </article>
           ))}
@@ -296,33 +273,36 @@ export function SegmentsBlock() {
 
 export function ProblemBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-page)]`}>
-      <StitchContainer className="py-16 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-          <div>
+    <section className="border-t border-white/10 py-16 md:py-24">
+      <StitchContainer>
+        <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-14">
+          <div className="lg:col-span-5">
             <Eyebrow>{c.problemDeepDive.eyebrow}</Eyebrow>
-            <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
+            <h2 className="font-[family-name:var(--font-display)] mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
               {c.problemDeepDive.title}
             </h2>
-            <div className="mt-6 space-y-4 text-[var(--stitch-body)]">
+            <div className="mt-8 space-y-5 text-lg text-slate-300">
               {c.problemDeepDive.paragraphs.map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
             </div>
-            <ul className="mt-8 list-disc space-y-2 pl-5 text-[var(--stitch-muted)]">
+            <ul className="mt-10 list-disc space-y-3 pl-6 text-slate-400">
               {c.problemDeepDive.bullets.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
           </div>
-          <div
-            className={`relative aspect-[4/5] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)] lg:sticky lg:top-8`}
-          >
-            <StitchImage
-              src={stitchImages.problem.src}
-              alt={stitchImages.problem.alt}
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
+          <div className="relative min-h-[min(50vh,520px)] lg:sticky lg:top-24 lg:col-span-7 lg:min-h-[min(72vh,780px)]">
+            <div className="relative h-full min-h-[inherit] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+              <StitchImage
+                src={stitchImages.problem.src}
+                alt={stitchImages.problem.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 58vw"
+                className="brightness-[0.72]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-slate-950/40" />
+            </div>
           </div>
         </div>
       </StitchContainer>
@@ -332,22 +312,22 @@ export function ProblemBlock() {
 
 export function StalledBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-band)]`}>
-      <StitchContainer className="py-16 sm:py-20">
+    <section className="border-t border-white/10 bg-slate-950/45 py-16 md:py-24">
+      <StitchContainer>
         <Eyebrow>{c.stalledToDeployed.eyebrow}</Eyebrow>
-        <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
+        <h2 className="font-[family-name:var(--font-display)] mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
           {c.stalledToDeployed.title}
         </h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
           {c.stalledToDeployed.steps.map((s) => (
             <div
               key={s.label}
-              className={`rounded-lg border ${b} bg-[var(--stitch-card)] p-5 shadow-sm`}
+              className="rounded-2xl border border-white/10 bg-slate-950/60 p-7 backdrop-blur-md"
             >
-              <p className="text-xs font-bold uppercase tracking-wider text-[color:var(--stitch-accent)]">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">
                 {s.label}
               </p>
-              <p className="mt-3 text-sm text-[var(--stitch-muted)]">{s.copy}</p>
+              <p className="mt-4 text-sm leading-relaxed text-slate-400">{s.copy}</p>
             </div>
           ))}
         </div>
@@ -358,68 +338,69 @@ export function StalledBlock() {
 
 export function ConnectiveBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-page)]`}>
-      <StitchContainer className="py-16 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <div>
-            <Eyebrow>{c.connectiveTissue.eyebrow}</Eyebrow>
-            <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
-              {c.connectiveTissue.title}
-            </h2>
-            <p
-              className={`mt-8 max-w-3xl border-l-4 border-[color:var(--stitch-accent-2)] pl-6 text-lg leading-relaxed text-[var(--stitch-ink)]`}
-            >
-              {c.connectiveTissue.statement}
-            </p>
-            <p className="mt-6 max-w-3xl text-sm leading-relaxed text-[var(--stitch-muted)] sm:text-base">
-              {c.connectiveTissue.supporting}
-            </p>
-          </div>
-          <div
-            className={`relative aspect-[16/11] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)]`}
-          >
-            <StitchImage
-              src={stitchImages.explorePower.src}
-              alt={stitchImages.explorePower.alt}
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
-          </div>
+    <section className="border-t border-white/10 py-16 md:py-24">
+      <StitchBleed>
+        <div className="relative min-h-[min(50vh,560px)] md:min-h-[min(56vh,620px)]">
+          <StitchImage
+            src={stitchImages.explorePower.src}
+            alt={stitchImages.explorePower.alt}
+            fill
+            sizes="100vw"
+            className="brightness-[0.65]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/30" />
+          <StitchContainer className="relative z-10 flex min-h-[min(50vh,560px)] items-center py-20 md:min-h-[min(56vh,620px)] md:py-28">
+            <div className="max-w-2xl">
+              <Eyebrow>{c.connectiveTissue.eyebrow}</Eyebrow>
+              <h2 className="font-[family-name:var(--font-display)] mt-5 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
+                {c.connectiveTissue.title}
+              </h2>
+              <p className="mt-8 border-l-4 border-cyan-400 pl-6 text-xl leading-relaxed text-slate-100">
+                {c.connectiveTissue.statement}
+              </p>
+              <p className="mt-8 text-base leading-relaxed text-slate-400">
+                {c.connectiveTissue.supporting}
+              </p>
+            </div>
+          </StitchContainer>
         </div>
-      </StitchContainer>
+      </StitchBleed>
     </section>
   );
 }
 
 export function WhatWeDoBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-page)]`}>
-      <StitchContainer className="py-16 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-          <div>
+    <section className="border-t border-white/10 py-16 md:py-24">
+      <StitchContainer>
+        <div className="grid items-start gap-14 lg:grid-cols-12">
+          <div className="lg:col-span-6">
             <Eyebrow>{c.whatKonativeDoes.eyebrow}</Eyebrow>
-            <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
+            <h2 className="font-[family-name:var(--font-display)] mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
               {c.whatKonativeDoes.title}
             </h2>
-            <p className="mt-6 max-w-3xl text-[var(--stitch-body)]">{c.whatKonativeDoes.body}</p>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <p className="mt-8 text-lg text-slate-300">{c.whatKonativeDoes.body}</p>
+            <div className="mt-10 grid gap-4 sm:grid-cols-2">
               {c.whatKonativeDoes.pillars.map((pillar) => (
                 <div
                   key={pillar}
-                  className={`rounded-lg border ${b} bg-[var(--stitch-card)] px-4 py-3 text-sm font-medium text-[var(--stitch-ink)] shadow-sm`}
+                  className="rounded-xl border border-white/10 bg-slate-950/50 px-4 py-4 text-sm font-medium text-slate-200 backdrop-blur-sm"
                 >
                   {pillar}
                 </div>
               ))}
             </div>
           </div>
-          <div
-            className={`relative aspect-[4/5] max-h-[520px] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)] lg:justify-self-end`}
-          >
-            <StitchImage
-              src={stitchImages.services.src}
-              alt={stitchImages.services.alt}
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
+          <div className="relative min-h-[min(48vh,520px)] lg:col-span-6 lg:min-h-[min(70vh,760px)]">
+            <div className="relative h-full min-h-[inherit] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+              <StitchImage
+                src={stitchImages.services.src}
+                alt={stitchImages.services.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="brightness-[0.7]"
+              />
+            </div>
           </div>
         </div>
       </StitchContainer>
@@ -429,43 +410,43 @@ export function WhatWeDoBlock() {
 
 export function ComparisonBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-page)]`}>
-      <StitchContainer className="py-16 sm:py-20">
+    <section className="border-t border-white/10 py-16 md:py-24">
+      <StitchContainer>
         <Eyebrow>{c.comparison.eyebrow}</Eyebrow>
-        <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
+        <h2 className="font-[family-name:var(--font-display)] mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
           {c.comparison.title}
         </h2>
-        <div className="mt-8 grid gap-8 lg:grid-cols-3 lg:items-start">
-          <div
-            className={`relative aspect-[16/10] overflow-hidden rounded-xl border ${b} bg-[var(--stitch-card)] lg:col-span-1`}
-          >
-            <StitchImage
-              src={stitchImages.compare.src}
-              alt={stitchImages.compare.alt}
-              sizes="(max-width: 1024px) 100vw, 30vw"
-            />
+        <div className="mt-12 grid items-start gap-10 lg:grid-cols-12">
+          <div className="relative min-h-[min(44vh,480px)] lg:col-span-5 lg:min-h-[min(64vh,700px)]">
+            <div className="relative h-full min-h-[inherit] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+              <StitchImage
+                src={stitchImages.compare.src}
+                alt={stitchImages.compare.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 42vw"
+                className="brightness-[0.72]"
+              />
+            </div>
           </div>
-          <div className={`overflow-x-auto rounded-xl border ${b} bg-[var(--stitch-card)] lg:col-span-2`}>
+          <div className="overflow-x-auto rounded-2xl border border-white/10 bg-slate-950/50 shadow-xl lg:col-span-7">
             <table className="w-full min-w-[600px] text-left text-sm">
               <thead>
-                <tr className={`border-b ${b} bg-[var(--stitch-ink)]`}>
-                  <th className="px-4 py-3 font-semibold text-[var(--stitch-footer-muted)]">
-                    {" "}
-                  </th>
-                  <th className="px-4 py-3 font-semibold text-[color:var(--stitch-accent-2)]">
+                <tr className="border-b border-white/10 bg-black/60">
+                  <th className="px-5 py-4 font-semibold text-slate-500"> </th>
+                  <th className="px-5 py-4 font-semibold text-cyan-300">
                     {c.comparison.columns.konative}
                   </th>
-                  <th className="px-4 py-3 font-semibold text-[var(--stitch-footer-muted)]">
+                  <th className="px-5 py-4 font-semibold text-slate-500">
                     {c.comparison.columns.others}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {c.comparison.rows.map((row) => (
-                  <tr key={row.feature} className={`border-b border-[color:var(--stitch-line)] last:border-0`}>
-                    <td className="px-4 py-3 font-medium text-[var(--stitch-ink)]">{row.feature}</td>
-                    <td className="px-4 py-3 text-[var(--stitch-body)]">{row.konative}</td>
-                    <td className="px-4 py-3 text-[var(--stitch-muted)]">{row.others}</td>
+                  <tr key={row.feature} className="border-b border-white/5 last:border-0">
+                    <td className="px-5 py-4 font-medium text-white">{row.feature}</td>
+                    <td className="px-5 py-4 text-slate-300">{row.konative}</td>
+                    <td className="px-5 py-4 text-slate-500">{row.others}</td>
                   </tr>
                 ))}
               </tbody>
@@ -479,35 +460,35 @@ export function ComparisonBlock() {
 
 export function EngagementBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-page)]`}>
-      <StitchContainer className="py-16 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-          <div>
+    <section className="border-t border-white/10 py-16 md:py-24">
+      <StitchContainer>
+        <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-6">
             <Eyebrow>{c.engagement.eyebrow}</Eyebrow>
-            <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
+            <h2 className="font-[family-name:var(--font-display)] mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
               {c.engagement.title}
             </h2>
-            <p className="mt-6 max-w-3xl text-[var(--stitch-body)]">{c.engagement.body}</p>
-            <ul className="mt-6 list-disc space-y-2 pl-5 text-[var(--stitch-muted)]">
+            <p className="mt-8 text-lg text-slate-300">{c.engagement.body}</p>
+            <ul className="mt-8 list-disc space-y-3 pl-6 text-slate-400">
               {c.engagement.deliverables.map((d) => (
                 <li key={d}>{d}</li>
               ))}
             </ul>
-            <p className="mt-6 font-medium text-[color:var(--stitch-accent)]">
-              {c.engagement.pricingNote}
-            </p>
-            <div className="mt-6">
+            <p className="mt-8 font-semibold text-cyan-300">{c.engagement.pricingNote}</p>
+            <div className="mt-10">
               <PrimaryCta href="/contact">{site.ctaLabel}</PrimaryCta>
             </div>
           </div>
-          <div
-            className={`relative aspect-[16/12] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)]`}
-          >
-            <StitchImage
-              src={stitchImages.engagement.src}
-              alt={stitchImages.engagement.alt}
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
+          <div className="relative min-h-[min(50vh,540px)] lg:col-span-6 lg:min-h-[min(72vh,800px)]">
+            <div className="relative h-full min-h-[inherit] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+              <StitchImage
+                src={stitchImages.engagement.src}
+                alt={stitchImages.engagement.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="brightness-[0.68]"
+              />
+            </div>
           </div>
         </div>
       </StitchContainer>
@@ -517,29 +498,30 @@ export function EngagementBlock() {
 
 export function TrustBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-band)]`}>
-      <StitchContainer className="py-16 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-          <div>
+    <section className="border-t border-white/10 bg-slate-950/40 py-16 md:py-24">
+      <StitchContainer>
+        <div className="grid items-start gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-6">
             <Eyebrow>{c.trust.eyebrow}</Eyebrow>
-            <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
+            <h2 className="font-[family-name:var(--font-display)] mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
               {c.trust.title}
             </h2>
-            <p className="mt-6 max-w-3xl text-[var(--stitch-body)]">{c.trust.body}</p>
-            <ul className="mt-6 list-disc space-y-2 pl-5 text-[var(--stitch-muted)]">
+            <p className="mt-8 text-lg text-slate-300">{c.trust.body}</p>
+            <ul className="mt-8 list-disc space-y-3 pl-6 text-slate-400">
               {c.trust.bullets.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
           </div>
-          <div
-            className={`relative aspect-[16/11] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)]`}
-          >
-            <StitchImage
-              src={stitchImages.trust.src}
-              alt={stitchImages.trust.alt}
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
+          <div className="relative min-h-[min(48vh,500px)] lg:col-span-6 lg:min-h-[min(70vh,760px)]">
+            <div className="relative h-full min-h-[inherit] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+              <StitchImage
+                src={stitchImages.trust.src}
+                alt={stitchImages.trust.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
           </div>
         </div>
       </StitchContainer>
@@ -549,56 +531,57 @@ export function TrustBlock() {
 
 export function NextStepsBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-page)]`}>
-      <StitchContainer className="py-16 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <div>
-            <Eyebrow>{c.nextSteps.eyebrow}</Eyebrow>
-            <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
-              {c.nextSteps.title}
-            </h2>
-            <p className="mt-6 max-w-3xl text-[var(--stitch-body)]">{c.nextSteps.body}</p>
-          </div>
-          <div
-            className={`relative aspect-[16/10] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)]`}
-          >
-            <StitchImage
-              src={stitchImages.exploreCooling.src}
-              alt={stitchImages.exploreCooling.alt}
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
-          </div>
+    <section className="border-t border-white/10 py-16 md:py-24">
+      <StitchBleed>
+        <div className="relative min-h-[min(48vh,520px)] md:min-h-[min(54vh,600px)]">
+          <StitchImage
+            src={stitchImages.exploreCooling.src}
+            alt={stitchImages.exploreCooling.alt}
+            fill
+            sizes="100vw"
+            className="brightness-[0.62]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/25" />
+          <StitchContainer className="relative z-10 flex min-h-[inherit] flex-col justify-end py-16 md:py-24">
+            <div className={`max-w-2xl ${glass}`}>
+              <Eyebrow>{c.nextSteps.eyebrow}</Eyebrow>
+              <h2 className="font-[family-name:var(--font-display)] mt-5 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                {c.nextSteps.title}
+              </h2>
+              <p className="mt-6 text-lg text-slate-300">{c.nextSteps.body}</p>
+            </div>
+          </StitchContainer>
         </div>
-      </StitchContainer>
+      </StitchBleed>
     </section>
   );
 }
 
 export function ContactFormBlock() {
   return (
-    <section className={`border-t ${b} bg-[var(--stitch-band)]`}>
-      <StitchContainer className="py-16 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-          <div>
+    <section className="border-t border-white/10 bg-slate-950/35 py-16 md:py-24">
+      <StitchContainer>
+        <div className="grid items-start gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-5">
             <Eyebrow>{c.contact.eyebrow}</Eyebrow>
-            <h2 className="font-[family-name:var(--font-display)] mt-3 text-2xl font-semibold text-[var(--stitch-ink)] sm:text-3xl">
+            <h2 className="font-[family-name:var(--font-display)] mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
               {c.contact.headline}
             </h2>
-            <p className="mt-6 max-w-2xl text-[var(--stitch-body)]">{c.contact.supporting}</p>
+            <p className="mt-8 text-lg text-slate-300">{c.contact.supporting}</p>
           </div>
-          <div
-            className={`relative hidden aspect-[16/12] overflow-hidden rounded-2xl border ${b} bg-[var(--stitch-card)] lg:block`}
-          >
-            <StitchImage
-              src={stitchImages.hero.src}
-              alt={stitchImages.hero.alt}
-              sizes="40vw"
-            />
+          <div className="relative hidden min-h-[min(52vh,560px)] lg:col-span-7 lg:block">
+            <div className="relative h-full min-h-[inherit] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+              <StitchImage
+                src={stitchImages.hero.src}
+                alt={stitchImages.hero.alt}
+                fill
+                sizes="50vw"
+                className="brightness-[0.7]"
+              />
+            </div>
           </div>
         </div>
-        <div
-          className={`mt-10 rounded-xl border ${b} bg-[var(--stitch-card)] p-6 shadow-sm sm:p-8 lg:mt-12`}
-        >
+        <div className="mt-12 rounded-2xl border border-white/10 bg-slate-950/50 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-10 md:mt-16">
           <InquiryForm />
         </div>
       </StitchContainer>

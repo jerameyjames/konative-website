@@ -1,27 +1,31 @@
 @import "tailwindcss";
 
-/* Konative “Stitch” — warm institutional paper, ink, brass (capital + engineering) */
+/* Stitch — image-first, AI / hyperscale DC edge (dark canvas, cyan–violet energy) */
 :root {
-  --background: #f3efe7;
-  --foreground: #2f3a4c;
-  --surface: rgba(255, 252, 247, 0.94);
-  --muted: #5c6678;
-  --accent: #a67c00;
+  --background: #030712;
+  --foreground: #e2e8f0;
+  --surface: rgba(15, 23, 42, 0.72);
+  --muted: #94a3b8;
+  --accent: #22d3ee;
 
-  --stitch-page: #f3efe7;
-  --stitch-card: #fffcf7;
-  --stitch-band: #e8dfd2;
-  --stitch-ink: #0b1020;
-  --stitch-body: #3d4d63;
-  --stitch-muted: #5c6b7d;
-  --stitch-faint: #7a8799;
-  --stitch-line: rgba(11, 16, 32, 0.11);
-  --stitch-accent: #8a6511;
-  --stitch-accent-2: #c9a227;
-  --stitch-cta: #0b1020;
-  --stitch-cta-text: #faf6ef;
-  --stitch-footer: #06090f;
-  --stitch-footer-muted: #9aa3b5;
+  --stitch-page: #030712;
+  --stitch-elevated: #0f172a;
+  --stitch-card: rgba(15, 23, 42, 0.5);
+  --stitch-glass: rgba(2, 6, 23, 0.55);
+  --stitch-glass-strong: rgba(2, 6, 23, 0.78);
+  --stitch-ink: #f8fafc;
+  --stitch-body: #cbd5e1;
+  --stitch-muted: #94a3b8;
+  --stitch-faint: #64748b;
+  --stitch-line: rgba(148, 163, 184, 0.14);
+  --stitch-accent: #22d3ee;
+  --stitch-accent-2: #5eead4;
+  --stitch-violet: #a78bfa;
+  --stitch-cta: #22d3ee;
+  --stitch-cta-text: #020617;
+  --stitch-footer: #020617;
+  --stitch-footer-muted: #94a3b8;
+  --stitch-glow: rgba(34, 211, 238, 0.12);
 }
 
 @theme inline {
@@ -46,18 +50,17 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
-/* Subtle architectural grid on main canvas */
 body::before {
   content: "";
   pointer-events: none;
   position: fixed;
   inset: 0;
   z-index: 0;
-  opacity: 0.35;
+  opacity: 0.4;
   background-image:
-    linear-gradient(rgba(11, 16, 32, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(11, 16, 32, 0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
+    linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(167, 139, 250, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
 body > * {

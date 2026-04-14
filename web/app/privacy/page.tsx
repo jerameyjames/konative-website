@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-[50vh] bg-[var(--stitch-page)] py-10 sm:py-14">
-      <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-[color:var(--stitch-line)] bg-[var(--stitch-card)] shadow-xl shadow-stone-900/10">
+    <main className="min-h-[50vh] bg-slate-950 py-10 sm:py-14">
+      <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-slate-950/70 shadow-2xl shadow-black/50 backdrop-blur-xl">
         <div className="relative aspect-[21/9] w-full">
           <Image
             src={stitchImages.trust.src}
@@ -22,25 +22,25 @@ export default function PrivacyPage() {
             sizes="100vw"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/55 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-8">
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-600">
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
               Privacy
             </p>
-            <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+            <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
               Privacy policy
             </h1>
           </div>
         </div>
         <div className="px-4 py-10 sm:px-8 sm:py-14 lg:px-10 lg:py-16">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-slate-400">
             Last updated: April 13, 2026. This page is written as a realistic B2B
             infrastructure placeholder — have counsel review before publishing
             broadly or using it as a compliance artifact.
           </p>
-          <div className="mt-10 max-w-none space-y-8 text-slate-700">
+          <div className="mt-10 max-w-none space-y-8 text-slate-300">
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">Who we are</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Who we are</h2>
               <p>
                 Konative (“we”, “us”) operates konative.com to describe modular
                 data center development readiness services and to receive project
@@ -50,7 +50,7 @@ export default function PrivacyPage() {
               </p>
             </section>
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-slate-100">
                 What we collect
               </h2>
               <p>
@@ -63,7 +63,7 @@ export default function PrivacyPage() {
               </p>
             </section>
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-slate-100">
                 How we use information
               </h2>
               <p>We use inquiry information to:</p>
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
               </ul>
             </section>
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-slate-100">
                 Sensitive or Indigenous-nation context
               </h2>
               <p>
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
               </p>
             </section>
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">Legal basis</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Legal basis</h2>
               <p>
                 Depending on your jurisdiction, processing may be based on
                 legitimate interests (responding to business inquiries),
@@ -97,7 +97,7 @@ export default function PrivacyPage() {
               </p>
             </section>
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">Retention</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Retention</h2>
               <p>
                 We retain inquiry records for as long as needed to operate the
                 business, defend claims, and meet legal obligations. Engineering
@@ -107,7 +107,7 @@ export default function PrivacyPage() {
               </p>
             </section>
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">Sharing</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Sharing</h2>
               <p>
                 We do not sell your personal information. We may share information
                 with subprocessors who help us operate the website, email, CRM, or
@@ -117,7 +117,7 @@ export default function PrivacyPage() {
               </p>
             </section>
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">Security</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Security</h2>
               <p>
                 We use reasonable administrative and technical measures to protect
                 information submitted through this site. No method of transmission
@@ -126,7 +126,7 @@ export default function PrivacyPage() {
               </p>
             </section>
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">Your choices</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Your choices</h2>
               <p>
                 You may request access, correction, or deletion where applicable
                 law provides those rights. We will verify requests to reduce fraud
@@ -136,14 +136,14 @@ export default function PrivacyPage() {
               </p>
             </section>
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">Contact</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Contact</h2>
               <p>
                 For privacy questions, use the contact path published on this site
                 once finalized, or reach through your existing Konative
                 relationship.
               </p>
               <p>
-                <Link href="/" className="font-medium text-slate-900 underline">
+                <Link href="/" className="font-medium text-cyan-300 underline decoration-cyan-300/50 underline-offset-4 hover:text-cyan-200">
                   Back to home
                 </Link>
               </p>
