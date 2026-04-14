@@ -12,7 +12,34 @@ Agent context for the monorepo: app code lives in **`web/`** (Next.js). See `web
 - **Deploy status command:** `vercel ls --prod` (from `web/` after `vercel link`), or use the Vercel dashboard **Deployments** tab.
 - **Merge method:** Per repo preference (GitHub default or team convention).
 - **Project type:** Web app (marketing site + `/api/inquiry`).
-- **Post-deploy health check:** `curl -sf https://konative.com -o /dev/null -w "%{http_code}\n"` (expect `200`). Note: `curl -I` (HEAD) may return `405` on some hosts; use GET without `-I` or open the URL in a browser.
+- **Post-deploy health check:** `curl -sf https://konative.com -o /dev/null -w "%{http_code}\n"` (expect `200`). Note: `curl -I` (HEAD) may return `405` on some hosts; use GET without `-I` or open the URL in a browser. **HTTP 200 alone is not enough:** if DNS still points at parking or forwarding, the body will not be this Next.js app (see **Registrar DNS** below).
+
+### Registrar DNS (external — required for konative.com)
+
+Pushing to **Git** updates the Vercel deployment. **DNS at the registrar** is what makes **konative.com** hit that deployment. This step is part of shipping to production, not optional polish.
+
+1. **Add domains in Vercel:** Project → **Settings → Domains** → add `konative.com` and `www.konative.com` (or `vercel domains add` from `web/` after `vercel link`).
+2. **Read the exact records Vercel expects** (authoritative; IPs/CNAME targets can be project-specific):
+
+   ```bash
+   cd web && vercel domains inspect konative.com
+   ```
+
+3. **General-purpose defaults** from [Vercel: Setting up a custom domain](https://vercel.com/docs/domains/set-up-custom-domain) — **always reconcile with `inspect` output**:
+
+   | Host | Type | Value |
+   |------|------|--------|
+   | `@` | **A** | `76.76.21.21` |
+   | `www` | **CNAME** | `cname.vercel-dns-0.com` |
+
+4. **At the registrar (e.g. GoDaddy):** create or update those records. **Remove** domain **forwarding**, **masking**, **parking**, and any conflicting **A** records. Those produce `/lander`, syndicated placeholder pages, or non-Konative content even when Git and Vercel are correct.
+
+5. **CAA:** If the zone has CAA records, allow Let’s Encrypt per [Vercel: A record and CAA](https://vercel.com/kb/guide/a-record-and-caa-with-vercel) (e.g. `0 issue "letsencrypt.org"`).
+
+6. **Verify before calling deploy “done”:**
+
+   - `vercel domains inspect konative.com` shows **Valid** configuration.
+   - `curl -sL https://konative.com/ | head -c 400` shows real **HTML from this app**, not a one-line `window.location` to `/lander` or a parked domain shell.
 
 ### Custom deploy hooks
 
