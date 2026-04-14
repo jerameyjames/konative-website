@@ -5,10 +5,12 @@ Agent context for the monorepo: app code lives in **`web/`** (Next.js). See `web
 ## Deploy Configuration (configured by /setup-deploy)
 
 - **Platform:** Vercel (Next.js 16 app in `web/`)
-- **Production URL:** https://konative.com
+- **Vercel project:** `tolowastudioincubator/konative-website` — link and run **`vercel deploy`** from the **repository root** (`.vercel/` lives at root). **Root Directory** = `web`. Do **not** link only inside `web/` or builds resolve to `web/web` and break.
+- **Framework:** Project should use the **Next.js** preset on Vercel. If `*.vercel.app` returns **NOT_FOUND** despite a successful build, set **Framework Preset** to Next.js (or redeploy after it is set).
+- **Production URL:** https://konative.com (also https://konative-website.vercel.app until DNS is fully cut over)
 - **Git remote:** https://github.com/jerameyjames/konative-website (`main`)
 - **Vercel project root:** set **Root Directory** to `web` in the Vercel project settings (this repo is not only the Next app at the filesystem root).
-- **No Vercel project yet:** Nothing in Git creates the Vercel project automatically. Run **`./scripts/vercel-bootstrap.sh`** from the repo root (after `npm i -g vercel` and `vercel login`). That script builds `web/`, runs **`vercel link`** to create or attach a project, prints **`vercel git connect`** for the GitHub remote, and optionally **`./scripts/vercel-bootstrap.sh --deploy`** for a first production deploy. Until a project exists and Git is connected (or you deploy from CLI), **pushing to GitHub does not deploy**.
+- **No Vercel project yet:** Run **`./scripts/vercel-bootstrap.sh`** from the repo root (after `npm i -g vercel` and `vercel login`). It builds `web/`, creates the project if needed, **`vercel link`** at **repo root**, **`vercel git connect`**, and optional **`--deploy`**. Until Git is connected, **pushing to GitHub does not deploy**.
 - **Deploy workflow:** After the project exists and **Git is connected** with **Root Directory = `web`**, auto-deploy on push to `main`; preview deployments on PRs (default Vercel Git integration).
 - **Deploy status command:** `vercel ls --prod` (from `web/` after `vercel link`), or use the Vercel dashboard **Deployments** tab.
 - **Merge method:** Per repo preference (GitHub default or team convention).
