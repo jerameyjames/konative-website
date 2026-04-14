@@ -1,6 +1,6 @@
 /**
- * Homepage copy — aligned to Stitch screens (konative.com project).
- * Edit this file to change marketing content; components in app/page.tsx consume it.
+ * Marketing copy — konative.com / Stitch screen set.
+ * Edit this file to change site-wide messaging; home and inner routes import it via `@/components/stitch/blocks`.
  */
 export const homepageContent = {
   hero: {

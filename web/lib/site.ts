@@ -6,11 +6,24 @@ export const site = {
   ctaLabel: "Request a Project Readiness Review",
 } as const;
 
+/** Primary header — wraps on small screens */
 export const navItems = [
-  { href: "#hero", label: "Overview" },
-  { href: "#playbook", label: "Playbook" },
-  { href: "#problem", label: "Problem" },
-  { href: "#comparison", label: "Compare" },
-  { href: "#engagement", label: "Engagement" },
-  { href: "#contact", label: "Request" },
+  { href: "/", label: "Home" },
+  { href: "/playbook", label: "Playbook" },
+  { href: "/problem", label: "Problem" },
+  { href: "/services", label: "Services" },
+  { href: "/engagement", label: "Engagement" },
+  { href: "/contact", label: "Contact" },
+] as const;
+
+/** Secondary pages linked in header (compact) + footer sitemap */
+export const navMoreItems = [
+  { href: "/segments", label: "Segments" },
+  { href: "/compare", label: "Compare" },
+  { href: "/trust", label: "Trust" },
+] as const;
+
+export const footerLegal = [
+  { href: "/privacy", label: "Privacy" },
+  { href: "/legal", label: "Legal" },
 ] as const;

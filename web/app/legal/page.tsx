@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function LegalPage() {
   return (
-    <main className="bg-white">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+    <main className="min-h-[50vh] bg-[#0a0f14] py-10 sm:py-14">
+      <div className="mx-auto max-w-3xl rounded-2xl border border-white/10 bg-white px-4 py-12 shadow-xl sm:px-8 sm:py-16 lg:px-10 lg:py-20">
         <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
           Legal
         </p>
