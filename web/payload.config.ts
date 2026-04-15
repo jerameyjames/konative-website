@@ -21,15 +21,38 @@ import { SEODefaults } from "./src/globals/SEODefaults";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-/** Neon/Vercel typically set several names; use first present (runtime values are plaintext on Vercel). */
+/**
+ * Neon/Vercel set several names. Prefer the first *valid* URL — integration vars can be
+ * present but wrong (e.g. host literally `base` from an unsubstituted template).
+ */
 function postgresConnectionString(): string {
-  return (
-    process.env.POSTGRES_PRISMA_URL ||
-    process.env.DATABASE_URL ||
-    process.env.POSTGRES_URL ||
-    process.env.DATABASE_URI ||
-    ""
-  );
+  const keys = [
+    "POSTGRES_PRISMA_URL",
+    "DATABASE_URL",
+    "POSTGRES_URL",
+    "DATABASE_URI",
+  ] as const;
+
+  for (const key of keys) {
+    const raw = process.env[key];
+    const ok = tryPostgresConnectionString(raw);
+    if (ok) return ok;
+  }
+  return "";
+}
+
+function tryPostgresConnectionString(raw: string | undefined): string | null {
+  const s = raw?.trim();
+  if (!s || !/^postgres(ql)?:\/\//i.test(s)) return null;
+  try {
+    const u = new URL(s);
+    const host = u.hostname;
+    // Broken templates / placeholders surface as host "base" (ENOTFOUND base in prod).
+    if (!host || host === "base") return null;
+    return s;
+  } catch {
+    return null;
+  }
 }
 
 const dbAdapter = postgresAdapter({

@@ -8,7 +8,7 @@
 ## Current status
 - A Neon Postgres resource (`konative-db`) may be provisioned and linked to Vercel project `konative-site` (or attach Postgres in the Vercel dashboard for that project).
 - Neon / Vercel often populate `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `POSTGRES_URL`, or `POSTGRES_*` / `PG*` variants.
-- The app picks the first env value that **looks like a Postgres URL** (`postgres://` or `postgresql://`) in this order: **`POSTGRES_PRISMA_URL`**, **`DATABASE_URL`**, **`POSTGRES_URL`**, **`DATABASE_URI`**. Non-URL placeholders are ignored so a bad manual value cannot win over Neon/Vercel integration vars.
+- The app picks the first env value that **looks like a Postgres URL** (`postgres://` or `postgresql://`) in this order: **`POSTGRES_PRISMA_URL`**, **`DATABASE_URL`**, **`POSTGRES_URL`**, **`DATABASE_URI`**. Invalid URLs (unparseable host, or placeholder host `base` from a broken template) are skipped so the next variable can be used.
 
 ## Connection string format (required)
 Use this format for all providers:
