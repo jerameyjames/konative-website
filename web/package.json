@@ -17,7 +17,7 @@
     "seed:home": "tsx scripts/seed-home.ts"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.0.0",
+    "@payloadcms/db-vercel-postgres": "^3.82.1",
     "@payloadcms/next": "^3.0.0",
     "@payloadcms/richtext-lexical": "^3.0.0",
     "@payloadcms/storage-vercel-blob": "^3.0.0",

@@ -18,6 +18,9 @@ Use this format for all providers:
 
 `postgres://<user>:<password>@<host>:5432/<database>?sslmode=require`
 
+## Payload on Vercel
+This app uses **`@payloadcms/db-vercel-postgres`**, which expects the **Neon / Vercel Storage** integration variables (primarily **`POSTGRES_URL`**). Do not rely on a hand-copied `DATABASE_URI` unless you are using a plain `postgres://` string for local development; on Vercel, the integration-managed `POSTGRES_URL` must be present for Production/Preview.
+
 ## Option A: Vercel Postgres (recommended)
 1. Vercel Dashboard -> `konative-site` -> **Storage** -> **Create Database** -> **Postgres**.
 2. Accept default region near deployment region (IAD recommended if app stays in US East).

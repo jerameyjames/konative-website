@@ -24,6 +24,12 @@ Capture architecture decisions that affect the future WebOS starter.
 - Tradeoffs: Anyone with links to the old `konative-website` Vercel project must migrate env vars, domains, and Postgres/Blob links to **`konative-site`** (or rename the project in Vercel to match).
 - Affected files: `web/**`, root `README.md`, `CLAUDE.md`, `scripts/vercel-bootstrap.sh`, `web/docs/database-setup.md`, `web/docs/deploy-readiness-checklist.md`, `web/docs/dns-setup.md`, `web/docs/analytics-setup.md`, `web/next.config.ts`, `docs/ai-os/*`
 
+### 2026-04-15 — Vercel Postgres adapter (`db-vercel-postgres`)
+- Context: `@payloadcms/db-postgres` + `DATABASE_URI` failed at runtime on Vercel (`ENOTFOUND base`) because Neon integration env values are not plain `postgres://` strings in the worker.
+- Decision: Use **`@payloadcms/db-vercel-postgres`** with `POSTGRES_URL` / `DATABASE_URL` / `DATABASE_URI` fallback order in `payload.config.ts`.
+- Why: Matches Vercel + Neon Storage integration and Payload’s documented deployment path.
+- Affected files: `web/payload.config.ts`, `web/package.json`, `web/.env.example`, `web/docs/database-setup.md`
+
 ### 2026-04-15 — Production host: `konative-site` + domain cutover
 - Context: Custom domain pointed at `konative-website` while the Payload app shipped on `konative-site`.
 - Decision: **API + CLI migration** documented in root `CLAUDE.md`: `scripts/vercel-migrate-konative-site.mjs` aligns **Root Directory**, copies env from the legacy project, and (with `--move-domains`) moves `konative.com` / `www` to `konative-site`.

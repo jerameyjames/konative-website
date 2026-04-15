@@ -1,5 +1,5 @@
 import { buildConfig } from "payload";
-import { postgresAdapter } from "@payloadcms/db-postgres";
+import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -38,8 +38,15 @@ export default buildConfig({
   globals: [SiteSettings, Navigation, Theme, SEODefaults],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "CHANGE_ME",
-  db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URI || "" },
+  // Vercel + Neon integration exposes POSTGRES_URL; local dev typically uses DATABASE_URI (plain postgres://).
+  db: vercelPostgresAdapter({
+    pool: {
+      connectionString:
+        process.env.POSTGRES_URL ||
+        process.env.DATABASE_URL ||
+        process.env.DATABASE_URI ||
+        "",
+    },
   }),
   typescript: {
     outputFile: path.resolve(dirname, "src/payload-types.ts"),
