@@ -21,6 +21,21 @@ import { SEODefaults } from "./src/globals/SEODefaults";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+/** First env value that looks like a real Postgres URL (skips Vercel pull tokens / placeholders). */
+function pickPostgresConnectionString(): string {
+  const keys = [
+    "POSTGRES_PRISMA_URL",
+    "DATABASE_URL",
+    "POSTGRES_URL",
+    "DATABASE_URI",
+  ] as const;
+  for (const k of keys) {
+    const v = process.env[k]?.trim();
+    if (v && /^postgres(ql)?:\/\//i.test(v)) return v;
+  }
+  return "";
+}
+
 export default buildConfig({
   admin: {
     livePreview: {
@@ -38,17 +53,8 @@ export default buildConfig({
   globals: [SiteSettings, Navigation, Theme, SEODefaults],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "CHANGE_ME",
-  // Prefer Vercel/Neon-linked vars first. A manual DATABASE_URI can override integration
-  // URLs and break production if mis-set (e.g. placeholder host "base").
   db: postgresAdapter({
-    pool: {
-      connectionString:
-        process.env.POSTGRES_URL ||
-        process.env.POSTGRES_PRISMA_URL ||
-        process.env.DATABASE_URL ||
-        process.env.DATABASE_URI ||
-        "",
-    },
+    pool: { connectionString: pickPostgresConnectionString() },
   }),
   typescript: {
     outputFile: path.resolve(dirname, "src/payload-types.ts"),
