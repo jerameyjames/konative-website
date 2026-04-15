@@ -19,7 +19,7 @@ Use this format for all providers:
 `postgres://<user>:<password>@<host>:5432/<database>?sslmode=require`
 
 ## Payload on Vercel
-This app uses **`@payloadcms/db-vercel-postgres`**, which expects the **Neon / Vercel Storage** integration variables (primarily **`POSTGRES_URL`**). Do not rely on a hand-copied `DATABASE_URI` unless you are using a plain `postgres://` string for local development; on Vercel, the integration-managed `POSTGRES_URL` must be present for Production/Preview.
+This app uses **`@payloadcms/db-postgres`** with **`POSTGRES_URL`** (preferred) or **`DATABASE_URL`** / **`DATABASE_URI`**. Values must be real **`postgresql://...`** strings. If variables were copied between Vercel projects via API and look like opaque blobs, re-pull from a healthy project with **`vercel env pull`** or run **`scripts/vercel-copy-plain-env-from-project.mjs`** from the monorepo root to upsert resolved URLs into **`konative-site`**.
 
 ## Option A: Vercel Postgres (recommended)
 1. Vercel Dashboard -> `konative-site` -> **Storage** -> **Create Database** -> **Postgres**.
