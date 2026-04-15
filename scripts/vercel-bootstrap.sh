@@ -40,8 +40,9 @@ if [[ -n "$GIT_REMOTE" ]]; then
 else
   echo "No git remote; connect manually in Vercel → Git."
 fi
-echo "In Vercel → Project → Settings → General: Root Directory = web"
+echo "In Vercel → Project → Settings → General: Root Directory = web (required for this monorepo)"
 echo "In Vercel → Project → Settings → General: Framework Preset should be Next.js (auto after first good deploy)."
+echo "If the project was created without a root directory, set it to web before the first successful deploy."
 
 echo ""
 if [[ "${1:-}" == "--deploy" ]]; then
