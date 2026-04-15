@@ -6,7 +6,7 @@
 3. Supabase Postgres
 
 ## Current status
-- A Neon Postgres resource (`konative-db`) has been provisioned and connected to Vercel project `konative-website`.
+- A Neon Postgres resource (`konative-db`) may be provisioned and linked to Vercel project `konative-site` (or attach Postgres in the Vercel dashboard for that project).
 - Neon populated these environment variables in Vercel for Development/Preview/Production:
   - `DATABASE_URL`
   - `DATABASE_URL_UNPOOLED`
@@ -19,9 +19,9 @@ Use this format for all providers:
 `postgres://<user>:<password>@<host>:5432/<database>?sslmode=require`
 
 ## Option A: Vercel Postgres (recommended)
-1. Vercel Dashboard -> `konative-website` -> **Storage** -> **Create Database** -> **Postgres**.
+1. Vercel Dashboard -> `konative-site` -> **Storage** -> **Create Database** -> **Postgres**.
 2. Accept default region near deployment region (IAD recommended if app stays in US East).
-3. Link database to `konative-website`.
+3. Link database to `konative-site`.
 4. Copy generated `POSTGRES_URL` or connection URI.
 5. Set `DATABASE_URI` to that value in Vercel env vars (Dev/Preview/Prod) and `.env.local`.
 

@@ -7,19 +7,19 @@
 
 Founder OS structure and PRD live in **`docs/`**. Notion hub (live): [konative.com](https://www.notion.so/konative-com-34132e0a547481489537d232018bbbb0).
 
-## Public site (Next.js)
+## Public site (Next.js + Payload CMS)
 
-The credibility-first marketing site lives in **`web/`** (Next.js 16 + TypeScript + Tailwind).
+The live site and CMS live in **`web/`** (Next.js 16 + Payload 3 + Postgres). Editor workflow, blocks, and collections are defined there.
 
 ```bash
 cd web
-npm install
+npm ci
 npm run dev
 ```
 
 - Production build: `npm run build` then `npm run start`
-- Vercel: first-time setup is **not** automatic from Git alone. Run **`./scripts/vercel-bootstrap.sh`** (see root **`CLAUDE.md`**). In the Vercel project, set **Root Directory** to **`web`**, then add **konative.com** and DNS as documented there.
-- Optional: set `INQUIRY_WEBHOOK_URL` to POST inquiry JSON to your automation (see `web/.env.example`)
+- Vercel: link from **repository root** with **Root Directory = `web`** (see root **`CLAUDE.md`**). Default project name in `scripts/vercel-bootstrap.sh` is **`konative-site`**; override with `VERCEL_PROJECT_NAME` if needed.
+- Environment: copy `web/.env.example` to `web/.env.local` and set `DATABASE_URI`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL` (see `web/docs/database-setup.md`).
 
 - [`docs/founder-os-konative.md`](docs/founder-os-konative.md) — operating model (vision → workstreams → rhythm)
 - [`docs/requirements-prd.md`](docs/requirements-prd.md) — konative.com requirements and backlog epics

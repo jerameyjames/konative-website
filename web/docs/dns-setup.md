@@ -1,7 +1,7 @@
 # DNS setup for konative.com on Vercel
 
 ## Current status
-- Domain is added to Vercel project `konative-website`.
+- Domain is added to Vercel project `konative-site`.
 - `konative.com` and `www.konative.com` are attached to the project.
 - Nameservers are currently not Vercel nameservers (`ns0.thescax.net`, `ns1.thescax.net`).
 

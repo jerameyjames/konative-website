@@ -1,7 +1,7 @@
 # Analytics setup
 
 ## Vercel Analytics (recommended baseline)
-1. Open Vercel project `konative-website`.
+1. Open Vercel project `konative-site`.
 2. Go to **Analytics** tab.
 3. Click **Enable Analytics**.
 4. Redeploy once enabled.

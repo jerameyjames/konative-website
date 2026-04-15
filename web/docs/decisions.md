@@ -16,3 +16,10 @@ Capture architecture decisions that affect the future WebOS starter.
 - Konative is Site 0
 - Vercel is acceptable for initial deployment speed
 - Future multi-tenant evolution happens after starter validation
+
+### 2026-04-15 — Canonical app in `web/`, Vercel project `konative-site`
+- Context: A parallel `konative-site/` folder and an older static marketing app in `web/` caused duplicate sources and mismatched Vercel project names (`konative-website` vs `konative-site`).
+- Decision: **One app**: the Payload + Next implementation lives only in **`web/`**. The Vercel project name **`konative-site`** is the default in `scripts/vercel-bootstrap.sh` and infra docs. Deprecated duplicate folders and large inbox exports were removed from the working tree; AI OS markdown playbooks live under **`docs/ai-os/`**.
+- Why: Single source of truth for Git, CI, and deploy; fewer path mistakes (`web/.env.local` vs nested folder).
+- Tradeoffs: Anyone with links to the old `konative-website` Vercel project must migrate env vars, domains, and Postgres/Blob links to **`konative-site`** (or rename the project in Vercel to match).
+- Affected files: `web/**`, root `README.md`, `CLAUDE.md`, `scripts/vercel-bootstrap.sh`, `web/docs/database-setup.md`, `web/docs/deploy-readiness-checklist.md`, `web/docs/dns-setup.md`, `web/docs/analytics-setup.md`, `web/next.config.ts`, `docs/ai-os/*`

@@ -2,26 +2,26 @@
 
 This checklist captures the remaining infrastructure actions after automated setup.
 
-## Completed
-- Vercel project `konative-website` exists and is linked.
-- Neon Postgres resource `konative-db` is provisioned and connected.
-- Core DB env vars (`DATABASE_URL`, `POSTGRES_*`, `PG*`) exist in Dev/Preview/Prod.
+## Completed (when true)
+- Vercel project `konative-site` exists, **Root Directory** = `web`, and Git is connected.
+- Postgres (Vercel Postgres or Neon) is linked to `konative-site`.
+- Core DB env vars (`DATABASE_URL` / `DATABASE_URI`, `POSTGRES_*`, `PG*` as applicable) exist in Dev/Preview/Prod.
 - `PAYLOAD_SECRET` and `NEXT_PUBLIC_SITE_URL` exist in Vercel envs.
-- Local `.env.local` exists and `DATABASE_URI` is synced to live development database URL.
+- Local `web/.env.local` exists and `DATABASE_URI` matches your database URL.
 
 ## Remaining manual actions
 
 ### 1) Finalize Blob token
 The CLI flow created Blob stores but did not complete automated environment-link selection.
 
-1. Open Vercel project `konative-website` -> **Storage** -> **Blob**.
+1. Open Vercel project `konative-site` -> **Storage** -> **Blob**.
 2. Keep one store (recommended: `konative-media-linked`) and remove extras.
 3. Generate or copy a **Read/Write token**.
 4. Set `BLOB_READ_WRITE_TOKEN` in:
    - Vercel Development
    - Vercel Preview
    - Vercel Production
-   - `konative-site/.env.local`
+   - `web/.env.local`
 
 ### 2) Preview env alignment
 Custom variable assignment for Preview had CLI branch-target constraints.

@@ -1,6 +1,3 @@
 .DS_Store
 **/.DS_Store
 .vercel
-
-# Legacy duplicate folder; canonical Next.js + Payload app is web/
-konative-site/
