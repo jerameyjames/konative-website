@@ -55,6 +55,11 @@ Pushing to **Git** updates the Vercel deployment. **DNS at the registrar** is wh
 
 - Copy from `web/.env.example` (create one locally if missing). Production must include Payload + DB: `DATABASE_URI`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`, and optional `BLOB_READ_WRITE_TOKEN` / `INQUIRY_WEBHOOK_URL` per `web/docs/database-setup.md`.
 
+### Migrating production to `konative-site` (ops)
+
+- **`node scripts/vercel-migrate-konative-site.mjs`** — sets **Root Directory** to `web` and copies env vars from `konative-website` (requires `vercel login` on this machine).
+- **`node scripts/vercel-migrate-konative-site.mjs --move-domains`** — removes `konative.com` / `www.konative.com` from `konative-website` and attaches them to `konative-site`. Run only **after** a successful production deployment on `konative-site`.
+
 ### Notion
 
 - **Project hub (canonical):** [Konative.com — Project Hub](https://www.notion.so/34232e0a547481b39bc1e081765d6df6) (legacy hub: [konative.com Founder OS HUB](https://www.notion.so/34132e0a547481489537d232018bbbb0)). See `docs/notion-setup.md`.
