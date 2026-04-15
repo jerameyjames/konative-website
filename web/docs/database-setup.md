@@ -15,8 +15,6 @@ Use this format for all providers:
 
 `postgres://<user>:<password>@<host>:5432/<database>?sslmode=require`
 
-On **Vercel**, `payload.config.ts` uses `@payloadcms/db-vercel-postgres` so Neon/Vercel integration variables resolve through `@vercel/postgres`. Local development uses the standard `@payloadcms/db-postgres` adapter with your `.env.local` URL.
-
 ## Option A: Vercel Postgres (recommended)
 1. Vercel Dashboard -> `konative-site` -> **Storage** -> **Create Database** -> **Postgres**.
 2. Accept default region near deployment region (IAD recommended if app stays in US East).

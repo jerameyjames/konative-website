@@ -1,6 +1,5 @@
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -22,34 +21,20 @@ import { SEODefaults } from "./src/globals/SEODefaults";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-/** First env value that looks like a real Postgres URL (skips Vercel pull tokens / placeholders). */
-function pickPostgresConnectionString(): string {
-  const keys = [
-    "POSTGRES_PRISMA_URL",
-    "DATABASE_URL",
-    "POSTGRES_URL",
-    "DATABASE_URI",
-  ] as const;
-  for (const k of keys) {
-    const v = process.env[k]?.trim();
-    if (v && /^postgres(ql)?:\/\//i.test(v)) return v;
-  }
-  return "";
+/** Neon/Vercel typically set several names; use first present (runtime values are plaintext on Vercel). */
+function postgresConnectionString(): string {
+  return (
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.DATABASE_URI ||
+    ""
+  );
 }
 
-const isVercel = process.env.VERCEL === "1";
-const postgresConnectionString = pickPostgresConnectionString();
-
-/**
- * On Vercel, do not pass pool.connectionString — @vercel/postgres reads Neon/Vercel
- * integration vars (POSTGRES_URL, etc.). Passing a parsed URL can break resolution.
- * Locally, use the standard pg adapter + .env URL.
- */
-const dbAdapter = isVercel
-  ? vercelPostgresAdapter({})
-  : postgresAdapter({
-      pool: { connectionString: postgresConnectionString },
-    });
+const dbAdapter = postgresAdapter({
+  pool: { connectionString: postgresConnectionString() },
+});
 
 export default buildConfig({
   admin: {
