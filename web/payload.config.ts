@@ -1,5 +1,6 @@
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -36,6 +37,20 @@ function pickPostgresConnectionString(): string {
   return "";
 }
 
+const isVercel = process.env.VERCEL === "1";
+const postgresConnectionString = pickPostgresConnectionString();
+
+/** Vercel + Neon: use @vercel/postgres pool so integration env vars resolve. Local: plain pg pool. */
+const dbAdapter = isVercel
+  ? vercelPostgresAdapter(
+      postgresConnectionString
+        ? { pool: { connectionString: postgresConnectionString } }
+        : {},
+    )
+  : postgresAdapter({
+      pool: { connectionString: postgresConnectionString },
+    });
+
 export default buildConfig({
   admin: {
     livePreview: {
@@ -53,9 +68,7 @@ export default buildConfig({
   globals: [SiteSettings, Navigation, Theme, SEODefaults],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "CHANGE_ME",
-  db: postgresAdapter({
-    pool: { connectionString: pickPostgresConnectionString() },
-  }),
+  db: dbAdapter,
   typescript: {
     outputFile: path.resolve(dirname, "src/payload-types.ts"),
   },
