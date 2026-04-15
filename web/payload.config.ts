@@ -38,7 +38,26 @@ function postgresConnectionString(): string {
     const ok = tryPostgresConnectionString(raw);
     if (ok) return ok;
   }
-  return "";
+  const fromParts = tryPostgresConnectionStringFromParts();
+  return fromParts ?? "";
+}
+
+/** When integration URLs are wrong, Neon/Vercel still expose PG* discrete variables. */
+function tryPostgresConnectionStringFromParts(): string | null {
+  const host = process.env.PGHOST?.trim() ?? process.env.POSTGRES_HOST?.trim();
+  const user = process.env.PGUSER?.trim() ?? process.env.POSTGRES_USER?.trim();
+  const pass = process.env.PGPASSWORD ?? process.env.POSTGRES_PASSWORD;
+  const database =
+    process.env.PGDATABASE?.trim() ??
+    process.env.POSTGRES_DATABASE?.trim() ??
+    process.env.POSTGRES_DB?.trim();
+  if (!host || !user || pass === undefined || pass === "" || !database) return null;
+  if (!isPlausiblePostgresHostname(host)) return null;
+  const port = process.env.PGPORT?.trim() || "5432";
+  const userEnc = encodeURIComponent(user);
+  const passEnc = encodeURIComponent(pass);
+  const dbEnc = encodeURIComponent(database);
+  return `postgres://${userEnc}:${passEnc}@${host}:${port}/${dbEnc}?sslmode=require`;
 }
 
 function tryPostgresConnectionString(raw: string | undefined): string | null {
@@ -47,12 +66,22 @@ function tryPostgresConnectionString(raw: string | undefined): string | null {
   try {
     const u = new URL(s);
     const host = u.hostname;
-    // Broken templates / placeholders surface as host "base" (ENOTFOUND base in prod).
-    if (!host || host === "base") return null;
+    if (!isPlausiblePostgresHostname(host)) return null;
     return s;
   } catch {
     return null;
   }
+}
+
+/** Reject placeholders, encrypted Vercel blobs pasted as URLs, and non-DNS-looking hosts. */
+function isPlausiblePostgresHostname(host: string): boolean {
+  if (!host || host === "base") return false;
+  // Mistaken encrypted integration value used as URL (hostname becomes a long eyJ… blob).
+  if (host.startsWith("eyJ") && host.length > 40) return false;
+  if (host.length > 200) return false;
+  if (host === "localhost" || host === "127.0.0.1") return true;
+  // Real RDS / Neon / Supabase hosts are DNS names with a TLD.
+  return host.includes(".");
 }
 
 const dbAdapter = postgresAdapter({
