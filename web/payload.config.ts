@@ -40,13 +40,13 @@ function pickPostgresConnectionString(): string {
 const isVercel = process.env.VERCEL === "1";
 const postgresConnectionString = pickPostgresConnectionString();
 
-/** Vercel + Neon: use @vercel/postgres pool so integration env vars resolve. Local: plain pg pool. */
+/**
+ * On Vercel, do not pass pool.connectionString — @vercel/postgres reads Neon/Vercel
+ * integration vars (POSTGRES_URL, etc.). Passing a parsed URL can break resolution.
+ * Locally, use the standard pg adapter + .env URL.
+ */
 const dbAdapter = isVercel
-  ? vercelPostgresAdapter(
-      postgresConnectionString
-        ? { pool: { connectionString: postgresConnectionString } }
-        : {},
-    )
+  ? vercelPostgresAdapter({})
   : postgresAdapter({
       pool: { connectionString: postgresConnectionString },
     });
