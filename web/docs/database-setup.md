@@ -8,7 +8,7 @@
 ## Current status
 - A Neon Postgres resource (`konative-db`) may be provisioned and linked to Vercel project `konative-site` (or attach Postgres in the Vercel dashboard for that project).
 - Neon / Vercel often populate `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `POSTGRES_URL`, or `POSTGRES_*` / `PG*` variants.
-- The app picks the first env value that **looks like a Postgres URL** (`postgres://` or `postgresql://`) in this order: **`POSTGRES_PRISMA_URL`**, **`DATABASE_URL`**, **`POSTGRES_URL`**, **`DATABASE_URI`**. Invalid URLs (unparseable host, placeholder host `base`, or an accidental encrypted blob as host) are skipped. If none work, it builds a URL from discrete **`PGHOST`** / **`POSTGRES_HOST`**, **`PGUSER`** / **`POSTGRES_USER`**, **`PGPASSWORD`** / **`POSTGRES_PASSWORD`**, and **`PGDATABASE`** / **`POSTGRES_DATABASE`** (optional **`PGPORT`**, default 5432), with `sslmode=require`.
+- The app picks the first env value that **looks like a Postgres URL** (`postgres://` or `postgresql://`) in this order: **`POSTGRES_PRISMA_URL`**, **`DATABASE_URL`**, **`POSTGRES_URL`**, **`DATABASE_URL_UNPOOLED`**, **`POSTGRES_URL_NON_POOLING`**, **`DATABASE_URI`**. Invalid URLs (unparseable host, placeholder host `base`, or an accidental encrypted blob as host) are skipped. If none work, it uses discrete **`PGHOST`** / **`PGHOST_UNPOOLED`** / **`POSTGRES_HOST`**, **`PGUSER`** / **`POSTGRES_USER`**, **`PGPASSWORD`** / **`POSTGRES_PASSWORD`**, and **`PGDATABASE`** / **`POSTGRES_DATABASE`** (optional **`PGPORT`**, default 5432), with SSL enabled.
 
 ## Connection string format (required)
 Use this format for all providers:

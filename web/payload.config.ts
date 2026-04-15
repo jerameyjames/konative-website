@@ -42,6 +42,8 @@ function resolvePostgresPoolConfig(): PgPoolInput {
     "POSTGRES_PRISMA_URL",
     "DATABASE_URL",
     "POSTGRES_URL",
+    "DATABASE_URL_UNPOOLED",
+    "POSTGRES_URL_NON_POOLING",
     "DATABASE_URI",
   ] as const;
 
