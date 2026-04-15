@@ -54,7 +54,7 @@ Pushing to **Git** updates the Vercel deployment. **DNS at the registrar** is wh
 
 ### Environment variables (Vercel)
 
-- Copy from `web/.env.example` (create one locally if missing). Production must include Payload + DB: **`DATABASE_URI`** (preferred), or **`POSTGRES_URL`** / **`DATABASE_URL`** if your host only injects those, plus `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`, and optional `BLOB_READ_WRITE_TOKEN` / `INQUIRY_WEBHOOK_URL` per `web/docs/database-setup.md`.
+- Copy from `web/.env.example` (create one locally if missing). Production must include Payload + DB: linked **`POSTGRES_URL`** (or **`POSTGRES_PRISMA_URL`** / **`DATABASE_URL`** / **`DATABASE_URI`**) per `web/docs/database-setup.md`, plus `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`, and optional `BLOB_READ_WRITE_TOKEN` / `INQUIRY_WEBHOOK_URL`. Do not set a manual **`DATABASE_URI`** on Vercel unless it is a full `postgres://…` string; a bad value overrides nothing now (priority favors integration URLs), but remove stale placeholders to avoid confusion.
 
 ### Notion
 

@@ -8,7 +8,7 @@
 ## Current status
 - A Neon Postgres resource (`konative-db`) may be provisioned and linked to Vercel project `konative-site` (or attach Postgres in the Vercel dashboard for that project).
 - Neon / Vercel often populate `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `POSTGRES_URL`, or `POSTGRES_*` / `PG*` variants.
-- The app reads the connection string in this order: **`DATABASE_URI`**, then **`POSTGRES_URL`**, then **`DATABASE_URL`**. Prefer setting **`DATABASE_URI`** in Vercel to the same pooled URI you use locally so all environments match.
+- The app reads the connection string in this order: **`POSTGRES_URL`**, **`POSTGRES_PRISMA_URL`**, **`DATABASE_URL`**, **`DATABASE_URI`**. On Vercel with Neon/Postgres linked, **`POSTGRES_URL`** is usually set automatically—put **`DATABASE_URI`** last so a mis-typed manual value cannot override integration URLs (a common cause of `getaddrinfo ENOTFOUND` / wrong host).
 
 ## Connection string format (required)
 Use this format for all providers:

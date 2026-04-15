@@ -38,12 +38,15 @@ export default buildConfig({
   globals: [SiteSettings, Navigation, Theme, SEODefaults],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "CHANGE_ME",
+  // Prefer Vercel/Neon-linked vars first. A manual DATABASE_URI can override integration
+  // URLs and break production if mis-set (e.g. placeholder host "base").
   db: postgresAdapter({
     pool: {
       connectionString:
-        process.env.DATABASE_URI ||
         process.env.POSTGRES_URL ||
+        process.env.POSTGRES_PRISMA_URL ||
         process.env.DATABASE_URL ||
+        process.env.DATABASE_URI ||
         "",
     },
   }),
