@@ -1,20 +1,8 @@
 import { buildConfig } from "payload";
-import { postgresAdapter } from "@payloadcms/db-postgres";
+import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 import { fileURLToPath } from "url";
-
-/** Subset of `pg.Pool` options we pass through (avoids depending on `@types/pg`). */
-type PgPoolInput =
-  | { connectionString: string }
-  | {
-      host: string;
-      port: number;
-      user: string;
-      password: string;
-      database: string;
-      ssl: boolean;
-    };
 
 // Collections
 import { Pages } from "./src/collections/Pages";
@@ -34,85 +22,12 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 /**
- * Resolve pg Pool options without ever passing an empty `connectionString` (pg would then
- * fall back to raw `process.env.DATABASE_URL`, which can be a broken integration value).
+ * Vercel + Neon integration stores env values as integration tokens in the dashboard;
+ * `@vercel/postgres` resolves them at runtime. Do not pass a manual `pool` here unless
+ * you are using a plain `postgres://` URL (e.g. local Docker). See Payload docs:
+ * `vercelPostgresAdapter()` with no args uses `POSTGRES_URL` / platform defaults.
  */
-function resolvePostgresPoolConfig(): PgPoolInput {
-  const keys = [
-    "POSTGRES_PRISMA_URL",
-    "DATABASE_URL",
-    "POSTGRES_URL",
-    "DATABASE_URL_UNPOOLED",
-    "POSTGRES_URL_NON_POOLING",
-    "DATABASE_URI",
-  ] as const;
-
-  for (const key of keys) {
-    const raw = process.env[key];
-    const ok = tryPostgresConnectionString(raw);
-    if (ok) return { connectionString: ok };
-  }
-  const discrete = tryDiscretePoolConfig();
-  if (discrete) return discrete;
-  // Never return `{}` or `{ connectionString: "" }` — `pg` would then read raw `process.env.DATABASE_URL`.
-  // Last resort: explicit localhost so failures are connection refused, not a bogus hostname from env.
-  return {
-    connectionString: "postgres://127.0.0.1:65535/__konative_db_unresolved__",
-  };
-}
-
-/** When integration URLs are wrong, Neon/Vercel still expose PG* discrete variables. */
-function tryDiscretePoolConfig(): PgPoolInput | null {
-  const host =
-    process.env.PGHOST?.trim() ??
-    process.env.PGHOST_UNPOOLED?.trim() ??
-    process.env.POSTGRES_HOST?.trim();
-  const user = process.env.PGUSER?.trim() ?? process.env.POSTGRES_USER?.trim();
-  const password = process.env.PGPASSWORD ?? process.env.POSTGRES_PASSWORD;
-  const database =
-    process.env.PGDATABASE?.trim() ??
-    process.env.POSTGRES_DATABASE?.trim() ??
-    process.env.POSTGRES_DB?.trim();
-  if (!host || !user || password === undefined || password === "" || !database) return null;
-  if (!isPlausiblePostgresHostname(host)) return null;
-  const port = Number.parseInt(process.env.PGPORT?.trim() || "5432", 10);
-  return {
-    host,
-    port,
-    user,
-    password,
-    database,
-    ssl: true,
-  };
-}
-
-function tryPostgresConnectionString(raw: string | undefined): string | null {
-  const s = raw?.trim();
-  if (!s || !/^postgres(ql)?:\/\//i.test(s)) return null;
-  try {
-    const u = new URL(s);
-    const host = u.hostname;
-    if (!isPlausiblePostgresHostname(host)) return null;
-    return s;
-  } catch {
-    return null;
-  }
-}
-
-/** Reject placeholders, encrypted Vercel blobs pasted as URLs, and non-DNS-looking hosts. */
-function isPlausiblePostgresHostname(host: string): boolean {
-  if (!host || host === "base") return false;
-  // Mistaken encrypted integration value used as URL (hostname becomes a long eyJ… blob).
-  if (host.startsWith("eyJ") && host.length > 40) return false;
-  if (host.length > 200) return false;
-  if (host === "localhost" || host === "127.0.0.1") return true;
-  // Real RDS / Neon / Supabase hosts are DNS names with a TLD.
-  return host.includes(".");
-}
-
-const dbAdapter = postgresAdapter({
-  pool: resolvePostgresPoolConfig(),
-});
+const dbAdapter = vercelPostgresAdapter({});
 
 export default buildConfig({
   admin: {

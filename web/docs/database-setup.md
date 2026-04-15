@@ -8,7 +8,7 @@
 ## Current status
 - A Neon Postgres resource (`konative-db`) may be provisioned and linked to Vercel project `konative-site` (or attach Postgres in the Vercel dashboard for that project).
 - Neon / Vercel often populate `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `POSTGRES_URL`, or `POSTGRES_*` / `PG*` variants.
-- The app picks the first env value that **looks like a Postgres URL** (`postgres://` or `postgresql://`) in this order: **`POSTGRES_PRISMA_URL`**, **`DATABASE_URL`**, **`POSTGRES_URL`**, **`DATABASE_URL_UNPOOLED`**, **`POSTGRES_URL_NON_POOLING`**, **`DATABASE_URI`**. Invalid URLs (unparseable host, placeholder host `base`, or an accidental encrypted blob as host) are skipped. If none work, it uses discrete **`PGHOST`** / **`PGHOST_UNPOOLED`** / **`POSTGRES_HOST`**, **`PGUSER`** / **`POSTGRES_USER`**, **`PGPASSWORD`** / **`POSTGRES_PASSWORD`**, and **`PGDATABASE`** / **`POSTGRES_DATABASE`** (optional **`PGPORT`**, default 5432), with SSL enabled.
+- **On Vercel**, `payload.config.ts` uses **`@payloadcms/db-vercel-postgres`** (`vercelPostgresAdapter({})` with no manual pool). That delegates to **`@vercel/postgres`**, which resolves Neon / Vercel integration variables at runtime (dashboard values can look like opaque tokens in `vercel env pull`; that is expected). For **local** dev with a normal Postgres URL, set **`POSTGRES_URL`** or **`DATABASE_URL`** to a plain `postgres://…` string in `.env.local`; the adapter uses the regular `pg` pool when the host is `localhost` / `127.0.0.1`.
 
 ## Connection string format (required)
 Use this format for all providers:
