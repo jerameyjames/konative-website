@@ -6,9 +6,10 @@ Agent context for the monorepo: app code lives in **`web/`** (Next.js 16 + Paylo
 
 - **Platform:** Vercel (Next.js 16 + Payload in `web/`)
 - **Vercel project:** `tolowastudioincubator/konative-site` — link and run **`vercel deploy`** from the **repository root** (`.vercel/` lives at root). **Root Directory must be `web`** (Vercel Dashboard → Project → Settings → General → Root Directory). If it is left as `.`, builds fail with “No Next.js version detected” or missing `vercel-build`. Do **not** run `vercel link` only inside `web/` or builds resolve to `web/web` and break.
+- **Naming:** The **GitHub** repository slug is `konative-website`; the **only** Vercel project for this app is **`konative-site`**. A duplicate Vercel project that reused the GitHub name was **removed**—do not recreate it or point domains at it.
 - **Framework:** Project should use the **Next.js** preset on Vercel. If `*.vercel.app` returns **NOT_FOUND** despite a successful build, set **Framework Preset** to Next.js (or redeploy after it is set).
 - **Production URL:** https://konative.com (preview: https://konative-site.vercel.app until custom domain is attached to this project)
-- **Git remote:** https://github.com/jerameyjames/konative-website (`main`)
+- **Git remote:** https://github.com/jerameyjames/konative-website (`main`) — repo name only; deploy target is **`konative-site`** on Vercel.
 - **Vercel project root:** set **Root Directory** to `web` in the Vercel project settings (this repo is not only the Next app at the filesystem root).
 - **No Vercel project yet:** Run **`./scripts/vercel-bootstrap.sh`** from the repo root (after `npm i -g vercel` and `vercel login`). It builds `web/`, creates the project if needed, **`vercel link`** at **repo root**, **`vercel git connect`**, and optional **`--deploy`**. Until Git is connected, **pushing to GitHub does not deploy**.
 - **Deploy workflow:** After the project exists and **Git is connected** with **Root Directory = `web`**, auto-deploy on push to `main`; preview deployments on PRs (default Vercel Git integration).
@@ -53,7 +54,7 @@ Pushing to **Git** updates the Vercel deployment. **DNS at the registrar** is wh
 
 ### Environment variables (Vercel)
 
-- Copy from `web/.env.example` (create one locally if missing). Production must include Payload + DB: `DATABASE_URI`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`, and optional `BLOB_READ_WRITE_TOKEN` / `INQUIRY_WEBHOOK_URL` per `web/docs/database-setup.md`.
+- Copy from `web/.env.example` (create one locally if missing). Production must include Payload + DB: **`DATABASE_URI`** (preferred), or **`POSTGRES_URL`** / **`DATABASE_URL`** if your host only injects those, plus `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`, and optional `BLOB_READ_WRITE_TOKEN` / `INQUIRY_WEBHOOK_URL` per `web/docs/database-setup.md`.
 
 ### Notion
 

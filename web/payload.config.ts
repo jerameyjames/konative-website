@@ -39,7 +39,13 @@ export default buildConfig({
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "CHANGE_ME",
   db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URI || "" },
+    pool: {
+      connectionString:
+        process.env.DATABASE_URI ||
+        process.env.POSTGRES_URL ||
+        process.env.DATABASE_URL ||
+        "",
+    },
   }),
   typescript: {
     outputFile: path.resolve(dirname, "src/payload-types.ts"),

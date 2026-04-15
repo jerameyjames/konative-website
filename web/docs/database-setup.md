@@ -7,11 +7,8 @@
 
 ## Current status
 - A Neon Postgres resource (`konative-db`) may be provisioned and linked to Vercel project `konative-site` (or attach Postgres in the Vercel dashboard for that project).
-- Neon populated these environment variables in Vercel for Development/Preview/Production:
-  - `DATABASE_URL`
-  - `DATABASE_URL_UNPOOLED`
-  - `POSTGRES_*` and `PG*` variants
-- `DATABASE_URI` still needs to be aligned to `DATABASE_URL` if the application expects `DATABASE_URI` specifically.
+- Neon / Vercel often populate `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `POSTGRES_URL`, or `POSTGRES_*` / `PG*` variants.
+- The app reads the connection string in this order: **`DATABASE_URI`**, then **`POSTGRES_URL`**, then **`DATABASE_URL`**. Prefer setting **`DATABASE_URI`** in Vercel to the same pooled URI you use locally so all environments match.
 
 ## Connection string format (required)
 Use this format for all providers:
@@ -23,12 +20,12 @@ Use this format for all providers:
 2. Accept default region near deployment region (IAD recommended if app stays in US East).
 3. Link database to `konative-site`.
 4. Copy generated `POSTGRES_URL` or connection URI.
-5. Set `DATABASE_URI` to that value in Vercel env vars (Dev/Preview/Prod) and `.env.local`.
+5. Set **`DATABASE_URI`** (recommended) or rely on **`POSTGRES_URL`** / **`DATABASE_URL`** if your integration only provides those names—in Vercel env vars (Dev/Preview/Prod) and `.env.local`.
 
 ## Option B: Neon
 1. (Already completed) Neon integration is installed and connected to the project.
 2. Pull vars locally with `vercel env pull .env.development.local`.
-3. Map `DATABASE_URI` to `DATABASE_URL` if your runtime expects `DATABASE_URI`.
+3. Optionally set **`DATABASE_URI`** in Vercel to mirror `DATABASE_URL` if you want one explicit name across docs and local `.env.local`.
 4. Keep SSL required for all production connections.
 
 ## Option C: Supabase Postgres
