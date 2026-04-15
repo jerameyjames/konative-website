@@ -5,11 +5,6 @@
   "engines": {
     "node": ">=20.9.0 <25"
   },
-  "overrides": {
-    "@payloadcms/db-postgres": {
-      "@types/pg": "8.11.6"
-    }
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -22,7 +17,7 @@
     "seed:home": "tsx scripts/seed-home.ts"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.82.1",
+    "@payloadcms/db-postgres": "^3.0.0",
     "@payloadcms/next": "^3.0.0",
     "@payloadcms/richtext-lexical": "^3.0.0",
     "@payloadcms/storage-vercel-blob": "^3.0.0",

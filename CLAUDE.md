@@ -53,12 +53,7 @@ Pushing to **Git** updates the Vercel deployment. **DNS at the registrar** is wh
 
 ### Environment variables (Vercel)
 
-- Copy from `web/.env.example` (create one locally if missing). Production must include Payload + DB: **`POSTGRES_URL` or `DATABASE_URL` or `DATABASE_URI`** (real `postgresql://` strings), `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`, and optional `BLOB_READ_WRITE_TOKEN` / `INQUIRY_WEBHOOK_URL` per `web/docs/database-setup.md`. If DB env was copied between Vercel projects and health checks fail, run **`node scripts/vercel-copy-plain-env-from-project.mjs`** from the repo root to upsert resolved URLs into **`konative-site`**.
-
-### Migrating production to `konative-site` (ops)
-
-- **`node scripts/vercel-migrate-konative-site.mjs`** — sets **Root Directory** to `web` and copies env vars from `konative-website` (requires `vercel login` on this machine).
-- **`node scripts/vercel-migrate-konative-site.mjs --move-domains`** — removes `konative.com` / `www.konative.com` from `konative-website` and attaches them to `konative-site`. Run only **after** a successful production deployment on `konative-site`.
+- Copy from `web/.env.example` (create one locally if missing). Production must include Payload + DB: `DATABASE_URI`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`, and optional `BLOB_READ_WRITE_TOKEN` / `INQUIRY_WEBHOOK_URL` per `web/docs/database-setup.md`.
 
 ### Notion
 
