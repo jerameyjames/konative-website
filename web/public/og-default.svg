@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Konative Open Graph</title>
+  <desc id="desc">Warm neutral background with Konative brand headline and tagline.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#efe5d7"/>
+      <stop offset="100%" stop-color="#d7c3a8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  <rect x="0" y="0" width="14" height="1200" fill="#01696f"/>
+  <rect x="1180" y="0" width="20" height="1200" fill="#964219" opacity="0.45"/>
+  <line x1="92" y1="468" x2="320" y2="468" stroke="#01696f" stroke-width="6"/>
+  <text x="90" y="603" fill="#2b221d" font-size="116" font-family="Instrument Serif, 'Times New Roman', serif" letter-spacing="1.2">Konative</text>
+  <text x="94" y="679" fill="#4f4036" font-size="44" font-family="Satoshi, Inter, Arial, sans-serif">Partnerships built for outdoor living brands</text>
+</svg>

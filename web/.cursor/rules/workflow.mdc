@@ -1,0 +1,11 @@
+---
+description: Agent workflow and planning rules
+alwaysApply: true
+---
+
+- Start each major task by identifying the current milestone from PLAN.md.
+- Before editing, state the files you expect to change.
+- Work in small, reviewable batches.
+- Do not silently refactor unrelated areas.
+- After each batch, summarize: completed work, blockers, next step.
+- If the requested scope exceeds the current milestone, propose a phased approach instead of doing everything at once.

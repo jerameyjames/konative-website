@@ -1,0 +1,15 @@
+---
+description: Rules for interacting with the AI OS Notion workspace
+alwaysApply: false
+---
+
+- When asked to sync Notion, search for existing records before creating new ones.
+- Treat Notion as the operational system of record.
+- Keep updates minimal and structured.
+- Prefer creating or updating these records during kickoff:
+  - Project: Konative.com
+  - Site Registry: konative.com
+  - Milestones for kickoff
+  - Planned Block Library entries
+- Log all Notion actions in the response.
+- If database structure differs from expectation, inspect first and adapt carefully.

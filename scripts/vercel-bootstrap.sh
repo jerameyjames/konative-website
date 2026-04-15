@@ -7,7 +7,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WEB="$ROOT/web"
-PROJECT="${VERCEL_PROJECT_NAME:-konative-website}"
+PROJECT="${VERCEL_PROJECT_NAME:-konative-site}"
 SCOPE="${VERCEL_TEAM_SLUG:-tolowastudioincubator}"
 
 die() { echo "$*" >&2; exit 1; }

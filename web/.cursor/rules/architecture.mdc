@@ -1,0 +1,13 @@
+---
+description: WebOS architecture and repo structure rules
+alwaysApply: true
+---
+
+- This repo implements a reusable website operating system starter, not a one-off site.
+- Use Payload CMS + Next.js + TypeScript.
+- Prefer generic naming for reusable content models and components.
+- Keep Phase 1 limited to Home, About, Services, Contact.
+- Keep the initial block system capped at 14 approved blocks.
+- Favor server components and simple data flow.
+- Avoid premature multi-tenant logic.
+- If adding a new reusable pattern, document it in `docs/decisions.md`.

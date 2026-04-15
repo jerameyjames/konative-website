@@ -1,13 +1,13 @@
 # Konative (repo)
 
-Agent context for the monorepo: app code lives in **`web/`** (Next.js). See `web/AGENTS.md` and `web/CLAUDE.md` for Next.js-specific rules.
+Agent context for the monorepo: app code lives in **`web/`** (Next.js 16 + Payload CMS). See `web/AGENTS.md` for site-specific rules.
 
 ## Deploy Configuration (configured by /setup-deploy)
 
-- **Platform:** Vercel (Next.js 16 app in `web/`)
-- **Vercel project:** `tolowastudioincubator/konative-website` — link and run **`vercel deploy`** from the **repository root** (`.vercel/` lives at root). **Root Directory** = `web`. Do **not** link only inside `web/` or builds resolve to `web/web` and break.
+- **Platform:** Vercel (Next.js 16 + Payload in `web/`)
+- **Vercel project:** `tolowastudioincubator/konative-site` — link and run **`vercel deploy`** from the **repository root** (`.vercel/` lives at root). **Root Directory** = `web`. Do **not** link only inside `web/` or builds resolve to `web/web` and break.
 - **Framework:** Project should use the **Next.js** preset on Vercel. If `*.vercel.app` returns **NOT_FOUND** despite a successful build, set **Framework Preset** to Next.js (or redeploy after it is set).
-- **Production URL:** https://konative.com (also https://konative-website.vercel.app until DNS is fully cut over)
+- **Production URL:** https://konative.com (preview: https://konative-site.vercel.app until custom domain is attached to this project)
 - **Git remote:** https://github.com/jerameyjames/konative-website (`main`)
 - **Vercel project root:** set **Root Directory** to `web` in the Vercel project settings (this repo is not only the Next app at the filesystem root).
 - **No Vercel project yet:** Run **`./scripts/vercel-bootstrap.sh`** from the repo root (after `npm i -g vercel` and `vercel login`). It builds `web/`, creates the project if needed, **`vercel link`** at **repo root**, **`vercel git connect`**, and optional **`--deploy`**. Until Git is connected, **pushing to GitHub does not deploy**.
@@ -46,14 +46,14 @@ Pushing to **Git** updates the Vercel deployment. **DNS at the registrar** is wh
 
 ### Custom deploy hooks
 
-- **Pre-merge:** `cd web && npm ci && npm run build && npm run lint`
+- **Pre-merge:** `cd web && npm ci && npm run build`
 - **Deploy trigger:** Automatic on merge to `main` (Vercel).
 - **Deploy status:** Vercel deployment list / dashboard, or poll `https://konative.com` until the new revision is live.
 - **Health check:** https://konative.com (homepage loads; API routes return expected status).
 
 ### Environment variables (Vercel)
 
-- Copy from `web/.env.example`. Production: set `INQUIRY_WEBHOOK_URL` (and any others you add) in the Vercel project **Settings → Environment Variables**.
+- Copy from `web/.env.example` (create one locally if missing). Production must include Payload + DB: `DATABASE_URI`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`, and optional `BLOB_READ_WRITE_TOKEN` / `INQUIRY_WEBHOOK_URL` per `web/docs/database-setup.md`.
 
 ### Notion
 

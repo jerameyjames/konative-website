@@ -1,0 +1,12 @@
+---
+description: Visual and frontend quality rules for WebOS sites
+alwaysApply: true
+---
+
+- The site should feel premium, warm, spacious, and professional.
+- Use design tokens for typography, spacing, colors, and radius.
+- Avoid generic AI-site aesthetics: purple gradients, bubbly cards, centered-everything layouts, icon-in-circle feature grids.
+- Default to left-aligned content outside of hero moments.
+- Build reusable section patterns that can serve future business sites.
+- Keep motion subtle and purposeful.
+- Optimize for clean editing and maintainable components.

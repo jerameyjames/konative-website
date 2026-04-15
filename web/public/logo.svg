@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 96" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Konative logo</title>
+  <desc id="logoDesc">A geometric wordmark with a forward-link symbol for Konative.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 70V26M24 48L52 26M24 48L52 70"/>
+    <path d="M78 48c0-12 8-22 21-22s21 10 21 22-8 22-21 22-21-10-21-22z"/>
+    <path d="M131 70V26M131 26l24 44M155 70V26"/>
+    <path d="M183 70V26M183 48h31M214 70V26"/>
+    <path d="M240 70V34h20c8 0 14 6 14 14s-6 14-14 14h-20"/>
+    <path d="M305 70V34M289 34h32"/>
+    <path d="M351 70V26"/>
+    <path d="M384 70V34M384 34h28"/>
+    <path d="M384 52h24"/>
+    <path d="M384 70h30"/>
+    <path d="M446 70V34"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M438 18h20"/>
+    <path d="M448 8l10 10-10 10"/>
+    <path d="M422 18h16"/>
+  </g>
+</svg>

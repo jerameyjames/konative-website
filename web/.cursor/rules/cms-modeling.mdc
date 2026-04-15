@@ -1,0 +1,12 @@
+---
+description: Payload CMS modeling rules for reusable sites
+alwaysApply: true
+---
+
+- Prefer block-based page composition through a `layout` field on Pages.
+- Use globals for site-wide settings: navigation, theme, SEO defaults, site settings.
+- Avoid page-specific hardcoded fields when a reusable block can solve the need.
+- Collections should be reusable for future studio sites.
+- Use clear slugs and stable field names.
+- Keep admin labels editor-friendly.
+- Enable preview/live preview where practical.

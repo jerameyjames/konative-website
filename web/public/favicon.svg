@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="favTitle">
+  <title id="favTitle">Konative mark</title>
+  <g fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 24V8M7 16l10-8M7 16l10 8"/>
+    <path d="M18 16h6"/>
+    <path d="M22 12l4 4-4 4"/>
+  </g>
+</svg>
