@@ -4,9 +4,11 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 const navLinks = [
-  { label: "About", url: "/about" },
-  { label: "Services", url: "/services" },
   { label: "Market Intel", url: "/market-intel" },
+  { label: "Blog", url: "/blog" },
+  { label: "Deals", url: "/deals" },
+  { label: "Dashboard", url: "/dashboard" },
+  { label: "Assessment", url: "/assessment" },
   { label: "Contact", url: "/contact" },
 ];
 

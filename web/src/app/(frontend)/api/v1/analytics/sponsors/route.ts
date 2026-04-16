@@ -1,0 +1,34 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
+
+export const dynamic = 'force-dynamic'
+
+export async function GET(request: NextRequest) {
+  const params = request.nextUrl.searchParams
+  const fromDate = params.get('from_date')
+  const toDate = params.get('to_date')
+  const sponsorName = params.get('sponsor_name')
+
+  let query = supabase
+    .from('sponsorship_placements')
+    .select('id, sponsor_name, placement_type, start_date, end_date, impressions, clicks, is_active')
+    .order('start_date', { ascending: false })
+
+  if (sponsorName) query = query.ilike('sponsor_name', `%${sponsorName}%`)
+  if (fromDate) query = query.gte('start_date', fromDate)
+  if (toDate) query = query.lte('end_date', toDate)
+
+  const { data, error } = await query
+
+  if (error) {
+    console.error('Sponsor analytics error:', error)
+    return NextResponse.json({ placements: [] }, { status: 500 })
+  }
+
+  const placements = (data || []).map((p) => ({
+    ...p,
+    ctr: p.impressions > 0 ? ((p.clicks / p.impressions) * 100).toFixed(2) + '%' : '0%',
+  }))
+
+  return NextResponse.json({ placements })
+}

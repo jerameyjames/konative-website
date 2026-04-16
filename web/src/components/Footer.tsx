@@ -1,12 +1,17 @@
 import React from "react";
 import Link from "next/link";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
-const footerLinks = [
-  { label: "About", url: "/about" },
-  { label: "Services", url: "/services" },
+const platformLinks = [
   { label: "Market Intel", url: "/market-intel" },
-  { label: "Contact", url: "/contact" },
+  { label: "Blog", url: "/blog" },
+  { label: "Deals", url: "/deals" },
+  { label: "Dashboard", url: "/dashboard" },
+];
+
+const companyLinks = [
   { label: "Assessment", url: "/assessment" },
+  { label: "Contact", url: "/contact" },
 ];
 
 export default function Footer() {
@@ -18,17 +23,36 @@ export default function Footer() {
             Konative
           </Link>
           <p className="site-footer__tagline">
-            Modular data center development brokerage.
+            The intelligence platform for modular data center development.
           </p>
         </div>
 
-        <nav className="site-footer__nav">
-          {footerLinks.map((link) => (
-            <Link key={link.url} href={link.url} className="site-footer__link">
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="site-footer__links">
+          <div className="site-footer__link-group">
+            <h4 className="site-footer__link-heading">Platform</h4>
+            <nav className="site-footer__nav">
+              {platformLinks.map((link) => (
+                <Link key={link.url} href={link.url} className="site-footer__link">
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+          <div className="site-footer__link-group">
+            <h4 className="site-footer__link-heading">Company</h4>
+            <nav className="site-footer__nav">
+              {companyLinks.map((link) => (
+                <Link key={link.url} href={link.url} className="site-footer__link">
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+
+        <div className="site-footer__newsletter">
+          <NewsletterSignup variant="inline" source="footer" />
+        </div>
       </div>
 
       <div className="site-footer__bottom">

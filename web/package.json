@@ -14,13 +14,17 @@
     "generate:importmap": "payload generate:importmap",
     "generate:types": "payload generate:types",
     "generate:schema": "payload-graphql generate:schema",
-    "seed:home": "tsx scripts/seed-home.ts"
+    "seed:home": "tsx scripts/seed-home.ts",
+    "seed:feeds": "npx tsx scripts/seed-feeds.ts",
+    "seed:sponsors": "npx tsx scripts/seed-sponsors.ts",
+    "seed:deals": "npx tsx scripts/seed-deals.ts"
   },
   "dependencies": {
     "@payloadcms/db-vercel-postgres": "^3.82.1",
     "@payloadcms/next": "3.82.1",
     "@payloadcms/richtext-lexical": "3.82.1",
     "@payloadcms/storage-vercel-blob": "3.82.1",
+    "@supabase/supabase-js": "^2.103.2",
     "next": "^16.2.3",
     "payload": "3.82.1",
     "react": "^19.2.0",
