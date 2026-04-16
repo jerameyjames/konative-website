@@ -30,46 +30,51 @@ async function upsertHomePage(payload: Awaited<ReturnType<typeof getPayload>>, m
   const homeLayout = [
     {
       blockType: 'hero-rotating',
-      headline: 'Expect More',
-      rotatingWords: [{ word: 'Results' }, { word: 'Reach' }, { word: 'Revenue' }, { word: 'Representation' }],
+      headline: 'Navigate',
+      rotatingWords: [
+        { word: 'Power' },
+        { word: 'Connectivity' },
+        { word: 'Capital' },
+        { word: 'Development' },
+      ],
       subtitle:
-        'Konative helps outdoor living, surface, and fabrication manufacturers win stronger territory coverage, grow dealer relationships, and convert market presence into measurable performance across the Pacific Northwest.',
-      ctaLabel: 'Start Partnership Inquiry',
+        'Konative brokers modular data center development — navigating site selection, power interconnection, fiber connectivity, and capital introduction across North America.',
+      ctaLabel: 'Request a Readiness Review',
       ctaLink: '/contact',
     },
     {
       blockType: 'stat-bar',
       stats: [
-        { value: '12+', label: 'Brands represented' },
-        { value: '3-state', label: 'Pacific Northwest footprint' },
-        { value: '18+', label: 'Years of representation experience' },
-        { value: '250+', label: 'Dealer and showroom contacts' },
+        { value: '$1T+', label: 'Global DC investment pipeline' },
+        { value: '15.6 GW', label: 'North American DC absorption' },
+        { value: '4 years', label: 'Large transformer lead time' },
+        { value: '8–10 wks', label: 'Modular DC deployment' },
       ],
     },
     {
       blockType: 'three-card-grid',
-      sectionTitle: 'How Konative Drives Territory Performance',
+      sectionTitle: 'How Konative Drives DC Development',
       cards: [
         {
-          title: 'Territory Representation',
+          title: 'Development Readiness',
           description:
-            'Structured field coverage and account planning to turn scattered opportunities into focused territory momentum.',
-          linkLabel: 'Explore Territory Representation',
+            'Site evaluation, power interconnection mapping, and capital introduction — structured to compress your timeline from land to energized facility.',
+          linkLabel: 'Explore Development Services',
           linkUrl: '/services',
         },
         {
-          title: 'Channel Development',
+          title: 'Connectivity Brokerage',
           description:
-            'Dealer onboarding, showroom strategy, and accountable partner communication that improves sell-through.',
-          linkLabel: 'Explore Channel Development',
+            'Fiber route analysis, carrier negotiation, and dark fiber procurement to ensure your facility meets hyperscale and enterprise connectivity requirements.',
+          linkLabel: 'Explore Connectivity',
           linkUrl: '/services',
         },
         {
-          title: 'Market Activation',
+          title: 'Market Intelligence',
           description:
-            'Launches, education, and regional enablement that align manufacturer goals with local channel execution.',
-          linkLabel: 'Explore Market Activation',
-          linkUrl: '/services',
+            'Curated analysis of power markets, modular build trends, and regional dynamics — practitioner insight, not recycled press releases.',
+          linkLabel: 'Explore Market Intel',
+          linkUrl: '/market-intel',
         },
       ],
     },
@@ -77,16 +82,16 @@ async function upsertHomePage(payload: Awaited<ReturnType<typeof getPayload>>, m
       blockType: 'split-image-text',
       heading: 'Why Konative',
       body:
-        'Konative combines senior rep discipline with practical Pacific Northwest market intelligence. We align dealer networks, protect brand position, and build repeatable sales motion across each territory with clear communication and accountable execution.',
-      ctaLabel: 'Learn About Konative',
+        'Most data center consultants advise from the outside. Konative operates from inside the development stack — we know the interconnection queues, the modular OEMs, and the capital partners because we work in them daily. We align power, connectivity, and capital so your project moves from concept to energized facility on a compressed timeline.',
+      ctaLabel: 'Learn About Our Approach',
       ctaLink: '/about',
       image: mediaId,
       imagePosition: 'right',
     },
     {
       blockType: 'cta-band',
-      heading: 'Ready to expand your Pacific Northwest representation with a partner built for measurable channel growth?',
-      ctaLabel: 'Start Partnership Inquiry',
+      heading: 'Ready to evaluate your modular data center opportunity with a team that knows the development stack?',
+      ctaLabel: 'Request a Readiness Review',
       ctaLink: '/contact',
       style: 'primary',
     },
@@ -107,9 +112,9 @@ async function upsertHomePage(payload: Awaited<ReturnType<typeof getPayload>>, m
         slug: 'home',
         layout: homeLayout,
         meta: {
-          title: 'Konative | Premium Sales Representation',
+          title: 'Konative | Modular Data Center Development Brokerage',
           description:
-            'Woman-owned sales representation and marketing for outdoor living, surfaces, and fabrication across the Pacific Northwest.',
+            'We navigate site, power, connectivity, and capital for modular data center projects across North America.',
         },
       },
     })
@@ -123,9 +128,9 @@ async function upsertHomePage(payload: Awaited<ReturnType<typeof getPayload>>, m
       slug: 'home',
       layout: homeLayout,
       meta: {
-        title: 'Konative | Premium Sales Representation',
+        title: 'Konative | Modular Data Center Development Brokerage',
         description:
-          'Woman-owned sales representation and marketing for outdoor living, surfaces, and fabrication across the Pacific Northwest.',
+          'We navigate site, power, connectivity, and capital for modular data center projects across North America.',
       },
     },
   })

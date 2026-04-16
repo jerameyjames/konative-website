@@ -10,6 +10,7 @@ import { Services } from "./src/collections/Services";
 import { Testimonials } from "./src/collections/Testimonials";
 import { TeamMembers } from "./src/collections/TeamMembers";
 import { FormSubmissions } from "./src/collections/FormSubmissions";
+import { MarketIntelPosts } from "./src/collections/MarketIntelPosts";
 import { Media } from "./src/collections/Media";
 
 // Globals
@@ -42,7 +43,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Pages, Services, Testimonials, TeamMembers, FormSubmissions, Media],
+  collections: [Pages, Services, Testimonials, TeamMembers, FormSubmissions, MarketIntelPosts, Media],
   globals: [SiteSettings, Navigation, Theme, SEODefaults],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "CHANGE_ME",
