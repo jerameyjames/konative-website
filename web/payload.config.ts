@@ -12,6 +12,9 @@ import { TeamMembers } from "./src/collections/TeamMembers";
 import { FormSubmissions } from "./src/collections/FormSubmissions";
 import { MarketIntelPosts } from "./src/collections/MarketIntelPosts";
 import { Media } from "./src/collections/Media";
+import { NewsSources } from "./src/collections/NewsSources";
+import { NewsItems } from "./src/collections/NewsItems";
+import { IngestionRuns } from "./src/collections/IngestionRuns";
 
 // Globals
 import { SiteSettings } from "./src/globals/SiteSettings";
@@ -43,7 +46,18 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Pages, Services, Testimonials, TeamMembers, FormSubmissions, MarketIntelPosts, Media],
+  collections: [
+    Pages,
+    Services,
+    Testimonials,
+    TeamMembers,
+    FormSubmissions,
+    MarketIntelPosts,
+    Media,
+    NewsSources,
+    NewsItems,
+    IngestionRuns,
+  ],
   globals: [SiteSettings, Navigation, Theme, SEODefaults],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "CHANGE_ME",

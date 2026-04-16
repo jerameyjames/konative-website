@@ -79,6 +79,18 @@ async function upsertHomePage(payload: Awaited<ReturnType<typeof getPayload>>, m
       ],
     },
     {
+      blockType: 'latest-news-feed',
+      heading: 'US + Canada Datacenter Intelligence Feed',
+      intro:
+        'Track datacenter construction, permitting, policy changes, and capital announcements in one place. This feed updates from curated industry, government, and corporate sources.',
+      maxItems: 8,
+      countryFilter: 'all',
+      showSource: true,
+      showPublishedDate: true,
+      ctaLabel: 'Open Admin News Dashboard',
+      ctaLink: '/admin/collections/news-items',
+    },
+    {
       blockType: 'split-image-text',
       heading: 'Why Konative',
       body:

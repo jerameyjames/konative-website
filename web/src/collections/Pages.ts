@@ -4,6 +4,7 @@ import { ThreeCardGrid } from "../blocks/ThreeCardGrid/config";
 import { StatBar } from "../blocks/StatBar/config";
 import { SplitImageText } from "../blocks/SplitImageText/config";
 import { CTABand } from "../blocks/CTABand/config";
+import { LatestNewsFeed } from "../blocks/LatestNewsFeed/config";
 
 export const Pages: CollectionConfig = {
   slug: "pages",
@@ -31,7 +32,7 @@ export const Pages: CollectionConfig = {
     {
       name: "layout",
       type: "blocks",
-      blocks: [HeroRotating, ThreeCardGrid, StatBar, SplitImageText, CTABand],
+      blocks: [HeroRotating, ThreeCardGrid, StatBar, SplitImageText, CTABand, LatestNewsFeed],
     },
     {
       name: "meta",

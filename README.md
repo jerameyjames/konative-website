@@ -3,8 +3,7 @@
 | What | URL |
 |------|-----|
 | **Production** | [https://konative.com](https://konative.com) |
-| **Git repository** | [github.com/jerameyjames/konative-website](https://github.com/jerameyjames/konative-website) (`main`) — repo slug only |
-| **Vercel project** | **`konative-site`** (team `tolowastudioincubator`). Not the same name as the GitHub repo; do not use a second “Konative” Vercel project. |
+| **Git repository** | [github.com/jerameyjames/konative-website](https://github.com/jerameyjames/konative-website) (`main`) |
 
 Founder OS structure and PRD live in **`docs/`**. Notion hub (live): [konative.com](https://www.notion.so/konative-com-34132e0a547481489537d232018bbbb0).
 
