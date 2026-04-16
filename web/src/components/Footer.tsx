@@ -29,7 +29,7 @@ export default function Footer() {
             KONATIVE
           </Link>
           <p className="site-footer__tagline">
-            Orchestrating the future of digital infrastructure.
+            The connective tissue between capital and deployed infrastructure.
           </p>
         </div>
 

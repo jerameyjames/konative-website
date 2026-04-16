@@ -360,13 +360,12 @@ p { text-wrap: pretty; max-width: 72ch; }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-dark);
   transition: box-shadow 200ms ease, background 200ms ease;
 }
 .site-header--scrolled {
-  box-shadow: var(--shadow-md);
-  background: rgba(255,255,255,0.98);
+  box-shadow: var(--shadow-lg);
+  background: rgba(26,26,26,0.98);
   backdrop-filter: blur(8px);
 }
 .site-header__inner {
@@ -375,7 +374,7 @@ p { text-wrap: pretty; max-width: 72ch; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-4);
   gap: var(--space-6);
 }
 .site-header__logo {
@@ -384,10 +383,10 @@ p { text-wrap: pretty; max-width: 72ch; }
 }
 .site-header__logo-text {
   font-family: var(--font-headline);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--color-text);
+  letter-spacing: 0.15em;
+  color: #ffffff;
 }
 .site-header__nav {
   display: flex;
@@ -396,23 +395,23 @@ p { text-wrap: pretty; max-width: 72ch; }
 }
 .site-header__link {
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: rgba(255,255,255,0.7);
   text-decoration: none;
   font-weight: 500;
   transition: color 150ms ease;
 }
 .site-header__link:hover {
-  color: var(--color-text);
+  color: #ffffff;
 }
 .site-header__cta {
   display: inline-block;
-  padding: var(--space-2) var(--space-5);
+  padding: var(--space-2) var(--space-4);
   background: var(--color-accent);
   color: #ffffff;
   text-decoration: none;
   border-radius: var(--radius-sm);
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: 500;
   transition: background 180ms ease;
   white-space: nowrap;
 }
@@ -435,7 +434,7 @@ p { text-wrap: pretty; max-width: 72ch; }
   display: block;
   width: 24px;
   height: 2px;
-  background: var(--color-text);
+  background: #ffffff;
   border-radius: 1px;
   transition: transform 200ms ease, opacity 200ms ease;
 }
@@ -456,11 +455,11 @@ p { text-wrap: pretty; max-width: 72ch; }
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--color-surface);
+    background: var(--color-dark);
     flex-direction: column;
     padding: var(--space-6) var(--space-4);
     gap: var(--space-4);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-lg);
   }
   .site-header__nav--open {
     display: flex;
@@ -479,11 +478,10 @@ p { text-wrap: pretty; max-width: 72ch; }
 
 /* ─── Site Footer ─── */
 .site-footer {
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: var(--color-dark);
+  color: #ffffff;
   padding: var(--space-16) var(--space-4) var(--space-8);
   margin-top: 0;
-  border-top: 1px solid var(--color-divider);
 }
 .site-footer__inner {
   max-width: var(--content-wide);
@@ -499,15 +497,15 @@ p { text-wrap: pretty; max-width: 72ch; }
 }
 .site-footer__logo {
   font-family: var(--font-headline);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--color-text);
+  letter-spacing: 0.15em;
+  color: #ffffff;
   text-decoration: none;
 }
 .site-footer__tagline {
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: rgba(255,255,255,0.6);
   margin-top: var(--space-3);
   line-height: 1.6;
 }
@@ -522,9 +520,9 @@ p { text-wrap: pretty; max-width: 72ch; }
 .site-footer__link-heading {
   font-size: var(--text-xs);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-text);
+  color: rgba(255,255,255,0.4);
   margin-bottom: var(--space-4);
 }
 .site-footer__nav {
@@ -534,20 +532,20 @@ p { text-wrap: pretty; max-width: 72ch; }
 }
 .site-footer__link {
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: rgba(255,255,255,0.6);
   text-decoration: none;
   transition: color 150ms ease;
 }
 .site-footer__link:hover {
-  color: var(--color-accent);
+  color: #ffffff;
 }
 .site-footer__bottom {
   max-width: var(--content-wide);
   margin: var(--space-12) auto 0;
   padding-top: var(--space-6);
-  border-top: 1px solid var(--color-divider);
+  border-top: 1px solid var(--color-dark-muted);
   font-size: var(--text-xs);
-  color: var(--color-text-muted);
+  color: rgba(255,255,255,0.4);
 }
 
 /* ─── Contact Page ─── */
