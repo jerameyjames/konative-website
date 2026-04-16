@@ -1,12 +1,14 @@
 import React from "react";
-import "./globals.css";
-import Header from "../../components/Header";
+
 import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+
+import "./globals.css";
 
 export const metadata = {
-  title: "Konative | Modular Data Center Development Brokerage",
+  title: "Konative | Premium Sales Representation",
   description:
-    "We navigate site, power, connectivity, and capital for modular data center projects across North America.",
+    "Woman-owned sales representation and marketing for the outdoor living, surfaces, and fabrication industry.",
 };
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
@@ -26,7 +28,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
       </head>
       <body>
         <Header />
-        <main>{children}</main>
+        <main className="site-main">{children}</main>
         <Footer />
       </body>
     </html>

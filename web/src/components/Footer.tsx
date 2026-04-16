@@ -1,17 +1,13 @@
 import React from "react";
 import Link from "next/link";
-import NewsletterSignup from "@/components/NewsletterSignup";
 
-const platformLinks = [
-  { label: "Market Intel", url: "/market-intel" },
-  { label: "Blog", url: "/blog" },
-  { label: "Deals", url: "/deals" },
-  { label: "Dashboard", url: "/dashboard" },
-];
-
-const companyLinks = [
-  { label: "Assessment", url: "/assessment" },
+const footerLinks = [
+  { label: "Home", url: "/" },
+  { label: "About", url: "/about" },
+  { label: "Services", url: "/services" },
+  { label: "News", url: "/news" },
   { label: "Contact", url: "/contact" },
+  { label: "Assessment", url: "/assessment" },
 ];
 
 export default function Footer() {
@@ -23,36 +19,17 @@ export default function Footer() {
             Konative
           </Link>
           <p className="site-footer__tagline">
-            The intelligence platform for modular data center development.
+            Woman-owned sales representation and marketing for outdoor living, surfaces, and fabrication.
           </p>
         </div>
 
-        <div className="site-footer__links">
-          <div className="site-footer__link-group">
-            <h4 className="site-footer__link-heading">Platform</h4>
-            <nav className="site-footer__nav">
-              {platformLinks.map((link) => (
-                <Link key={link.url} href={link.url} className="site-footer__link">
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-          <div className="site-footer__link-group">
-            <h4 className="site-footer__link-heading">Company</h4>
-            <nav className="site-footer__nav">
-              {companyLinks.map((link) => (
-                <Link key={link.url} href={link.url} className="site-footer__link">
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        </div>
-
-        <div className="site-footer__newsletter">
-          <NewsletterSignup variant="inline" source="footer" />
-        </div>
+        <nav className="site-footer__nav">
+          {footerLinks.map((link) => (
+            <Link key={link.url} href={link.url} className="site-footer__link">
+              {link.label}
+            </Link>
+          ))}
+        </nav>
       </div>
 
       <div className="site-footer__bottom">

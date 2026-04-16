@@ -1,0 +1,47 @@
+{
+  "stitchProject": {
+    "title": "konative.com",
+    "projectResourceName": "projects/17081589643924163321",
+    "projectId": "17081589643924163321"
+  },
+  "designBrief": "Konative: woman-owned B2B sales representation for outdoor living, surfaces, fabrication. Light warm UI (#FAF9F7 / #F4F2EE), charcoal text (#1C1917), single restrained accent (terracotta or deep sage). Sticky nav: Konative, Home, About, Services, News, Contact; primary CTA Start partnership inquiry. Max width ~1200px, generous whitespace, no hero text overlap, no scroll-bounce clichés.",
+  "screens": [
+    {
+      "key": "home",
+      "route": "/",
+      "title": "Home",
+      "prompt": "Design a desktop marketing homepage for Konative (woman-owned sales representation and marketing for outdoor living, surfaces, fabrication; partnership inquiries). Light UI: warm off-white background (#FAF9F7 / #F4F2EE), charcoal text (#1C1917), one restrained accent terracotta or deep sage, no neon or purple-blue gradients. Typography: DM Sans or Geist feel, clear hierarchy. Sticky header: wordmark Konative, nav Home · About · Services · News · Contact, primary button Start partnership inquiry.\n\nHero: large headline \"Expect More\" with a single rotating word slot showing one of: Results, Reach, Revenue, Representation (show one state). Subtitle: Konative helps outdoor living, surface, and fabrication manufacturers grow territory coverage, dealer relationships, and measurable performance in the Pacific Northwest. One primary CTA: Start partnership inquiry.\n\nBelow: stat bar — 12+ brands represented, 3-state PNW footprint, 18+ years experience, 250+ dealer/showroom contacts.\n\nThree cards: Territory representation, Channel development, Market activation — short copy each, link to Services.\n\nNews feed strip: title \"US + Canada datacenter intelligence feed\", intro line, 3 placeholder article rows (title, source, date).\n\nFooter: contact teaser, legal row. Generous whitespace, max width ~1200px, no overlapping hero text, no scroll-bounce clichés."
+    },
+    {
+      "key": "about",
+      "route": "/about",
+      "title": "About",
+      "prompt": "Desktop About page for Konative: hero with page title About Konative, short mission paragraph (representation firm, manufacturer partnerships). Sections: Our story (two columns text + image placeholder), Leadership / team as a grid of 4 portrait cards (name, role, one line). Values as 3 short pillars. Closing CTA band: partnership inquiry. Same header/footer as home. Light warm premium marketing aesthetic per Konative brief."
+    },
+    {
+      "key": "services",
+      "route": "/services",
+      "title": "Services",
+      "prompt": "Desktop Services landing for Konative: hero Services + one-line value prop. Services list: expandable rows or stacked sections for Territory representation, Channel development, Market activation, Showroom & dealer programs (placeholder bullets). Include split image + text block and a testimonial quote with attribution. End with Contact CTA. Same nav/footer. Light warm UI per Konative brief."
+    },
+    {
+      "key": "contact",
+      "route": "/contact",
+      "title": "Contact",
+      "prompt": "Desktop Contact page: hero Start a partnership inquiry. Two-column layout: left — form fields Name, Company, Email, Phone, Message, dropdown Primary interest (Representation / Channel / Other), submit Send inquiry. Right — contact card (placeholder Pacific Northwest, email, response-time note). Calm, trustworthy. Same header; footer simplified OK. Konative light warm marketing style."
+    },
+    {
+      "key": "news",
+      "route": "/news",
+      "title": "News",
+      "prompt": "Desktop News listing: title Industry intelligence, subcopy about curated US/Canada datacenter and construction signals. Filter bar: country (All / US / Canada), topic chips (placeholder). Card grid of articles (thumb, title, source, date, excerpt), pagination at bottom. Same global chrome. Konative marketing site style."
+    },
+    {
+      "key": "interior",
+      "route": "/[slug]",
+      "title": "Interior CMS page",
+      "prompt": "Desktop long-form interior page template for Konative: hero with page title and optional eyebrow. Rich article layout: intro paragraph, H2 sections, pull quote, inline image placeholder, bullet list, closing CTA to Contact. Generic Payload-driven page — neutral for any slug. Same header/footer."
+    }
+  ],
+  "mcpNote": "stitch__generate_screen_from_text can exceed MCP client timeouts; run from Google Stitch UI with these prompts, or retry MCP with an extended timeout client."
+}
