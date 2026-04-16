@@ -4,12 +4,11 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 const navLinks = [
-  { label: "Market Intel", url: "/market-intel" },
-  { label: "Blog", url: "/blog" },
+  { label: "Solutions", url: "/solutions" },
+  { label: "Process", url: "/assessment" },
+  { label: "Intel", url: "/market-intel" },
   { label: "Deals", url: "/deals" },
-  { label: "Dashboard", url: "/dashboard" },
-  { label: "Assessment", url: "/assessment" },
-  { label: "Contact", url: "/contact" },
+  { label: "Insights", url: "/blog" },
 ];
 
 export default function Header() {
@@ -26,7 +25,7 @@ export default function Header() {
     <header className={`site-header${scrolled ? " site-header--scrolled" : ""}`}>
       <div className="site-header__inner">
         <Link href="/" className="site-header__logo">
-          Konative
+          <span className="site-header__logo-text">KONATIVE</span>
         </Link>
 
         <nav className={`site-header__nav${menuOpen ? " site-header__nav--open" : ""}`}>
@@ -45,12 +44,12 @@ export default function Header() {
             className="site-header__cta site-header__cta--mobile"
             onClick={() => setMenuOpen(false)}
           >
-            Request a Review
+            Contact
           </Link>
         </nav>
 
         <Link href="/contact" className="site-header__cta site-header__cta--desktop">
-          Request a Review
+          Contact
         </Link>
 
         <button

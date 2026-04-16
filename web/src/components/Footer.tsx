@@ -1,16 +1,15 @@
 import React from "react";
 import Link from "next/link";
-import NewsletterSignup from "@/components/NewsletterSignup";
 
 const platformLinks = [
   { label: "Market Intel", url: "/market-intel" },
-  { label: "Blog", url: "/blog" },
   { label: "Deals", url: "/deals" },
+  { label: "Blog", url: "/blog" },
   { label: "Dashboard", url: "/dashboard" },
 ];
 
 const companyLinks = [
-  { label: "Assessment", url: "/assessment" },
+  { label: "Process", url: "/assessment" },
   { label: "Contact", url: "/contact" },
 ];
 
@@ -20,10 +19,10 @@ export default function Footer() {
       <div className="site-footer__inner">
         <div className="site-footer__brand">
           <Link href="/" className="site-footer__logo">
-            Konative
+            KONATIVE
           </Link>
           <p className="site-footer__tagline">
-            The intelligence platform for modular data center development.
+            The connective tissue for ambitious infrastructure projects.
           </p>
         </div>
 
@@ -48,10 +47,6 @@ export default function Footer() {
               ))}
             </nav>
           </div>
-        </div>
-
-        <div className="site-footer__newsletter">
-          <NewsletterSignup variant="inline" source="footer" />
         </div>
       </div>
 
