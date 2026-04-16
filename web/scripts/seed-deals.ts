@@ -16,7 +16,7 @@ const deals = [
     status: 'announced',
     category: 'saudi_gulf',
     power_capacity_mw: 1900,
-    partner_companies: 'Public Investment Fund, HUMAIN',
+    partner_companies: ['Public Investment Fund', 'HUMAIN'],
     summary: 'Saudi AI infrastructure platform targeting 1.9GW of data center capacity.',
   },
   {
@@ -26,7 +26,7 @@ const deals = [
     status: 'announced',
     category: 'investment_ma',
     power_capacity_mw: 5000,
-    partner_companies: 'MGX, Aligned Data Centers',
+    partner_companies: ['MGX', 'Aligned Data Centers'],
     summary: 'Landmark $40B deal for 5GW hyperscale data center portfolio.',
   },
   {
@@ -36,7 +36,7 @@ const deals = [
     status: 'active',
     category: 'saudi_gulf',
     power_capacity_mw: null,
-    partner_companies: 'G42',
+    partner_companies: ['G42'],
     summary: 'Abu Dhabi AI fund investing in global data center infrastructure.',
   },
   {
@@ -46,7 +46,7 @@ const deals = [
     status: 'announced',
     category: 'investment_ma',
     power_capacity_mw: null,
-    partner_companies: 'Qatar Investment Authority, Brookfield',
+    partner_companies: ['Qatar Investment Authority', 'Brookfield'],
     summary: 'Sovereign wealth fund partnership for global data center expansion.',
   },
   {
@@ -56,7 +56,7 @@ const deals = [
     status: 'active',
     category: 'modular_build',
     power_capacity_mw: null,
-    partner_companies: 'DataVolt',
+    partner_companies: ['DataVolt'],
     summary: 'Multi-GW sustainable data center pipeline with renewable energy focus.',
   },
 ]
