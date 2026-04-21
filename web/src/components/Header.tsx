@@ -16,6 +16,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [ctaHovered, setCtaHovered] = useState(false);
+  const [loginHovered, setLoginHovered] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -41,11 +42,11 @@ export default function Header() {
   const innerStyle: React.CSSProperties = {
     maxWidth: 1280,
     margin: "0 auto",
-    padding: "0 32px",
+    padding: "0 24px",
     display: "flex",
     alignItems: "center",
     height: 64,
-    gap: 32,
+    gap: 24,
   };
 
   const wordmarkStyle: React.CSSProperties = {
@@ -76,9 +77,42 @@ export default function Header() {
 
   const navStyle: React.CSSProperties = {
     display: "flex",
-    gap: 28,
+    gap: 22,
     flex: 1,
     justifyContent: "center",
+    minWidth: 0,
+  };
+
+  const actionsStyle: React.CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    flexShrink: 0,
+  };
+
+  const loginStyle: React.CSSProperties = {
+    fontFamily: "'Inter', sans-serif",
+    fontWeight: 600,
+    fontSize: 11,
+    letterSpacing: "0.12em",
+    textTransform: "uppercase",
+    padding: "9px 14px",
+    textDecoration: "none",
+    border:
+      loginHovered
+        ? scrolled
+          ? "1px solid rgba(17,17,17,0.45)"
+          : "1px solid rgba(255,255,255,0.75)"
+        : scrolled
+          ? "1px solid rgba(17,17,17,0.22)"
+          : "1px solid rgba(255,255,255,0.42)",
+    color: linkColor,
+    background: loginHovered
+      ? scrolled
+        ? "rgba(17,17,17,0.04)"
+        : "rgba(255,255,255,0.08)"
+      : "transparent",
+    transition: "border-color 0.2s, color 0.2s, background 0.2s",
   };
 
   const ctaStyle: React.CSSProperties = {
@@ -133,15 +167,25 @@ export default function Header() {
           })}
         </nav>
 
-        {/* CTA */}
-        <Link
-          href="/contact"
-          style={ctaStyle}
-          onMouseEnter={() => setCtaHovered(true)}
-          onMouseLeave={() => setCtaHovered(false)}
-        >
-          REQUEST A REVIEW
-        </Link>
+        {/* Login + CTA */}
+        <div style={actionsStyle}>
+          <Link
+            href="/cms"
+            style={loginStyle}
+            onMouseEnter={() => setLoginHovered(true)}
+            onMouseLeave={() => setLoginHovered(false)}
+          >
+            Log in
+          </Link>
+          <Link
+            href="/contact"
+            style={ctaStyle}
+            onMouseEnter={() => setCtaHovered(true)}
+            onMouseLeave={() => setCtaHovered(false)}
+          >
+            REQUEST A REVIEW
+          </Link>
+        </div>
       </div>
     </header>
   );
