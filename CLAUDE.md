@@ -2,6 +2,11 @@
 
 Agent context for the monorepo: app code lives in **`web/`** (Next.js 16 + Sanity + Builder.io). See `web/AGENTS.md` for site-specific rules.
 
+## Local development
+
+- From `web/`: `npm ci` then **`npm run dev`** — app URL **`http://localhost:3005`** (port **3005** is the repo default so it does not collide with common bindings on **3000** / **3010** / **3011**, e.g. Docker).
+- Override when needed: `npx next dev -p <port>` from `web/`.
+
 ## Deploy Configuration (configured by /setup-deploy)
 
 - **Platform:** Vercel (Next.js 16 app in `web/`)

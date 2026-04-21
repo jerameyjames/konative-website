@@ -17,6 +17,8 @@ npm ci
 npm run dev
 ```
 
+Dev server: **http://localhost:3005** (see root `CLAUDE.md`).
+
 - Production build: `npm run build` then `npm run start`
 - Vercel: link from **repository root** with **Root Directory = `web`** (see root **`CLAUDE.md`**). Default project name in `scripts/vercel-bootstrap.sh` is **`konative-site`**; override with `VERCEL_PROJECT_NAME` if needed.
 - Environment: copy `web/.env.example` to `web/.env.local` and set `DATABASE_URI`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL` (see `web/docs/database-setup.md`).
