@@ -1172,10 +1172,6 @@ button {
   color: var(--gray, #666);
   border: 1px solid var(--border, #e0ddd8);
 }
-.cms-hub__badge--neutral {
-  background: #e0e7ff;
-  color: #3730a3;
-}
 .cms-hub__card-title {
   font-family: var(--font-body);
   font-size: var(--text-lg);
