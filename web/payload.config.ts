@@ -5,22 +5,22 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // Collections
-import { Pages } from "./src/collections/Pages";
-import { Services } from "./src/collections/Services";
-import { Testimonials } from "./src/collections/Testimonials";
-import { TeamMembers } from "./src/collections/TeamMembers";
-import { FormSubmissions } from "./src/collections/FormSubmissions";
-import { MarketIntelPosts } from "./src/collections/MarketIntelPosts";
-import { Media } from "./src/collections/Media";
-import { NewsSources } from "./src/collections/NewsSources";
-import { NewsItems } from "./src/collections/NewsItems";
-import { IngestionRuns } from "./src/collections/IngestionRuns";
+import { Pages } from "./src/collections/Pages.js";
+import { Services } from "./src/collections/Services.js";
+import { Testimonials } from "./src/collections/Testimonials.js";
+import { TeamMembers } from "./src/collections/TeamMembers.js";
+import { FormSubmissions } from "./src/collections/FormSubmissions.js";
+import { MarketIntelPosts } from "./src/collections/MarketIntelPosts.js";
+import { Media } from "./src/collections/Media.js";
+import { NewsSources } from "./src/collections/NewsSources.js";
+import { NewsItems } from "./src/collections/NewsItems.js";
+import { IngestionRuns } from "./src/collections/IngestionRuns.js";
 
 // Globals
-import { SiteSettings } from "./src/globals/SiteSettings";
-import { Navigation } from "./src/globals/Navigation";
-import { Theme } from "./src/globals/Theme";
-import { SEODefaults } from "./src/globals/SEODefaults";
+import { SiteSettings } from "./src/globals/SiteSettings.js";
+import { Navigation } from "./src/globals/Navigation.js";
+import { Theme } from "./src/globals/Theme.js";
+import { SEODefaults } from "./src/globals/SEODefaults.js";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
