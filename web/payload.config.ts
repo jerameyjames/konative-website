@@ -15,6 +15,10 @@ import { Media } from "./src/collections/Media";
 import { NewsSources } from "./src/collections/NewsSources";
 import { NewsItems } from "./src/collections/NewsItems";
 import { IngestionRuns } from "./src/collections/IngestionRuns";
+import { Users } from "./src/collections/Users";
+
+// Migrations
+import * as InitMigration from "./src/migrations/20240421_000000_init";
 
 // Globals
 import { SiteSettings } from "./src/globals/SiteSettings";
@@ -25,16 +29,17 @@ import { SEODefaults } from "./src/globals/SEODefaults";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-// Use non-pooling URL for DDL (push/migrations) — PgBouncer can't run CREATE TABLE.
-// Falls back to POSTGRES_URL if the non-pooling var isn't set.
+// Non-pooling URL required for DDL — PgBouncer blocks CREATE TABLE.
 const dbAdapter = vercelPostgresAdapter({
-  push: true,
   pool: {
     connectionString:
       process.env.POSTGRES_URL_NON_POOLING ??
       process.env.DATABASE_URL_UNPOOLED ??
       process.env.POSTGRES_URL,
   },
+  // prodMigrations runs on every cold start in production and applies any
+  // pending migrations. InitMigration pushes the full schema on first deploy.
+  prodMigrations: [InitMigration],
 });
 
 export default buildConfig({
@@ -51,6 +56,7 @@ export default buildConfig({
     },
   },
   collections: [
+    Users,
     Pages,
     Services,
     Testimonials,
