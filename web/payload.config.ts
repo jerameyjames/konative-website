@@ -31,7 +31,7 @@ const dirname = path.dirname(filename);
  * you are using a plain `postgres://` URL (e.g. local Docker). See Payload docs:
  * `vercelPostgresAdapter()` with no args uses `POSTGRES_URL` / platform defaults.
  */
-const dbAdapter = vercelPostgresAdapter({});
+const dbAdapter = vercelPostgresAdapter({ push: true });
 
 export default buildConfig({
   admin: {
