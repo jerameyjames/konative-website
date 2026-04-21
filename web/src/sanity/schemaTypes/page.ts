@@ -14,9 +14,22 @@ export const page = defineType({
     }),
     defineField({
       name: "layout",
-      type: "json",
-      title: "Layout blocks",
-      description: "Array of blocks: each item uses Payload-style { blockType, ...fields }.",
+      type: "text",
+      title: "Layout blocks (JSON)",
+      description:
+        'JSON array of blocks. Each item uses Payload-style { "blockType": "hero-rotating" | …, …fields }.',
+      rows: 24,
+      validation: (Rule) =>
+        Rule.custom((value) => {
+          if (!value || typeof value !== "string") return true;
+          try {
+            const parsed = JSON.parse(value) as unknown;
+            if (!Array.isArray(parsed)) return "Must be a JSON array";
+          } catch {
+            return "Invalid JSON";
+          }
+          return true;
+        }),
     }),
     defineField({
       name: "meta",

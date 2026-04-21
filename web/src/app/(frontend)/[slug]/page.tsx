@@ -18,6 +18,19 @@ const pageQuery = `*[_type == "page" && slug.current == $slug][0]{
   meta
 }`;
 
+function normalizeLayoutBlocks(raw: unknown): unknown[] {
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw === "string" && raw.trim()) {
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
 const latestNewsQuery = `*[_type == "newsItem" && status == "published"] | order(publishedAt desc)[0...20]{
   "id": _id,
   title,
@@ -33,7 +46,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { slug = "home" } = await paramsPromise;
   const decodedSlug = decodeURIComponent(slug);
 
-  let pageData: { layout?: unknown[]; title?: string } | null = null;
+  let pageData: { layout?: unknown; title?: string } | null = null;
   let newsItems: any[] = [];
 
   try {
@@ -85,8 +98,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     return notFound();
   }
 
-  const rawLayout = pageData.layout;
-  const blocks = Array.isArray(rawLayout) ? rawLayout : [];
+  const blocks = normalizeLayoutBlocks(pageData.layout);
 
   return <RenderBlocks blocks={blocks as any} newsItems={newsItems} />;
 }
