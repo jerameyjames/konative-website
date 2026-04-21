@@ -1,9 +1,14 @@
 import type { NextConfig } from "next";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+/** Parent of `web/` — must match Vercel `outputFileTracingRoot` when Root Directory is `web`. */
+const webDir = path.dirname(fileURLToPath(import.meta.url));
+const monorepoRoot = path.resolve(webDir, "..");
 
 const nextConfig: NextConfig = {
   turbopack: {
-    root: path.resolve(process.cwd()),
+    root: monorepoRoot,
   },
   images: {
     remotePatterns: [

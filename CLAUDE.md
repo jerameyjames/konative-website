@@ -1,10 +1,10 @@
 # Konative (repo)
 
-Agent context for the monorepo: app code lives in **`web/`** (Next.js 16 + Payload CMS). See `web/AGENTS.md` for site-specific rules.
+Agent context for the monorepo: app code lives in **`web/`** (Next.js 16 + Sanity + Builder.io). See `web/AGENTS.md` for site-specific rules.
 
 ## Deploy Configuration (configured by /setup-deploy)
 
-- **Platform:** Vercel (Next.js 16 + Payload in `web/`)
+- **Platform:** Vercel (Next.js 16 app in `web/`)
 - **Vercel project:** `tolowastudioincubator/konative-site` — link and run **`vercel deploy`** from the **repository root** (`.vercel/` lives at root). **Root Directory must be `web`** (Vercel Dashboard → Project → Settings → General → Root Directory). If it is left as `.`, builds fail with “No Next.js version detected” or missing `vercel-build`. Do **not** run `vercel link` only inside `web/` or builds resolve to `web/web` and break.
 - **Framework:** Project should use the **Next.js** preset on Vercel. If `*.vercel.app` returns **NOT_FOUND** despite a successful build, set **Framework Preset** to Next.js (or redeploy after it is set).
 - **Production URL:** https://konative.com (preview: https://konative-site.vercel.app until custom domain is attached to this project)
@@ -53,7 +53,7 @@ Pushing to **Git** updates the Vercel deployment. **DNS at the registrar** is wh
 
 ### Environment variables (Vercel)
 
-- Copy from `web/.env.example` (create one locally if missing). Production must include Payload + DB: `DATABASE_URI`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`, and optional `BLOB_READ_WRITE_TOKEN` / `INQUIRY_WEBHOOK_URL` per `web/docs/database-setup.md`.
+- Copy from `web/.env.local.example`. Production needs at least `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_TOKEN`, `NEXT_PUBLIC_SITE_URL`, and (if using Builder on `/`) `NEXT_PUBLIC_BUILDER_API_KEY`. See that file for optional keys (Resend, Supabase, news ingest, etc.).
 
 ### Notion
 
