@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
 
 import { XMLParser } from "fast-xml-parser";
-
-type PayloadInstance = any;
+import type { SanityClient } from "@sanity/client";
 
 type SourceDoc = {
-  id: string | number;
+  _id: string;
+  id: string;
   name: string;
   slug?: string;
   feedUrl?: string;
@@ -65,8 +65,17 @@ const normalizeDate = (value: unknown) => {
   return parsed.toISOString();
 };
 
-const fingerprintFor = (sourceId: string | number, rawFingerprint: string, publishedAt: string) =>
+const fingerprintFor = (sourceId: string, rawFingerprint: string, publishedAt: string) =>
   createHash("sha256").update(`${sourceId}::${rawFingerprint}::${publishedAt}`).digest("hex");
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
 
 function parseFeed(xmlText: string): ParsedItem[] {
   const parsed = parser.parse(xmlText);
@@ -98,31 +107,26 @@ function parseFeed(xmlText: string): ParsedItem[] {
   return [...rssItems, ...atomItems].filter((item) => item.title && item.url && item.rawFingerprint);
 }
 
-async function ingestSource(payload: PayloadInstance, source: SourceDoc): Promise<PerSourceResult> {
-  const run = await payload.create({
-    collection: "ingestion-runs",
-    data: {
-      runLabel: `Source ingest: ${source.name}`,
-      status: "running",
-      source: source.id,
-      startedAt: new Date().toISOString(),
-      itemsDiscovered: 0,
-      itemsCreated: 0,
-      itemsSkipped: 0,
-    },
-  });
+async function ingestSource(sanity: SanityClient, source: SourceDoc): Promise<PerSourceResult> {
+  const runDoc = {
+    _type: "ingestionRun" as const,
+    runLabel: `Source ingest: ${source.name}`,
+    status: "running" as const,
+    source: { _type: "reference" as const, _ref: source._id },
+    startedAt: new Date().toISOString(),
+    itemsDiscovered: 0,
+    itemsCreated: 0,
+    itemsSkipped: 0,
+  };
+
+  const run = await sanity.create(runDoc);
 
   if (!source.feedUrl) {
     const error = "No feedUrl configured for this source.";
-    await payload.update({
-      collection: "ingestion-runs",
-      id: run.id,
-      data: {
-        status: "partial",
-        completedAt: new Date().toISOString(),
-        errorLog: error,
-      },
-    });
+    await sanity
+      .patch(run._id)
+      .set({ status: "partial", completedAt: new Date().toISOString(), errorLog: error })
+      .commit();
     return {
       sourceName: source.name,
       sourceSlug: source.slug,
@@ -152,60 +156,62 @@ async function ingestSource(payload: PayloadInstance, source: SourceDoc): Promis
     let skipped = 0;
 
     for (const item of parsedItems) {
-      const ingestFingerprint = fingerprintFor(source.id, item.rawFingerprint, item.publishedAt);
+      const ingestFingerprint = fingerprintFor(source._id, item.rawFingerprint, item.publishedAt);
+      const stableId = `newsitem.${ingestFingerprint}`;
 
-      const existing = await payload.find({
-        collection: "news-items",
-        where: { ingestFingerprint: { equals: ingestFingerprint } },
-        limit: 1,
-      });
+      const existingId = await sanity.fetch<string | null>(
+        `*[_type == "newsItem" && ingestFingerprint == $fp][0]._id`,
+        { fp: ingestFingerprint },
+      );
 
-      if (existing.docs[0]) {
+      if (existingId) {
         skipped += 1;
         continue;
       }
 
-      await payload.create({
-        collection: "news-items",
-        data: {
+      const normalizedDate =
+        typeof item.publishedAt === "string" ? item.publishedAt.slice(0, 10) : new Date().toISOString().slice(0, 10);
+      const itemSlug = `${slugify(item.title)}-${normalizedDate}`;
+
+      try {
+        await sanity.create({
+          _id: stableId,
+          _type: "newsItem",
           title: item.title,
+          slug: { _type: "slug", current: itemSlug },
+          status: "published",
           url: item.url,
           summary: item.summary?.slice(0, 350),
           contentType: "news",
-          source: source.id,
+          source: { _type: "reference", _ref: source._id },
           sourceName: source.name,
           publishedAt: item.publishedAt,
           discoveredAt: new Date().toISOString(),
-          countries: source.countries || ["us"],
-          topics: source.topics || ["construction"],
+          countries: source.countries?.length ? source.countries : ["us"],
+          topics: source.topics?.length ? source.topics : ["construction"],
           ingestFingerprint,
-          status: "published",
-        },
-      });
-
-      created += 1;
+        });
+        created += 1;
+      } catch {
+        skipped += 1;
+      }
     }
 
-    await payload.update({
-      collection: "news-sources",
-      id: source.id,
-      data: {
-        lastIngestedAt: new Date().toISOString(),
-        lastIngestError: "",
-      },
-    });
+    await sanity
+      .patch(source._id)
+      .set({ lastIngestedAt: new Date().toISOString(), lastIngestError: "" })
+      .commit();
 
-    await payload.update({
-      collection: "ingestion-runs",
-      id: run.id,
-      data: {
+    await sanity
+      .patch(run._id)
+      .set({
         status: "succeeded",
         completedAt: new Date().toISOString(),
         itemsDiscovered: parsedItems.length,
         itemsCreated: created,
         itemsSkipped: skipped,
-      },
-    });
+      })
+      .commit();
 
     return {
       sourceName: source.name,
@@ -218,24 +224,19 @@ async function ingestSource(payload: PayloadInstance, source: SourceDoc): Promis
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown ingest error";
 
-    await payload.update({
-      collection: "news-sources",
-      id: source.id,
-      data: {
-        lastIngestedAt: new Date().toISOString(),
-        lastIngestError: message,
-      },
-    });
+    await sanity
+      .patch(source._id)
+      .set({ lastIngestedAt: new Date().toISOString(), lastIngestError: message })
+      .commit();
 
-    await payload.update({
-      collection: "ingestion-runs",
-      id: run.id,
-      data: {
+    await sanity
+      .patch(run._id)
+      .set({
         status: "failed",
         completedAt: new Date().toISOString(),
         errorLog: message,
-      },
-    });
+      })
+      .commit();
 
     return {
       sourceName: source.name,
@@ -249,26 +250,31 @@ async function ingestSource(payload: PayloadInstance, source: SourceDoc): Promis
   }
 }
 
-export async function runNewsIngestion(payload: PayloadInstance, options: RunOptions = {}): Promise<NewsIngestionSummary> {
-  const andConditions: any[] = [{ active: { equals: true } }];
-  if (options.sourceSlug) {
-    andConditions.push({ slug: { equals: options.sourceSlug } });
-  }
-
-  const sources = await payload.find({
-    collection: "news-sources",
-    where: andConditions.length > 1 ? { and: andConditions } : andConditions[0],
-    sort: "-priority",
-    limit: options.maxSources || 100,
-  });
+export async function runNewsIngestion(sanity: SanityClient, options: RunOptions = {}): Promise<NewsIngestionSummary> {
+  const sources = await sanity.fetch<SourceDoc[]>(
+    `*[_type == "newsSource" && active == true && ($sourceSlug == null || slug.current == $sourceSlug)] | order(priority desc)[0...$max]{
+      "_id": _id,
+      "id": _id,
+      name,
+      "slug": slug.current,
+      feedUrl,
+      countries,
+      topics,
+      priority
+    }`,
+    {
+      sourceSlug: options.sourceSlug ?? null,
+      max: options.maxSources ?? 100,
+    },
+  );
 
   const results: PerSourceResult[] = [];
   let discovered = 0;
   let created = 0;
   let skipped = 0;
 
-  for (const source of sources.docs as SourceDoc[]) {
-    const result = await ingestSource(payload, source);
+  for (const source of sources) {
+    const result = await ingestSource(sanity, source);
     discovered += result.discovered;
     created += result.created;
     skipped += result.skipped;
@@ -276,7 +282,7 @@ export async function runNewsIngestion(payload: PayloadInstance, options: RunOpt
   }
 
   return {
-    sourceCount: sources.docs.length,
+    sourceCount: sources.length,
     discovered,
     created,
     skipped,

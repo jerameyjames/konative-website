@@ -1,6 +1,4 @@
-import type { Block } from "payload";
-
-export const StatBar: Block = {
+export const StatBar = {
   slug: "stat-bar",
   labels: { singular: "Stat Bar", plural: "Stat Bars" },
   fields: [

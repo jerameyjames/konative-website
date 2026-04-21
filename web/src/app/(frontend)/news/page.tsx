@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { getPayload } from "payload";
 
-import config from "@payload-config";
-import { NEWS_SOURCE_COUNTRY_OPTIONS, NEWS_TOPIC_OPTIONS } from "../../../collections/NewsSources";
+import {
+  NEWS_SOURCE_COUNTRY_OPTIONS,
+  NEWS_TOPIC_OPTIONS,
+  isNewsTopicValue,
+} from "../../../lib/newsConstants";
+import { getSanityReadClient } from "../../../sanity/readClient";
 
 export const dynamic = "force-dynamic";
 
@@ -39,14 +42,9 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   const params = await searchParams;
 
   const country = params.country === "us" || params.country === "ca" ? params.country : "all";
-  const validTopicValues = new Set(NEWS_TOPIC_OPTIONS.map((option) => option.value));
-  const topic = params.topic && validTopicValues.has(params.topic) ? params.topic : "all";
+  const topic = params.topic && isNewsTopicValue(params.topic) ? params.topic : "all";
   const page = Number.parseInt(params.page || "1", 10);
   const currentPage = Number.isNaN(page) || page < 1 ? 1 : page;
-
-  const andConditions: any[] = [{ status: { equals: "published" } }];
-  if (country !== "all") andConditions.push({ countries: { contains: country } });
-  if (topic !== "all") andConditions.push({ topics: { contains: topic } });
 
   let isDataUnavailable = false;
   let news: {
@@ -59,15 +57,34 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     totalPages: 1,
   };
 
+  const filter =
+    `_type == "newsItem" && status == "published"` +
+    (country !== "all" ? ` && "${country}" in coalesce(countries, [])` : "") +
+    (topic !== "all" ? ` && "${topic}" in coalesce(topics, [])` : "");
+
   try {
-    const payload = await getPayload({ config });
-    news = await payload.find({
-      collection: "news-items",
-      where: { and: andConditions },
-      sort: "-publishedAt",
+    const client = getSanityReadClient();
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    const total = await client.fetch<number>(`count(*[${filter}])`, {});
+    const docs = await client.fetch<any[]>(
+      `*[${filter}] | order(publishedAt desc)[${start}...${end}]{
+        "id": _id,
+        title,
+        url,
+        summary,
+        sourceName,
+        publishedAt,
+        countries,
+        topics
+      }`,
+      {},
+    );
+    news = {
+      docs,
       page: currentPage,
-      limit: ITEMS_PER_PAGE,
-    });
+      totalPages: Math.max(1, Math.ceil(total / ITEMS_PER_PAGE)),
+    };
   } catch (_error) {
     isDataUnavailable = true;
   }

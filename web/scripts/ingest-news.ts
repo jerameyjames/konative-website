@@ -1,12 +1,13 @@
-import { getPayload } from "payload";
+import { loadEnvConfig } from "@next/env";
 
-import config from "../payload.config";
 import { runNewsIngestion } from "../src/lib/newsIngestion";
+import { getSanityWriteClient } from "../src/sanity/writeClient";
+
+loadEnvConfig(process.cwd());
 
 async function main() {
-  const payload = await getPayload({ config });
-
-  const summary = await runNewsIngestion(payload);
+  const sanity = getSanityWriteClient();
+  const summary = await runNewsIngestion(sanity);
 
   for (const result of summary.results) {
     console.log(

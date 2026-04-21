@@ -1,0 +1,47 @@
+import { NextResponse } from "next/server";
+
+import { getSanityReadClient } from "../../../../sanity/readClient";
+
+export const dynamic = "force-dynamic";
+
+const MAX = 24;
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const limit = Math.min(MAX, Math.max(1, Number.parseInt(searchParams.get("limit") || "8", 10) || 8));
+  const country = searchParams.get("country");
+
+  let filter = `_type == "newsItem" && status == "published"`;
+  if (country === "us" || country === "ca") {
+    filter += ` && "${country}" in coalesce(countries, [])`;
+  }
+
+  try {
+    const client = getSanityReadClient();
+    const items = await client.fetch<
+      {
+        id: string;
+        title?: string;
+        url?: string;
+        summary?: string;
+        sourceName?: string;
+        publishedAt?: string;
+        countries?: string[];
+      }[]
+    >(
+      `*[${filter}] | order(publishedAt desc)[0...${limit}]{
+        "id": _id,
+        title,
+        url,
+        summary,
+        sourceName,
+        publishedAt,
+        countries
+      }`,
+      {},
+    );
+    return NextResponse.json({ items: items ?? [] });
+  } catch {
+    return NextResponse.json({ items: [] });
+  }
+}

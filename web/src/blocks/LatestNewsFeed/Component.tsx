@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 
 type NewsItem = {
   id: string | number;
@@ -19,6 +21,7 @@ type Props = {
   showPublishedDate?: boolean;
   ctaLabel?: string;
   ctaLink?: string;
+  /** Optional: Builder can bind pre-resolved items; otherwise we load from `/api/latest-news`. */
   __newsItems?: NewsItem[];
 };
 
@@ -42,9 +45,36 @@ export const LatestNewsFeedBlock: React.FC<Props> = ({
   showPublishedDate = true,
   ctaLabel,
   ctaLink,
-  __newsItems = [],
+  __newsItems,
 }) => {
-  const filteredItems = __newsItems
+  const [fetched, setFetched] = useState<NewsItem[] | null>(null);
+
+  useEffect(() => {
+    if (__newsItems && __newsItems.length > 0) return;
+
+    const params = new URLSearchParams();
+    params.set("limit", String(maxItems));
+    if (countryFilter && countryFilter !== "all") {
+      params.set("country", countryFilter);
+    }
+
+    let cancelled = false;
+    fetch(`/api/latest-news?${params.toString()}`)
+      .then((r) => r.json())
+      .then((body: { items?: NewsItem[] }) => {
+        if (!cancelled) setFetched(Array.isArray(body.items) ? body.items : []);
+      })
+      .catch(() => {
+        if (!cancelled) setFetched([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [__newsItems, maxItems, countryFilter]);
+
+  const baseItems = __newsItems && __newsItems.length > 0 ? __newsItems : fetched ?? [];
+  const filteredItems = baseItems
     .filter((item) => {
       if (countryFilter === "all") return true;
       return Array.isArray(item.countries) && item.countries.includes(countryFilter);
@@ -59,7 +89,9 @@ export const LatestNewsFeedBlock: React.FC<Props> = ({
           {intro && <p>{intro}</p>}
         </div>
 
-        {filteredItems.length === 0 ? (
+        {fetched === null && !(__newsItems && __newsItems.length) ? (
+          <p className="latest-news-feed__empty">Loading latest stories…</p>
+        ) : filteredItems.length === 0 ? (
           <p className="latest-news-feed__empty">
             No news items have been ingested yet. Run the ingestion script to populate this feed.
           </p>

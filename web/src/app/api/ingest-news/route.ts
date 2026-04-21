@@ -1,8 +1,7 @@
-import { getPayload } from "payload";
 import { NextResponse } from "next/server";
 
-import config from "@payload-config";
 import { runNewsIngestion } from "../../../lib/newsIngestion";
+import { getSanityWriteClient } from "../../../sanity/writeClient";
 
 export const dynamic = "force-dynamic";
 
@@ -35,8 +34,8 @@ async function runIngestionRequest(request: Request) {
   const url = new URL(request.url);
   const sourceSlug = url.searchParams.get("source") || undefined;
 
-  const payload = await getPayload({ config });
-  const summary = await runNewsIngestion(payload, { sourceSlug });
+  const sanity = getSanityWriteClient();
+  const summary = await runNewsIngestion(sanity, { sourceSlug });
 
   return NextResponse.json({
     ok: true,

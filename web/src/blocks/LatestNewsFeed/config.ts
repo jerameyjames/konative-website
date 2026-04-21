@@ -1,6 +1,4 @@
-import type { Block } from "payload";
-
-export const LatestNewsFeed: Block = {
+export const LatestNewsFeed = {
   slug: "latest-news-feed",
   labels: { singular: "Latest News Feed", plural: "Latest News Feeds" },
   fields: [

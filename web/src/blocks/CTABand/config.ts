@@ -1,6 +1,4 @@
-import type { Block } from "payload";
-
-export const CTABand: Block = {
+export const CTABand = {
   slug: "cta-band",
   labels: { singular: "CTA Band", plural: "CTA Bands" },
   fields: [

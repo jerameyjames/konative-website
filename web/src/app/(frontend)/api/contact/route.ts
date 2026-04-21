@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { getPayload } from "payload";
-import config from "../../../../../payload.config";
 
 function sendEmailNotification(body: Record<string, string>) {
   const apiKey = process.env.RESEND_API_KEY;
@@ -54,31 +52,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const payload = await getPayload({ config });
-
-    await payload.create({
-      collection: "form-submissions",
-      data: {
-        name: body.name,
-        email: body.email,
-        organization: body.organization,
-        role: body.role || undefined,
-        projectType: body.projectType || undefined,
-        projectStage: body.projectStage || undefined,
-        message: body.message || undefined,
-        referralSource: body.referralSource || undefined,
-      },
-    });
-
-    // Fire-and-forget email notification
     sendEmailNotification(body);
 
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Contact form error:", err);
-    return NextResponse.json(
-      { error: "Failed to submit form. Please try again." },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to submit form. Please try again." }, { status: 500 });
   }
 }

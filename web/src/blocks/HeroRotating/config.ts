@@ -1,6 +1,4 @@
-import type { Block } from "payload";
-
-export const HeroRotating: Block = {
+export const HeroRotating = {
   slug: "hero-rotating",
   labels: { singular: "Hero Rotating", plural: "Hero Rotating" },
   fields: [

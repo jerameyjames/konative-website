@@ -1,6 +1,4 @@
-import type { Block } from "payload";
-
-export const ThreeCardGrid: Block = {
+export const ThreeCardGrid = {
   slug: "three-card-grid",
   labels: { singular: "Three Card Grid", plural: "Three Card Grids" },
   fields: [

@@ -1,84 +1,92 @@
-import { getPayload } from 'payload'
-import { notFound } from 'next/navigation'
+import { notFound } from "next/navigation";
 
-import config from '@payload-config'
-import { RenderBlocks } from '../../../blocks/RenderBlocks'
+import { RenderBlocks } from "../../../blocks/RenderBlocks";
+import { getSanityReadClient } from "../../../sanity/readClient";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 type Args = {
   params: Promise<{
-    slug?: string
-  }>
-}
+    slug?: string;
+  }>;
+};
+
+const pageQuery = `*[_type == "page" && slug.current == $slug][0]{
+  title,
+  "slug": slug.current,
+  layout,
+  meta
+}`;
+
+const latestNewsQuery = `*[_type == "newsItem" && status == "published"] | order(publishedAt desc)[0...20]{
+  "id": _id,
+  title,
+  url,
+  summary,
+  sourceName,
+  publishedAt,
+  countries,
+  topics
+}`;
 
 export default async function Page({ params: paramsPromise }: Args) {
-  const { slug = 'home' } = await paramsPromise
-  const decodedSlug = decodeURIComponent(slug)
+  const { slug = "home" } = await paramsPromise;
+  const decodedSlug = decodeURIComponent(slug);
 
-  let pageData: any | undefined
-  let newsItems: any[] = []
+  let pageData: { layout?: unknown[]; title?: string } | null = null;
+  let newsItems: any[] = [];
 
   try {
-    const payload = await getPayload({ config })
-    const page = await payload.find({
-      collection: 'pages',
-      where: { slug: { equals: decodedSlug } },
-      limit: 1,
-    })
-
-    pageData = page.docs[0]
-
-    const latestNews = await payload.find({
-      collection: 'news-items',
-      where: { status: { equals: 'published' } },
-      sort: '-publishedAt',
-      limit: 20,
-    })
-
-    newsItems = latestNews.docs || []
+    const client = getSanityReadClient();
+    pageData = await client.fetch(pageQuery, { slug: decodedSlug });
+    newsItems = await client.fetch(latestNewsQuery);
   } catch (error) {
-    if (decodedSlug === 'home') {
+    if (decodedSlug === "home") {
       return (
         <main
           style={{
-            minHeight: '100vh',
-            display: 'grid',
-            placeItems: 'center',
-            padding: '4rem 1.5rem',
-            textAlign: 'center',
-            background: '#0b1020',
-            color: '#f6f7fb',
-            fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
+            minHeight: "100vh",
+            display: "grid",
+            placeItems: "center",
+            padding: "4rem 1.5rem",
+            textAlign: "center",
+            background: "#0b1020",
+            color: "#f6f7fb",
+            fontFamily: "Inter, system-ui, -apple-system, sans-serif",
           }}
         >
           <div style={{ maxWidth: 720 }}>
-            <p style={{ marginBottom: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <p style={{ marginBottom: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>
               Konative
             </p>
-            <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', margin: 0 }}>Leadership. Learning. Legacy.</h1>
-            <p style={{ marginTop: '1.25rem', lineHeight: 1.6, opacity: 0.9 }}>
-              Our production CMS database is reconnecting. The public homepage is online for your demo and full
-              content will repopulate as soon as the database connection is restored.
+            <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", margin: 0 }}>Leadership. Learning. Legacy.</h1>
+            <p style={{ marginTop: "1.25rem", lineHeight: 1.6, opacity: 0.9 }}>
+              CMS configuration is updating. Set{" "}
+              <code style={{ color: "#fbbf24" }}>NEXT_PUBLIC_SANITY_PROJECT_ID</code> and dataset, then add a
+              &quot;home&quot; page document in Sanity Studio.
             </p>
           </div>
         </main>
-      )
+      );
     }
 
-    throw error
+    throw error;
   }
 
   if (!pageData) {
-    if (decodedSlug === 'home') {
+    if (decodedSlug === "home") {
       return (
-        <div style={{ padding: '4rem', textAlign: 'center' }}>
-          Create a "home" page in the admin panel to get started.
+        <div style={{ padding: "4rem", textAlign: "center" }}>
+          Create a &quot;home&quot; page in Sanity Studio (slug <code>home</code>) to serve block content for
+          this route.
         </div>
-      )
+      );
     }
-    return notFound()
+    return notFound();
   }
 
-  return <RenderBlocks blocks={(pageData.layout as any) || []} newsItems={newsItems} />
+  const rawLayout = pageData.layout;
+  const blocks = Array.isArray(rawLayout) ? rawLayout : [];
+
+  return <RenderBlocks blocks={blocks as any} newsItems={newsItems} />;
 }

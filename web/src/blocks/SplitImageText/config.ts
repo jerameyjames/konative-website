@@ -1,6 +1,4 @@
-import type { Block } from "payload";
-
-export const SplitImageText: Block = {
+export const SplitImageText = {
   slug: "split-image-text",
   labels: { singular: "Split Image + Text", plural: "Split Image + Text" },
   fields: [
