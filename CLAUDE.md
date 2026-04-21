@@ -10,6 +10,7 @@ Agent context for the monorepo: app code lives in **`web/`** (Next.js 16 + Sanit
 - **Production URL:** https://konative.com (preview: https://konative-site.vercel.app until custom domain is attached to this project)
 - **Git remote:** https://github.com/jerameyjames/konative-website (`main`)
 - **Vercel project root:** set **Root Directory** to `web` in the Vercel project settings (this repo is not only the Next app at the filesystem root).
+- **Node.js version on Vercel:** Prefer **22.x** (see `web/.nvmrc` and `web/package.json` `engines.node`). Forcing **24.x** caused production **`npm install` failures** (`isolated-vm` native compile for Builder.io). Use **Settings → Build & Deployment → Node.js Version → 22.x** (or match `engines` / “Match .nvmrc”) instead of pinning 24.x unless you have re-verified install.
 - **No Vercel project yet:** Run **`./scripts/vercel-bootstrap.sh`** from the repo root (after `npm i -g vercel` and `vercel login`). It builds `web/`, creates the project if needed, **`vercel link`** at **repo root**, **`vercel git connect`**, and optional **`--deploy`**. Until Git is connected, **pushing to GitHub does not deploy**.
 - **Deploy workflow:** After the project exists and **Git is connected** with **Root Directory = `web`**, auto-deploy on push to `main`; preview deployments on PRs (default Vercel Git integration).
 - **Deploy status command:** `vercel ls --prod` (from `web/` after `vercel link`), or use the Vercel dashboard **Deployments** tab.

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=20.9.0 <25"
+    "node": ">=22.0.0 <25"
   },
   "scripts": {
     "dev": "next dev",
@@ -14,8 +14,8 @@
     "ingest-news": "tsx scripts/ingest-news.ts"
   },
   "dependencies": {
-    "@builder.io/react": "^8.0.12",
-    "@builder.io/sdk": "^2.2.9",
+    "@builder.io/react": "^9.3.0",
+    "@builder.io/sdk": "^6.3.0",
     "@sanity/client": "^7.21.0",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.22.0",
