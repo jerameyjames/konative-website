@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "vercel-build": "next build",
+    "vercel-build": "payload migrate:create --name init 2>/dev/null; payload migrate && next build",
     "start": "next start",
     "payload": "payload",
     "generate:importmap": "payload generate:importmap",
