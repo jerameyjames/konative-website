@@ -5,33 +5,37 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // Collections
-import { Pages } from "./src/collections/Pages.js";
-import { Services } from "./src/collections/Services.js";
-import { Testimonials } from "./src/collections/Testimonials.js";
-import { TeamMembers } from "./src/collections/TeamMembers.js";
-import { FormSubmissions } from "./src/collections/FormSubmissions.js";
-import { MarketIntelPosts } from "./src/collections/MarketIntelPosts.js";
-import { Media } from "./src/collections/Media.js";
-import { NewsSources } from "./src/collections/NewsSources.js";
-import { NewsItems } from "./src/collections/NewsItems.js";
-import { IngestionRuns } from "./src/collections/IngestionRuns.js";
+import { Pages } from "./src/collections/Pages";
+import { Services } from "./src/collections/Services";
+import { Testimonials } from "./src/collections/Testimonials";
+import { TeamMembers } from "./src/collections/TeamMembers";
+import { FormSubmissions } from "./src/collections/FormSubmissions";
+import { MarketIntelPosts } from "./src/collections/MarketIntelPosts";
+import { Media } from "./src/collections/Media";
+import { NewsSources } from "./src/collections/NewsSources";
+import { NewsItems } from "./src/collections/NewsItems";
+import { IngestionRuns } from "./src/collections/IngestionRuns";
 
 // Globals
-import { SiteSettings } from "./src/globals/SiteSettings.js";
-import { Navigation } from "./src/globals/Navigation.js";
-import { Theme } from "./src/globals/Theme.js";
-import { SEODefaults } from "./src/globals/SEODefaults.js";
+import { SiteSettings } from "./src/globals/SiteSettings";
+import { Navigation } from "./src/globals/Navigation";
+import { Theme } from "./src/globals/Theme";
+import { SEODefaults } from "./src/globals/SEODefaults";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-/**
- * Vercel + Neon integration stores env values as integration tokens in the dashboard;
- * `@vercel/postgres` resolves them at runtime. Do not pass a manual `pool` here unless
- * you are using a plain `postgres://` URL (e.g. local Docker). See Payload docs:
- * `vercelPostgresAdapter()` with no args uses `POSTGRES_URL` / platform defaults.
- */
-const dbAdapter = vercelPostgresAdapter({});
+// Use non-pooling URL for DDL (push/migrations) — PgBouncer can't run CREATE TABLE.
+// Falls back to POSTGRES_URL if the non-pooling var isn't set.
+const dbAdapter = vercelPostgresAdapter({
+  push: true,
+  pool: {
+    connectionString:
+      process.env.POSTGRES_URL_NON_POOLING ??
+      process.env.DATABASE_URL_UNPOOLED ??
+      process.env.POSTGRES_URL,
+  },
+});
 
 export default buildConfig({
   admin: {
