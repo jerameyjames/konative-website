@@ -21,7 +21,7 @@ function StatusBadge({
   tone,
 }: {
   label: string;
-  tone: "ok" | "warn" | "muted" | "neutral";
+  tone: "ok" | "warn" | "muted";
 }) {
   return <span className={`cms-hub__badge cms-hub__badge--${tone}`}>{label}</span>;
 }
