@@ -5,6 +5,7 @@
 
 /* ─── 1. Root Variables ─── */
 :root {
+  /* ── Legacy raw tokens (kept for inline styles that use them) ── */
   --orange: #C84B1F;
   --orange-dark: #A33D17;
   --black: #111111;
@@ -14,6 +15,58 @@
   --warm-off: #F2F0EB;
   --border: #E0DDD8;
   --gray: #666666;
+
+  /* ── Semantic color tokens ── */
+  --color-primary: #C84B1F;
+  --color-primary-hover: #A33D17;
+  --color-warm: #C84B1F;
+  --color-text: #111111;
+  --color-text-muted: #666666;
+  --color-bg: #FFFFFF;
+  --color-surface: #F9F8F6;
+  --color-divider: #E0DDD8;
+
+  /* ── Typography ── */
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* ── Type scale ── */
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.125rem;  /* 18px */
+  --text-xl:   1.375rem;  /* 22px */
+  --text-2xl:  1.75rem;   /* 28px */
+  --text-3xl:  2.25rem;   /* 36px */
+  --text-4xl:  3rem;      /* 48px */
+
+  /* ── Spacing (4px base) ── */
+  --space-1:  0.25rem;   /* 4px  */
+  --space-2:  0.5rem;    /* 8px  */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+
+  /* ── Border radius ── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.05);
+
+  /* ── Layout widths ── */
+  --content-narrow: 640px;
+  --content-default: 800px;
+  --content-wide: 1200px;
 }
 
 /* ─── 2. CSS Reset ─── */
@@ -1226,6 +1279,110 @@ button {
 }
 .cms-hub__card-link:hover .cms-hub__card-arrow {
   transform: translateX(3px);
+}
+
+/* ── CMS hub: four-column grid ── */
+.cms-hub__grid--four {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+
+/* ── CMS hub: alert banner ── */
+.cms-hub__alert {
+  margin-top: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: #78350f;
+  line-height: 1.6;
+}
+.cms-hub__alert a {
+  color: #78350f;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* ── CMS hub: CTA button on card ── */
+.cms-hub__card-cta {
+  display: inline-block;
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background 150ms ease;
+}
+.cms-hub__card-cta:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ── CMS hub: setup steps ── */
+.cms-hub__setup-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding: 0;
+}
+.cms-hub__setup-step {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+.cms-hub__setup-num {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-divider);
+  color: var(--color-text);
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+.cms-hub__setup-text a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── CMS hub: quick links section ── */
+.cms-hub__links-section {
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-8);
+}
+.cms-hub__links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-8);
+  margin-top: var(--space-4);
+}
+.cms-hub__links li a {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.cms-hub__links li a:hover {
+  text-decoration: underline;
 }
 
 /* ─── Footer Enhanced ─── */

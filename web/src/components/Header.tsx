@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
   { label: "Market Intel", url: "/market-intel" },
@@ -12,17 +13,28 @@ const navLinks: { label: string; url: string }[] = [
   { label: "Assessment", url: "/assessment" },
 ];
 
+/** Pages that have a full-bleed dark hero under the header */
+const DARK_HERO_PAGES = new Set(["/"]);
+
 export default function Header() {
-  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const hasDarkHero = DARK_HERO_PAGES.has(pathname);
+
+  const [scrolled, setScrolled] = useState(!hasDarkHero);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [ctaHovered, setCtaHovered] = useState(false);
   const [loginHovered, setLoginHovered] = useState(false);
 
   useEffect(() => {
+    if (!hasDarkHero) {
+      setScrolled(true);
+      return;
+    }
     const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [hasDarkHero]);
 
   const linkColor = scrolled ? "#111" : "#fff";
 
@@ -98,14 +110,13 @@ export default function Header() {
     textTransform: "uppercase",
     padding: "9px 14px",
     textDecoration: "none",
-    border:
-      loginHovered
-        ? scrolled
-          ? "1px solid rgba(17,17,17,0.45)"
-          : "1px solid rgba(255,255,255,0.75)"
-        : scrolled
-          ? "1px solid rgba(17,17,17,0.22)"
-          : "1px solid rgba(255,255,255,0.42)",
+    border: loginHovered
+      ? scrolled
+        ? "1px solid rgba(17,17,17,0.45)"
+        : "1px solid rgba(255,255,255,0.75)"
+      : scrolled
+        ? "1px solid rgba(17,17,17,0.22)"
+        : "1px solid rgba(255,255,255,0.42)",
     color: linkColor,
     background: loginHovered
       ? scrolled
