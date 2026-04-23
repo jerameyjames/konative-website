@@ -5,12 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
-  { label: "Market Intel", url: "/market-intel" },
-  { label: "Blog", url: "/news" },
+  { label: "Services", url: "/#capabilities" },
+  { label: "Team", url: "/#team" },
   { label: "Deals", url: "/deals" },
-  { label: "Dashboard", url: "/dashboard" },
-  { label: "Power Markets", url: "/power-markets" },
-  { label: "Assessment", url: "/assessment" },
+  { label: "Market Intel", url: "/market-intel" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
@@ -23,7 +21,6 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(!hasDarkHero);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [ctaHovered, setCtaHovered] = useState(false);
-  const [loginHovered, setLoginHovered] = useState(false);
 
   useEffect(() => {
     if (!hasDarkHero) {
@@ -36,7 +33,7 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [hasDarkHero]);
 
-  const linkColor = scrolled ? "#111" : "#fff";
+  const linkColor = "#fff";
 
   const headerStyle: React.CSSProperties = {
     position: "fixed",
@@ -45,8 +42,8 @@ export default function Header() {
     right: 0,
     height: 64,
     zIndex: 1000,
-    background: scrolled ? "rgba(255,255,255,0.98)" : "transparent",
-    borderBottom: scrolled ? "1px solid #E0DDD8" : "1px solid transparent",
+    background: scrolled ? "rgba(8,20,45,0.97)" : "transparent",
+    borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
     backdropFilter: scrolled ? "blur(8px)" : "none",
     transition: "background 0.3s, border-color 0.3s",
   };
@@ -74,7 +71,7 @@ export default function Header() {
     fontSize: 22,
     letterSpacing: "0.04em",
     textTransform: "uppercase",
-    color: scrolled ? "#111" : "#fff",
+    color: "#fff",
     transition: "color 0.3s",
   };
 
@@ -84,7 +81,7 @@ export default function Header() {
     fontSize: 22,
     letterSpacing: "0.04em",
     textTransform: "uppercase",
-    color: "#C84B1F",
+    color: "#E07B39",
   };
 
   const navStyle: React.CSSProperties = {
@@ -102,37 +99,13 @@ export default function Header() {
     flexShrink: 0,
   };
 
-  const loginStyle: React.CSSProperties = {
-    fontFamily: "'Inter', sans-serif",
-    fontWeight: 600,
-    fontSize: 11,
-    letterSpacing: "0.12em",
-    textTransform: "uppercase",
-    padding: "9px 14px",
-    textDecoration: "none",
-    border: loginHovered
-      ? scrolled
-        ? "1px solid rgba(17,17,17,0.45)"
-        : "1px solid rgba(255,255,255,0.75)"
-      : scrolled
-        ? "1px solid rgba(17,17,17,0.22)"
-        : "1px solid rgba(255,255,255,0.42)",
-    color: linkColor,
-    background: loginHovered
-      ? scrolled
-        ? "rgba(17,17,17,0.04)"
-        : "rgba(255,255,255,0.08)"
-      : "transparent",
-    transition: "border-color 0.2s, color 0.2s, background 0.2s",
-  };
-
   const ctaStyle: React.CSSProperties = {
     fontFamily: "'Inter', sans-serif",
     fontWeight: 600,
     fontSize: 11,
     letterSpacing: "0.12em",
     textTransform: "uppercase",
-    background: ctaHovered ? "#A33D17" : "#C84B1F",
+    background: ctaHovered ? "#2a5fd0" : "#1E4FBF",
     color: "#fff",
     padding: "10px 20px",
     textDecoration: "none",
@@ -160,7 +133,7 @@ export default function Header() {
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               textDecoration: "none",
-              color: isHovered ? "#C84B1F" : linkColor,
+              color: isHovered ? "#E07B39" : linkColor,
               opacity: isHovered ? 1 : 0.85,
               transition: "color 0.2s, opacity 0.2s",
             };
@@ -178,23 +151,15 @@ export default function Header() {
           })}
         </nav>
 
-        {/* Login + CTA */}
+        {/* CTA */}
         <div style={actionsStyle}>
-          <Link
-            href="/cms"
-            style={loginStyle}
-            onMouseEnter={() => setLoginHovered(true)}
-            onMouseLeave={() => setLoginHovered(false)}
-          >
-            Log in
-          </Link>
           <Link
             href="/contact"
             style={ctaStyle}
             onMouseEnter={() => setCtaHovered(true)}
             onMouseLeave={() => setCtaHovered(false)}
           >
-            REQUEST A REVIEW
+            START YOUR PROJECT
           </Link>
         </div>
       </div>
