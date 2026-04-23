@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.0.0 <23"
+    "node": "22"
   },
   "scripts": {
     "dev": "next dev -p 3005",
@@ -11,7 +11,10 @@
     "vercel-build": "next build",
     "start": "next start",
     "sanity:typegen": "sanity schema extract --path=./src/sanity/extract.json && sanity typegen generate",
-    "ingest-news": "tsx scripts/ingest-news.ts"
+    "ingest-news": "tsx scripts/ingest-news.ts",
+    "builder": "builder",
+    "builder:import": "builder import -o ./builder-export",
+    "builder:create": "builder create"
   },
   "dependencies": {
     "@builder.io/react": "^9.3.0",
@@ -30,6 +33,7 @@
     "sharp": "^0.34.2"
   },
   "devDependencies": {
+    "@builder.io/cli": "^1.2.10",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "tsx": "^4.21.0",

@@ -1,4 +1,5 @@
 import { BuilderVisualPage } from "../../../builder/BuilderVisualPage";
+import { getBuilderPageContent } from "@/lib/builder/get-page-content";
 
 export const dynamic = "force-dynamic";
 
@@ -11,5 +12,6 @@ export default async function BuilderCatchAll({ params }: Props) {
   const suffix = path.length ? path.join("/") : "";
   const urlPath = suffix ? `/${suffix}` : "/";
 
-  return <BuilderVisualPage urlPath={urlPath} />;
+  const initialContent = await getBuilderPageContent(urlPath);
+  return <BuilderVisualPage urlPath={urlPath} initialContent={initialContent} />;
 }

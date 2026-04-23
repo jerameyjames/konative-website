@@ -7,6 +7,8 @@ const webDir = path.dirname(fileURLToPath(import.meta.url));
 const monorepoRoot = path.resolve(webDir, "..");
 
 const nextConfig: NextConfig = {
+  /** Tracing includes monorepo root so Vercel serverless output matches local builds when app lives in `web/`. */
+  outputFileTracingRoot: monorepoRoot,
   turbopack: {
     root: monorepoRoot,
   },

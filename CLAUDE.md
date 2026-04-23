@@ -17,7 +17,7 @@ Agent context for the monorepo: app code lives in **`web/`** (Next.js 16 + Sanit
 - **Production URL:** https://konative.com (preview: https://konative-site.vercel.app until custom domain is attached to this project)
 - **Git remote:** https://github.com/jerameyjames/konative-website (`main`)
 - **Vercel project root:** set **Root Directory** to `web` in the Vercel project settings (this repo is not only the Next app at the filesystem root).
-- **Node.js version on Vercel:** Prefer **22.x** (see `web/.nvmrc` and `web/package.json` `engines.node`). Forcing **24.x** caused production **`npm install` failures** (`isolated-vm` native compile for Builder.io). Use **Settings → Build & Deployment → Node.js Version → 22.x** (or match `engines` / “Match .nvmrc”) instead of pinning 24.x unless you have re-verified install.
+- **Node.js version on Vercel:** Use **Node 22** everywhere so the UI does not show an override: `web/.nvmrc` and `web/package.json` `engines.node` must be the **same** string (both are **`22`**). Do not set `22.x` in one file and `22` in the other — that triggers Vercel’s “Node.js version is being overridden” message. In the dashboard, use **Build & Deployment → Node.js Version → 22.x** (same major) or the option that **follows `package.json` / `.nvmrc`**, not a pinned major like **20** or **24** unless you have re-verified the full install. Forcing **24.x** has previously broken **`isolated-vm`** (Builder.io) installs.
 - **No Vercel project yet:** Run **`./scripts/vercel-bootstrap.sh`** from the repo root (after `npm i -g vercel` and `vercel login`). It builds `web/`, creates the project if needed, **`vercel link`** at **repo root**, **`vercel git connect`**, and optional **`--deploy`**. Until Git is connected, **pushing to GitHub does not deploy**.
 - **Deploy workflow:** After the project exists and **Git is connected** with **Root Directory = `web`**, auto-deploy on push to `main`; preview deployments on PRs (default Vercel Git integration).
 - **Deploy status command:** `vercel ls --prod` (from `web/` after `vercel link`), or use the Vercel dashboard **Deployments** tab.
@@ -61,7 +61,7 @@ Pushing to **Git** updates the Vercel deployment. **DNS at the registrar** is wh
 
 ### Environment variables (Vercel)
 
-- Copy from `web/.env.local.example`. Production needs at least `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_TOKEN`, `NEXT_PUBLIC_SITE_URL`, and (if using Builder on `/`) `NEXT_PUBLIC_BUILDER_API_KEY`. See that file for optional keys (Resend, Supabase, news ingest, etc.).
+- Copy from `web/.env.local.example`. Production needs at least `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_TOKEN`, `NEXT_PUBLIC_SITE_URL`, and optional `NEXT_PUBLIC_BUILDER_API_KEY` (for `/builder/*` only; production `/` is composed in the Next app). See that file for optional keys (Resend, Supabase, news ingest, etc.).
 
 ### Notion
 
