@@ -14,6 +14,49 @@ interface Deal {
   description?: string
 }
 
+
+// API response shape from /api/v1/deals (Supabase rows)
+interface ApiDeal {
+  id: string
+  entity_name: string | null
+  deal_type: string | null
+  deal_value_usd: number | null
+  status: string | null
+  partner_companies: string[] | null
+  us_locations: string[] | null
+  summary: string | null
+  category: string | null
+  power_capacity_mw: number | null
+}
+
+function formatUsd(v: number | null): string {
+  if (!v) return '—'
+  if (v >= 1_000_000_000) return `$${(v / 1_000_000_000).toFixed(1)}B`
+  if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(0)}M`
+  return `$${v.toLocaleString()}`
+}
+
+function mapApiDealToUi(d: ApiDeal): Deal {
+  const statusRaw = (d.status || 'ACTIVE').toUpperCase()
+  const status: Deal['status'] =
+    statusRaw === 'ANNOUNCED' ? 'ANNOUNCED'
+    : statusRaw === 'CLOSED' ? 'CLOSED'
+    : 'ACTIVE'
+
+  const partners = d.partner_companies?.join(' / ') ?? ''
+  const locations = d.us_locations?.join(', ') ?? 'North America'
+
+  return {
+    id: d.id,
+    name: d.entity_name || 'Unnamed deal',
+    entity: partners || d.entity_name || '—',
+    type: (d.deal_type || d.category || 'Development').replace(/_/g, ' '),
+    size: formatUsd(d.deal_value_usd),
+    status,
+    geography: locations,
+    description: d.summary ?? undefined,
+  }
+}
 const statusColor = (s: string) =>
   s === 'ACTIVE' ? '#22c55e' : s === 'ANNOUNCED' ? '#D97706' : '#888888'
 
@@ -89,7 +132,8 @@ export default function DealsPage() {
     fetch('/api/v1/deals')
       .then(r => r.json())
       .then(d => {
-        setDeals(d.deals || d.data || d || [])
+        const rows: ApiDeal[] = d.deals || d.data || d || []
+        setDeals(rows.map(mapApiDealToUi))
         setLoading(false)
       })
       .catch(() => {
