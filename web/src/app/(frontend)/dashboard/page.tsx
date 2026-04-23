@@ -58,12 +58,18 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function fetchAll() {
-      const supabaseUrl =
-        process.env.NEXT_PUBLIC_SUPABASE_URL ;
-      const supabaseKey =
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ;
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-      const headers = {
+      // Short-circuit cleanly when Supabase env vars aren't wired up
+      // (e.g. preview deploys without secrets). Narrows supabaseKey
+      // from `string | undefined` to `string` for the rest of the fn.
+      if (!supabaseUrl || !supabaseKey) {
+        setLoading(false);
+        return;
+      }
+
+      const headers: Record<string, string> = {
         apikey: supabaseKey,
         Authorization: `Bearer ${supabaseKey}`,
       };
