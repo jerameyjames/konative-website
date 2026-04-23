@@ -33,7 +33,7 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [hasDarkHero]);
 
-  const linkColor = "#fff";
+  const linkColor = scrolled ? "#fff" : "#131f36";
 
   const headerStyle: React.CSSProperties = {
     position: "fixed",
@@ -45,7 +45,7 @@ export default function Header() {
     background: scrolled ? "rgba(8,20,45,1)" : "transparent",
     borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
     backdropFilter: scrolled ? "blur(8px)" : "none",
-    transition: "background 0.3s, border-color 0.3s",
+    transition: "background 0.3s, border-color 0.3s, color 0.3s",
   };
 
   const innerStyle: React.CSSProperties = {
@@ -71,7 +71,7 @@ export default function Header() {
     fontSize: 22,
     letterSpacing: "0.04em",
     textTransform: "uppercase",
-    color: "#131f36",
+    color: scrolled ? "#fff" : "#131f36",
     transition: "color 0.3s",
   };
 
@@ -105,7 +105,7 @@ export default function Header() {
     fontSize: 11,
     letterSpacing: "0.12em",
     textTransform: "uppercase",
-    background: ctaHovered ? "#2a5fd0" : "#1E4FBF",
+    background: scrolled ? (ctaHovered ? "#2a5fd0" : "#1E4FBF") : "#131f36",
     color: "#fff",
     padding: "10px 20px",
     textDecoration: "none",
@@ -135,7 +135,7 @@ export default function Header() {
               textDecoration: "none",
               color: isHovered ? "#E07B39" : linkColor,
               opacity: isHovered ? 1 : 0.85,
-              transition: "color 0.2s, opacity 0.2s",
+              transition: "color 0.3s, opacity 0.2s",
             };
             return (
               <Link
