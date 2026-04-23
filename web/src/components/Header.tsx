@@ -42,7 +42,7 @@ export default function Header() {
     right: 0,
     height: 64,
     zIndex: 1000,
-    background: scrolled ? "rgba(8,20,45,0.97)" : "transparent",
+    background: scrolled ? "rgba(8,20,45,1)" : "transparent",
     borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
     backdropFilter: scrolled ? "blur(8px)" : "none",
     transition: "background 0.3s, border-color 0.3s",

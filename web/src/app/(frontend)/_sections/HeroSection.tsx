@@ -80,7 +80,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
     >
       <div style={{
         position: 'absolute', inset: 0,
-        backgroundImage: "url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=85')",
+        backgroundImage: "url('https://images.pexels.com/photos/17489152/pexels-photo-17489152.jpeg?w=1600&q=85')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }} />
