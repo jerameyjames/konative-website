@@ -67,6 +67,20 @@
   --content-narrow: 640px;
   --content-default: 800px;
   --content-wide: 1200px;
+
+  /* ── Navy + Rust/Amber system (brokerage redesign) ── */
+  --navy-900: #08142D;
+  --navy-800: #0C2046;
+  --navy-700: #0F2A5C;
+  --blue-600: #1E4FBF;
+  --blue-400: #5B8DEF;
+  --rust-500: #E07B39;
+  --rust-600: #C86428;
+  --amber-400: #F0A050;
+  --navy-border: rgba(255,255,255,0.08);
+  --navy-border-2: rgba(255,255,255,0.13);
+  --navy-dim: rgba(255,255,255,0.45);
+  --navy-dimmer: rgba(255,255,255,0.22);
 }
 
 /* ─── 2. CSS Reset ─── */
@@ -1419,4 +1433,10 @@ button {
   .site-footer__links {
     gap: var(--space-8);
   }
+}
+
+/* ── Deal ticker animation ── */
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
