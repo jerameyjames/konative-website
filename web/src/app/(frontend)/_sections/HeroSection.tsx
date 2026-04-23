@@ -80,7 +80,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
     >
       <div style={{
         position: 'absolute', inset: 0,
-        backgroundImage: "url('https://cdn.builder.io/api/v1/image/assets%2Fe1b58026c635427ca6b6481e4535334a%2F20ef9a7003e4431db172ef0f756edd47?format=webp&width=800&height=1200')",
+        backgroundImage: "url('https://www.adventuresincre.com/wp-content/uploads/2025/06/An-external-view-of-a-hyperscale-modern-data-center-building-1210x423.jpg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }} />
