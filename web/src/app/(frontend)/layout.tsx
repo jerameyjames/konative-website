@@ -6,9 +6,9 @@ import Header from "../../components/Header";
 import "./globals.css";
 
 export const metadata = {
-  title: "Konative | AI Infrastructure Development",
+  title: "Konative | Energy Infrastructure Brokerage & Development",
   description:
-    "The development quarterback for modular data centers, investment groups, and tribal nations. We navigate site, power, connectivity, and capital so you can move from opportunity to operating infrastructure.",
+    "End-to-end energy infrastructure deal facilitation — connecting investors, landholders, supply chain, power sourcing, and the right teams. Bring us your project. We take it from here.",
 };
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
