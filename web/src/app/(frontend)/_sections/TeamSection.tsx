@@ -5,7 +5,7 @@ const members = [
     name: 'Jeramey James',
     role: 'Founder & Principal',
     bio: 'Former CIO turned Gartner advisor. Solutions architect and infrastructure operations background spanning ISP, tribal enterprise, and enterprise consulting. Brings the technical depth and boardroom credibility to get deals done.',
-    photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80',
+    photo: 'https://cdn.builder.io/api/v1/image/assets%2Fe1b58026c635427ca6b6481e4535334a%2Fcc5b93d28936470bb9210e38abacb551?format=webp&width=800&height=1200',
     linkedin: 'https://www.linkedin.com/in/jerameyjames/',
   },
   {
