@@ -71,7 +71,7 @@ export default function Header() {
     fontSize: 22,
     letterSpacing: "0.04em",
     textTransform: "uppercase",
-    color: "#fff",
+    color: "#131f36",
     transition: "color 0.3s",
   };
 
