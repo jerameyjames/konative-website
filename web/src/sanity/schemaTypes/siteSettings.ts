@@ -11,6 +11,13 @@ export const siteSettings = defineType({
     defineField({ name: "phone", type: "string" }),
     defineField({ name: "address", type: "text" }),
     defineField({
+      name: "heroImage",
+      type: "image",
+      title: "Hero background image",
+      description: "Full-bleed datacenter/infrastructure photo shown behind the homepage hero. High-res landscape image recommended (min 1600px wide). Falls back to Unsplash photo-1558618666-fcd25c85cd64 if empty.",
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "socialLinks",
       type: "array",
       of: [
