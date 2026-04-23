@@ -2,3 +2,6 @@
 **/.DS_Store
 .vercel
 .superpowers/
+
+# Never nest a second checkout here (breaks monorepo layout and confuses agents)
+konative-site/

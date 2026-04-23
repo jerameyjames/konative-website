@@ -1,5 +1,7 @@
 # Konative (repo)
 
+**Canonical local clone (this machine):** `~/repos/konative` (`/Users/jerameyjames/repos/konative`). Run all `git` commands here. The OneDrive path `_AI_projects/konative/konative-site` is a **symlink** to this folder so older Cursor workspaces still open the real repo — do not create a separate Git checkout under OneDrive.
+
 Agent context for the monorepo: app code lives in **`web/`** (Next.js 16 + Sanity + Builder.io). See `web/AGENTS.md` for site-specific rules.
 
 ## Local development
