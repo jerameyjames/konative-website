@@ -1,7 +1,8 @@
 "use client";
 
+import type { BuilderContent } from "@builder.io/sdk";
 import { builder } from "@builder.io/sdk";
-import { Builder, BuilderComponent } from "@builder.io/react";
+import { Builder, BuilderComponent, useIsPreviewing } from "@builder.io/react";
 import { useEffect, useState } from "react";
 
 import { CTABandBlock } from "../blocks/CTABand/Component";
@@ -31,6 +32,14 @@ function registerKonativeBlocks() {
       { name: "subtitle", type: "longText" },
       { name: "ctaLabel", type: "string", defaultValue: "Contact" },
       { name: "ctaLink", type: "string", defaultValue: "/contact" },
+      {
+        name: "backgroundImage",
+        type: "object",
+        subFields: [
+          { name: "url", type: "string", helperText: "Full image URL (https). Leave empty for default datacenter photo." },
+          { name: "alt", type: "string", helperText: "Short description for accessibility" },
+        ],
+      },
     ],
   });
 
@@ -137,7 +146,45 @@ function registerKonativeBlocks() {
   });
 }
 
-export function BuilderVisualPage({ urlPath }: { urlPath: string }) {
+function BuilderCanvas({
+  urlPath,
+  initialContent,
+}: {
+  urlPath: string;
+  /** `undefined` = client-only fetch; `null` = server found no entry (show empty unless visual preview). */
+  initialContent?: BuilderContent | null;
+}) {
+  const isPreviewing = useIsPreviewing();
+  const ssrTried = initialContent !== undefined;
+
+  if (ssrTried && initialContent === null && !isPreviewing) {
+    return (
+      <div style={{ padding: "2rem", fontFamily: "system-ui", maxWidth: "40rem" }}>
+        <p>
+          No published Builder content for <code>{urlPath || "/"}</code> (model <code>page</code>). Create or publish a
+          page in Builder.io, or open this URL in the visual editor to work on drafts.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <BuilderComponent
+      model="page"
+      url={urlPath || "/"}
+      content={initialContent === undefined ? undefined : initialContent ?? undefined}
+    />
+  );
+}
+
+export function BuilderVisualPage({
+  urlPath,
+  initialContent,
+}: {
+  urlPath: string;
+  /** From server `getBuilderPageContent` — set on Vercel for SSR; omit for legacy client-only fetch. */
+  initialContent?: BuilderContent | null;
+}) {
   const [ready, setReady] = useState(false);
   const apiKey = process.env.NEXT_PUBLIC_BUILDER_API_KEY;
 
@@ -161,5 +208,5 @@ export function BuilderVisualPage({ urlPath }: { urlPath: string }) {
 
   if (!ready) return null;
 
-  return <BuilderComponent model="page" url={urlPath || "/"} />;
+  return <BuilderCanvas urlPath={urlPath} initialContent={initialContent} />;
 }

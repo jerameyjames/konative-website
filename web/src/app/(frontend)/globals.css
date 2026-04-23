@@ -1440,3 +1440,83 @@ button {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
+
+/* ── Builder.io + CMS: HeroRotating (was unstyled; background lived only on legacy `HeroSection`) ── */
+.hero-rotating {
+  position: relative;
+  min-height: min(100dvh, 960px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--navy-900);
+  color: #fff;
+  padding: var(--space-20) var(--space-8) var(--space-12);
+  width: 100%;
+  box-sizing: border-box;
+}
+.hero-rotating__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+.hero-rotating__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    115deg,
+    rgba(8, 20, 45, 0.97) 0%,
+    rgba(8, 20, 45, 0.85) 45%,
+    rgba(12, 32, 70, 0.55) 75%,
+    rgba(30, 79, 191, 0.2) 100%
+  );
+  pointer-events: none;
+}
+.hero-rotating__inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--content-wide, 1200px);
+  margin: 0 auto;
+  width: 100%;
+}
+.hero-rotating__headline {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-6);
+  color: #fff;
+}
+.hero-rotating__accent {
+  color: var(--rust-500);
+}
+.hero-rotating__subtitle {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 36rem;
+  margin-bottom: var(--space-8);
+}
+.hero-rotating__cta {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--blue-600);
+  color: #fff;
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.hero-rotating__cta:hover {
+  background: #2b63d1;
+  transform: translateY(-1px);
+}
