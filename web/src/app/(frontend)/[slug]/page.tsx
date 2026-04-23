@@ -83,7 +83,9 @@ export default async function Page({ params: paramsPromise }: Args) {
       );
     }
 
-    throw error;
+    console.error("[slug] Sanity fetch failed:", error);
+
+    return notFound();
   }
 
   if (!pageData) {
