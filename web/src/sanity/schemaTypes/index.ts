@@ -1,9 +1,15 @@
 import type { SchemaTypeDefinition } from "sanity";
 
+import { capacityRequest } from "./capacityRequest";
+import { contactInquiry } from "./contactInquiry";
 import { deal } from "./deal";
 import { ingestionRun } from "./ingestionRun";
+import { investorProfile } from "./investorProfile";
+import { landSubmission } from "./landSubmission";
 import { marketIntelPost } from "./marketIntelPost";
+import { marketReport } from "./marketReport";
 import { navigation } from "./navigation";
+import { newsletterSubscriber } from "./newsletterSubscriber";
 import { newsItem } from "./newsItem";
 import { newsSource } from "./newsSource";
 import { page } from "./page";
@@ -15,15 +21,24 @@ import { testimonial } from "./testimonial";
 import { theme } from "./theme";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
-  page,
+  // Lead capture
+  landSubmission,
+  investorProfile,
+  capacityRequest,
+  contactInquiry,
+  newsletterSubscriber,
+  // Intelligence
   newsSource,
   newsItem,
   ingestionRun,
+  marketReport,
   marketIntelPost,
+  deal,
+  // Site structure
+  page,
   service,
   testimonial,
   teamMember,
-  deal,
   siteSettings,
   navigation,
   theme,
