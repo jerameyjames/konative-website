@@ -6,8 +6,10 @@ export const maxDuration = 300
 
 const SPARQL_URL = 'https://query.wikidata.org/sparql'
 
+// Simpler query — direct instance-of only (no P279* traversal which times out)
 const QUERY = `SELECT ?item ?itemLabel ?coord ?operatorLabel ?country WHERE {
-  ?item wdt:P31/wdt:P279* wd:Q1378425 .
+  VALUES ?type { wd:Q1378425 wd:Q1420834 }
+  ?item wdt:P31 ?type .
   ?item wdt:P17 ?country .
   VALUES ?country { wd:Q30 wd:Q16 }
   OPTIONAL { ?item wdt:P625 ?coord. }

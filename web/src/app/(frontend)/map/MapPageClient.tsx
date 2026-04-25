@@ -2,23 +2,47 @@
 
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { STATUS_COLORS, type MapStats } from '@/components/DataCenterMap'
 
 const DataCenterMap = dynamic(() => import('@/components/DataCenterMap'), { ssr: false })
 
-const STATUS_LEGEND = [
-  { color: '#22d3ee', label: 'Operational' },
-  { color: '#E07B39', label: 'Under Construction' },
-  { color: '#a78bfa', label: 'Announced / Proposed' },
-]
-
 const SIZE_LEGEND = [
-  { r: 4,  label: '< 50 MW' },
-  { r: 8,  label: '50–250 MW' },
-  { r: 14, label: '250–1,000 MW' },
-  { r: 24, label: '1,000+ MW' },
+  { r: 6,  label: 'No MW data' },
+  { r: 10, label: '50 MW' },
+  { r: 16, label: '250 MW' },
+  { r: 26, label: '1,000+ MW' },
 ]
 
 export default function MapPageClient() {
+  const [stats, setStats] = useState<MapStats | null>(null)
+  const [sourceCounts, setSourceCounts] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    fetch('/api/v1/projects')
+      .then(r => r.json())
+      .then(d => {
+        setStats(d.stats)
+        // Count by source from features
+        const counts: Record<string, number> = {}
+        for (const f of d.features ?? []) {
+          const src = f.properties?.source ?? 'unknown'
+          counts[src] = (counts[src] ?? 0) + 1
+        }
+        setSourceCounts(counts)
+      })
+      .catch(() => {})
+  }, [])
+
+  const SOURCE_DISPLAY = [
+    { key: 'osm', label: 'OpenStreetMap' },
+    { key: 'wikidata', label: 'Wikidata' },
+    { key: 'news_extraction', label: 'News extraction' },
+    { key: 'ieso_queue', label: 'IESO queue (CA)' },
+  ]
+
+  const hasMwData = (stats?.totalMw ?? 0) > 0
+
   return (
     <div style={{ background: '#08142D', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
 
@@ -28,7 +52,9 @@ export default function MapPageClient() {
         paddingLeft: 48, paddingRight: 48,
         borderBottom: '1px solid rgba(255,255,255,0.07)',
       }}>
-        <div style={{ maxWidth: 1320, margin: '0 auto', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+        <div style={{ maxWidth: 1320, margin: '0 auto', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 24 }}>
+
+          {/* Title */}
           <div>
             <p style={{
               display: 'flex', alignItems: 'center', gap: 10,
@@ -56,32 +82,40 @@ export default function MapPageClient() {
             </p>
           </div>
 
-          {/* Legend */}
+          {/* Legend panel */}
           <div style={{
             background: 'rgba(255,255,255,0.04)',
             border: '1px solid rgba(255,255,255,0.09)',
             padding: '20px 24px',
             display: 'flex', gap: 40, flexWrap: 'wrap',
           }}>
+
             {/* Status */}
             <div>
               <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
                 Status
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {STATUS_LEGEND.map(({ color, label }) => (
-                  <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ width: 10, height: 10, borderRadius: '50%', background: color, flexShrink: 0, opacity: 0.85 }} />
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>{label}</span>
-                  </div>
-                ))}
+                {(Object.entries(STATUS_COLORS) as [keyof typeof STATUS_COLORS, string][]).map(([status, color]) => {
+                  const count = stats?.[status] ?? 0
+                  return (
+                    <div key={status} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <span style={{ width: 10, height: 10, borderRadius: '50%', background: color, flexShrink: 0, opacity: count > 0 ? 0.85 : 0.2 }} />
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: count > 0 ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.25)' }}>
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                        {stats && <span style={{ marginLeft: 6, opacity: 0.5 }}>({count.toLocaleString()})</span>}
+                      </span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
 
             {/* Bubble size */}
             <div>
               <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
-                Bubble Size = MW
+                Bubble Size = MW capacity
+                {!hasMwData && <span style={{ marginLeft: 6, color: 'rgba(255,165,0,0.6)' }}>· limited data</span>}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {SIZE_LEGEND.map(({ r, label }) => (
@@ -92,7 +126,7 @@ export default function MapPageClient() {
                       border: '1.5px solid rgba(255,255,255,0.3)',
                       flexShrink: 0,
                     }} />
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>{label}</span>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: label === 'No MW data' ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.7)' }}>{label}</span>
                   </div>
                 ))}
               </div>
@@ -103,15 +137,27 @@ export default function MapPageClient() {
               <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
                 Sources
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {['OpenStreetMap', 'Wikidata', 'News extraction', 'IESO queue (CA)'].map(s => (
-                  <div key={s} style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#E07B39', flexShrink: 0 }} />
-                    {s}
-                  </div>
-                ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+                {SOURCE_DISPLAY.map(({ key, label }) => {
+                  const count = sourceCounts[key] ?? 0
+                  const active = count > 0
+                  return (
+                    <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: active ? '#E07B39' : 'rgba(255,255,255,0.15)', flexShrink: 0 }} />
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: active ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.2)' }}>
+                        {label}
+                        {stats !== null && (
+                          <span style={{ marginLeft: 6 }}>
+                            {active ? `(${count.toLocaleString()})` : '— pending'}
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -129,7 +175,7 @@ export default function MapPageClient() {
         flexWrap: 'wrap', gap: 12,
       }}>
         <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.05em' }}>
-          OSM/Wikidata: weekly refresh · News extraction: daily · Hover a bubble for project details
+          OSM/Wikidata: weekly · News extraction: daily · Hover any bubble for project details
         </p>
         <div style={{ display: 'flex', gap: 20 }}>
           <Link href="/land/submit" style={{
