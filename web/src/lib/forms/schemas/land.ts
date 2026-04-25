@@ -4,15 +4,15 @@ export const landStep1Schema = z.object({
   county: z.string().min(1, "County is required"),
   state: z.string().min(2, "State is required"),
   apn: z.string().optional(),
-  acreage: z.number({ invalid_type_error: "Enter a number" }).positive("Must be positive"),
+  acreage: z.number({ error: "Enter a number" }).positive("Must be positive"),
   ownershipType: z.enum(["sole", "partnership", "trust", "llc", "other"]).optional(),
   hasTalkedToBrokers: z.boolean().optional(),
 });
 
 export const landStep2Schema = z.object({
-  substationDistanceMiles: z.number({ invalid_type_error: "Enter a number" }).nonnegative().optional(),
+  substationDistanceMiles: z.number({ error: "Enter a number" }).nonnegative().optional(),
   transmissionVoltage: z.enum(["<115kV", "115-230kV", "230-500kV", "500+kV", "unknown"]).optional(),
-  fiberDistanceMiles: z.number({ invalid_type_error: "Enter a number" }).nonnegative().optional(),
+  fiberDistanceMiles: z.number({ error: "Enter a number" }).nonnegative().optional(),
   waterAccess: z.enum(["yes", "no", "unknown"]).optional(),
   zoning: z.enum(["agricultural", "industrial", "mixed", "unknown"]).optional(),
 });

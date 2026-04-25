@@ -5,14 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
-  { label: "Services", url: "/#capabilities" },
-  { label: "Team", url: "/#team" },
-  { label: "Deals", url: "/deals" },
+  { label: "Land", url: "/land" },
+  { label: "Invest", url: "/invest" },
+  { label: "Capacity", url: "/capacity" },
   { label: "Market Intel", url: "/market-intel" },
+  { label: "Services", url: "/#capabilities" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
-const DARK_HERO_PAGES = new Set(["/"]);
+const DARK_HERO_PAGES = new Set(["/", "/land", "/invest", "/capacity"]);
 
 export default function Header() {
   const pathname = usePathname();
@@ -105,7 +106,7 @@ export default function Header() {
     fontSize: 11,
     letterSpacing: "0.12em",
     textTransform: "uppercase",
-    background: scrolled ? (ctaHovered ? "#2a5fd0" : "#1E4FBF") : "#131f36",
+    background: ctaHovered ? "#c96a28" : "#E07B39",
     color: "#fff",
     padding: "10px 20px",
     textDecoration: "none",
@@ -154,12 +155,12 @@ export default function Header() {
         {/* CTA */}
         <div style={actionsStyle}>
           <Link
-            href="/contact"
+            href="/land/submit"
             style={ctaStyle}
             onMouseEnter={() => setCtaHovered(true)}
             onMouseLeave={() => setCtaHovered(false)}
           >
-            START YOUR PROJECT
+            Submit land →
           </Link>
         </div>
       </div>

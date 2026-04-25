@@ -19,15 +19,18 @@ function getRequestToken(request: Request) {
 
 async function runIngestionRequest(request: Request) {
   const configuredToken = process.env.NEWS_INGEST_TOKEN;
-  if (!configuredToken) {
+  const cronSecret = process.env.CRON_SECRET;
+
+  if (!configuredToken && !cronSecret) {
     return NextResponse.json(
-      { ok: false, error: "Server missing NEWS_INGEST_TOKEN environment variable." },
+      { ok: false, error: "Server missing NEWS_INGEST_TOKEN or CRON_SECRET environment variable." },
       { status: 500 },
     );
   }
 
   const providedToken = getRequestToken(request);
-  if (!providedToken || providedToken !== configuredToken) {
+  const validTokens = [configuredToken, cronSecret].filter(Boolean);
+  if (!providedToken || !validTokens.includes(providedToken)) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
 

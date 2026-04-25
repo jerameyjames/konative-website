@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { submitForm } from "@/lib/forms/submit";
-import { contactSchema } from "@/lib/forms/schemas/contact";
+import { landFullSchema } from "@/lib/forms/schemas/land";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -12,10 +12,10 @@ export async function POST(request: Request) {
 
   const b = body as Record<string, string>;
   const result = await submitForm({
-    schemaType: "contactInquiry",
-    zodSchema: contactSchema,
+    schemaType: "landSubmission",
+    zodSchema: landFullSchema,
     payload: body,
-    emailSubject: `New Konative Contact: ${b?.name ?? "Unknown"} from ${b?.organization ?? "Unknown"}`,
+    emailSubject: `New land submission: ${b?.acreage ?? "?"}ac in ${b?.county ?? "?"}, ${b?.state ?? "?"} from ${b?.name ?? "unknown"}`,
   });
 
   if (!result.ok) {

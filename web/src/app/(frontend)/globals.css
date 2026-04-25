@@ -1520,3 +1520,234 @@ button {
   background: #2b63d1;
   transform: translateY(-1px);
 }
+
+/* ============================================================
+   Form shell shared styles
+   ============================================================ */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+.form-field__label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.form-field__required { color: var(--orange); }
+.form-field__input,
+.form-field__textarea,
+.form-field__select {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background: #fff;
+  border: 1.5px solid var(--color-divider);
+  border-radius: 6px;
+  padding: 10px 14px;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.form-field__input:focus,
+.form-field__textarea:focus,
+.form-field__select:focus {
+  outline: none;
+  border-color: var(--orange);
+}
+.form-field__textarea { min-height: 100px; resize: vertical; }
+.form-field__help { font-size: var(--text-sm); color: var(--color-text-muted); margin: 0; }
+.form-field__error { font-size: var(--text-sm); color: #c0392b; margin: 0; }
+.form-shell { display: flex; flex-direction: column; }
+.form-shell__submit {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 700;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 13px 28px;
+  cursor: pointer;
+  transition: background 0.15s;
+  align-self: flex-start;
+  margin-top: 8px;
+}
+.form-shell__submit:hover { background: var(--orange-dark); }
+.form-shell__submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.form-shell__error { color: #c0392b; font-size: var(--text-sm); margin-bottom: 12px; }
+.form-shell__success {
+  background: #f0faf0;
+  border: 1.5px solid #2ecc71;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  color: #1a7a3a;
+  font-weight: 600;
+}
+
+/* ============================================================
+   StepForm multi-step wizard
+   ============================================================ */
+
+.step-form { width: 100%; }
+.step-form__progress { display: flex; gap: 4px; margin-bottom: 36px; }
+.step-form__pip { display: flex; flex-direction: column; align-items: center; flex: 1; gap: 6px; }
+.step-form__pip-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--color-divider); color: var(--color-text-muted);
+  font-size: var(--text-sm); font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+.step-form__pip--active .step-form__pip-num { background: var(--orange); color: #fff; }
+.step-form__pip-label {
+  font-size: 11px; color: var(--color-text-muted);
+  text-align: center; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.step-form__pip--active .step-form__pip-label { color: var(--orange); font-weight: 600; }
+.step-form__form { display: flex; flex-direction: column; }
+.step-form__fields { display: flex; flex-direction: column; }
+.step-form__actions { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+.step-form__back {
+  font-family: var(--font-body); font-size: var(--text-sm);
+  color: var(--color-text-muted); background: none; border: none;
+  cursor: pointer; padding: 0; text-decoration: underline;
+}
+.step-form__next {
+  font-family: var(--font-body); font-size: var(--text-base); font-weight: 700;
+  background: var(--orange); color: #fff; border: none; border-radius: 6px;
+  padding: 13px 28px; cursor: pointer; transition: background 0.15s;
+}
+.step-form__next:hover { background: var(--orange-dark); }
+.step-form__next:disabled { opacity: 0.6; cursor: not-allowed; }
+.step-form__error { color: #c0392b; font-size: var(--text-sm); margin-bottom: 12px; }
+.step-form__success {
+  background: #f0faf0; border: 1.5px solid #2ecc71; border-radius: 8px;
+  padding: 40px 24px; text-align: center; color: #1a7a3a;
+}
+.step-form__success-icon { font-size: 48px; margin-bottom: 12px; }
+
+/* ============================================================
+   /land hub
+   ============================================================ */
+
+.land-hub__hero { background: #08142D; color: #fff; padding: 120px 24px 80px; }
+.land-hub__hero-inner { max-width: 760px; margin: 0 auto; }
+.land-hub__eyebrow {
+  font-family: var(--font-display); font-size: var(--text-sm);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 16px;
+}
+.land-hub__headline {
+  font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 700; line-height: 1.1; margin-bottom: 24px; text-transform: uppercase;
+}
+.land-hub__sub {
+  font-size: var(--text-lg); line-height: 1.7; color: rgba(255,255,255,0.8);
+  max-width: 600px; margin-bottom: 36px;
+}
+.land-hub__ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+.land-hub__cta-primary {
+  display: inline-block; background: var(--orange); color: #fff;
+  font-family: var(--font-body); font-size: var(--text-base); font-weight: 700;
+  padding: 14px 28px; border-radius: 6px; text-decoration: none; transition: background 0.15s;
+}
+.land-hub__cta-primary:hover { background: var(--orange-dark); }
+.land-hub__cta-secondary {
+  display: inline-block; color: rgba(255,255,255,0.8);
+  font-family: var(--font-body); font-size: var(--text-base); font-weight: 600;
+  padding: 14px 0; text-decoration: underline; text-underline-offset: 3px;
+}
+.land-hub__criteria { background: var(--warm-off); padding: 80px 24px; }
+.land-hub__criteria-inner, .land-hub__process-inner { max-width: 960px; margin: 0 auto; }
+.land-hub__section-heading {
+  font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700;
+  text-transform: uppercase; margin-bottom: 40px; color: var(--color-text);
+}
+.land-hub__criteria-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+.land-hub__criterion {
+  background: #fff; border-radius: 10px; padding: 28px; border: 1.5px solid var(--color-divider);
+}
+.land-hub__criterion-icon { font-size: 28px; margin-bottom: 12px; }
+.land-hub__criterion-title { font-family: var(--font-body); font-size: var(--text-base); font-weight: 700; margin-bottom: 8px; }
+.land-hub__criterion-body { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; }
+.land-hub__process { padding: 80px 24px; background: #fff; }
+.land-hub__steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 28px; }
+.land-hub__step { display: flex; gap: 20px; align-items: flex-start; }
+.land-hub__step-num { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; color: var(--orange); min-width: 48px; line-height: 1; }
+.land-hub__step-title { display: block; font-size: var(--text-base); font-weight: 700; margin-bottom: 4px; }
+.land-hub__step-body { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; margin: 0; }
+
+/* ============================================================
+   /land/submit
+   ============================================================ */
+
+.land-submit { background: var(--warm-off); min-height: 100vh; padding: 100px 24px 80px; }
+.land-submit__inner {
+  max-width: 600px; margin: 0 auto; background: #fff;
+  border-radius: 12px; border: 1.5px solid var(--color-divider); padding: 48px 40px;
+}
+@media (max-width: 640px) { .land-submit__inner { padding: 32px 20px; } }
+.land-submit__headline { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+.land-submit__sub { color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: 36px; line-height: 1.6; }
+.land-submit__header { margin-bottom: 32px; }
+
+/* ============================================================
+   /land/process
+   ============================================================ */
+
+.land-process { background: var(--warm-off); min-height: 100vh; padding: 100px 24px 80px; }
+.land-process__inner {
+  max-width: 640px; margin: 0 auto; background: #fff;
+  border-radius: 12px; border: 1.5px solid var(--color-divider); padding: 56px 48px; text-align: center;
+}
+@media (max-width: 640px) { .land-process__inner { padding: 36px 20px; } }
+.land-process__check { font-size: 56px; color: #2ecc71; margin-bottom: 16px; }
+.land-process__headline { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+.land-process__sub { color: var(--color-text-muted); margin-bottom: 40px; }
+.land-process__timeline { list-style: none; padding: 0; margin: 0 0 40px; text-align: left; display: flex; flex-direction: column; gap: 24px; }
+.land-process__item { display: flex; gap: 20px; align-items: flex-start; padding-bottom: 24px; border-bottom: 1px solid var(--color-divider); }
+.land-process__item:last-child { border-bottom: none; padding-bottom: 0; }
+.land-process__period { font-family: var(--font-display); font-size: var(--text-sm); font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.06em; min-width: 100px; padding-top: 2px; }
+.land-process__item-title { display: block; font-size: var(--text-base); font-weight: 700; margin-bottom: 4px; }
+.land-process__item-body { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; margin: 0; }
+.land-process__footer { color: var(--color-text-muted); font-size: var(--text-sm); }
+.land-process__footer a { color: var(--orange); }
+
+/* ============================================================
+   /land/what-its-worth
+   ============================================================ */
+
+.valuation-page { background: #fff; padding: 80px 24px; }
+.valuation-page__article { max-width: 760px; margin: 0 auto; }
+.valuation-page__header { margin-bottom: 48px; padding-top: 40px; }
+.valuation-page__headline { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; text-transform: uppercase; line-height: 1.15; margin-bottom: 20px; }
+.valuation-page__lede { font-size: var(--text-lg); color: var(--color-text-muted); line-height: 1.7; }
+.valuation-page__section { margin-bottom: 48px; }
+.valuation-page__section h2 { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; text-transform: uppercase; margin-bottom: 16px; }
+.valuation-page__section p { font-size: var(--text-base); line-height: 1.75; margin-bottom: 16px; }
+.valuation-page__factors { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
+.valuation-page__factor { display: flex; gap: 16px; padding: 20px; border: 1.5px solid var(--color-divider); border-radius: 8px; align-items: flex-start; }
+.valuation-page__factor-rank { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; color: var(--orange); min-width: 28px; line-height: 1; }
+.valuation-page__factor-name { display: block; font-size: var(--text-base); font-weight: 700; margin-bottom: 4px; }
+.valuation-page__factor-detail { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; margin: 0; }
+.valuation-page__cta-block { background: #08142D; color: #fff; border-radius: 12px; padding: 48px 40px; margin-top: 48px; text-align: center; }
+.valuation-page__cta-block h2 { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+.valuation-page__cta-block p { color: rgba(255,255,255,0.8); margin-bottom: 24px; }
+
+/* ============================================================
+   Placeholder door pages (/invest, /capacity)
+   ============================================================ */
+
+.placeholder-door { background: var(--warm-off); min-height: 100vh; padding: 100px 24px 80px; }
+.placeholder-door__inner { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 12px; border: 1.5px solid var(--color-divider); padding: 48px 40px; }
+@media (max-width: 640px) { .placeholder-door__inner { padding: 32px 20px; } }
+.placeholder-door__headline { font-family: var(--font-display); font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 700; text-transform: uppercase; line-height: 1.15; margin-bottom: 16px; }
+.placeholder-door__sub { font-size: var(--text-base); color: var(--color-text-muted); line-height: 1.7; margin-bottom: 24px; }
+.placeholder-door__benefits { margin-bottom: 32px; display: flex; flex-direction: column; gap: 8px; }
+.placeholder-door__benefit { font-size: var(--text-sm); font-weight: 600; color: var(--color-text); margin: 0; }
