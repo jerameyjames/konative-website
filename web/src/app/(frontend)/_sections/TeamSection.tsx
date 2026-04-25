@@ -12,15 +12,15 @@ const members = [
     name: 'Scott Swartzbaugh',
     role: 'Partner — Supply Chain & Procurement',
     bio: "20+ years building high-performance supply chains and strategic supplier partnerships. The person who knows what's available, what's on lead time, and how to move equipment when everyone else is waiting.",
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&q=80',
+    photo: 'https://media.licdn.com/dms/image/v2/D5603AQFXTBCdoZynYw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1695852926095?e=1778716800&v=beta&t=FtBHyfJBkZxY92RkLKTb8eoZfDzF_E6sCdF25_6Q-LA',
     linkedin: 'https://www.linkedin.com/in/scott-swartzbaugh-ab156b1/',
   },
   {
-    name: 'Jerry Borlin',
-    role: 'Partner — Relationships & Deal Creation',
-    bio: 'Enterprise deal closer with a career record of winning the most complex, highest-stakes engagements. Genuine, proactive, and the kind of partner who shows up before you ask. He builds the relationships that open the rooms.',
-    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=80',
-    linkedin: 'https://www.linkedin.com/in/jerryborlin/',
+    name: 'Terry Van Roekel',
+    role: 'Partner — Revenue & Strategic Development',
+    bio: '20+ years driving revenue and strategic partnerships at the intersection of data center infrastructure, cybersecurity, and digital transformation — including executive roles at TAOS Network, Fidelis Cybersecurity, and Leidos. Currently CRO at Tier IV DevCo, where he leads development of mission-critical data center projects across North America. The person in the room who knows how to close.',
+    photo: 'https://cdn.sanity.io/images/zwk4buq7/production/a4a6a52251b325c02c45bc52b40e162223c2e096-800x800.jpg',
+    linkedin: 'https://www.linkedin.com/in/terry-van-roekel/',
   },
 ]
 
