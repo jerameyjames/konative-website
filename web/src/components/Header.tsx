@@ -10,6 +10,7 @@ const navLinks: { label: string; url: string }[] = [
   { label: "Capacity", url: "/capacity" },
   { label: "Map", url: "/map" },
   { label: "Intelligence", url: "/news" },
+  { label: "Site Eval", url: "/assessment" },
   { label: "Services", url: "/#capabilities" },
 ];
 
