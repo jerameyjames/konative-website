@@ -1,46 +1,30 @@
 import { NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@sanity/client'
 
 export const dynamic = 'force-dynamic'
 
+const sanity = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-01-01',
+  useCdn: true,
+})
+
 export async function GET() {
-  const [feedsRes, articlesRes, subscribersRes] = await Promise.all([
-    supabase.from('feed_sources').select('id, is_active, error_count', { count: 'exact' }),
-    supabase
-      .from('market_intel_articles')
-      .select('id, is_published', { count: 'exact' }),
-    supabase.from('newsletter_subscribers').select('id', { count: 'exact' }),
-  ])
+  try {
+    const stats = await sanity.fetch(`{
+      "articleCount": count(*[_type == "newsItem"]),
+      "feedCount": count(*[_type == "newsSource" && active == true]),
+      "dealCount": count(*[_type == "landSubmission" && status == "active"])
+    }`)
 
-  const feeds = feedsRes.data || []
-  const activeFeedCount = feeds.filter((f) => f.is_active).length
-  const erroringFeedCount = feeds.filter(
-    (f) => typeof f.error_count === 'number' && f.error_count > 0,
-  ).length
-
-  const publishedCount =
-    articlesRes.data?.filter((a) => a.is_published).length ?? 0
-
-  const lastFetchRes = await supabase
-    .from('feed_sources')
-    .select('last_fetched_at')
-    .order('last_fetched_at', { ascending: false })
-    .limit(1)
-    .single()
-
-  return NextResponse.json({
-    feeds: {
-      total: feedsRes.count ?? feeds.length,
-      active: activeFeedCount,
-      erroring: erroringFeedCount,
-    },
-    articles: {
-      total: articlesRes.count ?? 0,
-      published: publishedCount,
-    },
-    subscribers: {
-      total: subscribersRes.count ?? 0,
-    },
-    last_fetch: lastFetchRes.data?.last_fetched_at ?? null,
-  })
+    return NextResponse.json({
+      articleCount: stats.articleCount ?? 0,
+      feedCount: stats.feedCount ?? 0,
+      dealCount: stats.dealCount ?? 0,
+    })
+  } catch (err) {
+    console.error('Health API (Sanity) error:', err)
+    return NextResponse.json({ articleCount: 0, feedCount: 0, dealCount: 0 }, { status: 500 })
+  }
 }
