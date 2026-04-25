@@ -117,7 +117,7 @@ export default function MapPageClient() {
       </div>
 
       {/* Full map */}
-      <div style={{ flex: 1, minHeight: '72vh', position: 'relative' }}>
+      <div style={{ height: '72vh', position: 'relative' }}>
         <DataCenterMap />
       </div>
 
