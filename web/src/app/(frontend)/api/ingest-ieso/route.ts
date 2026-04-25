@@ -5,6 +5,7 @@ import { getSanityWriteClient, upsertProject, type RawProject } from '@/lib/proj
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300
 
+// URL drifts — check https://www.ieso.ca/Sector-Participants/Connection-Process/Application-Status when 404
 const IESO_URL = 'https://www.ieso.ca/-/media/Files/IESO/Document-Library/connection-assessments/connection-application-status.xlsx'
 
 const CITY_COORDS: Record<string, [number, number]> = {
