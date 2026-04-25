@@ -24,6 +24,13 @@ const doors = [
     href: '/capacity',
     primary: false,
   },
+  {
+    label: 'Evaluate a site',
+    desc: 'Run a site through our infrastructure evaluation tool — power, fiber, and development readiness in minutes.',
+    cta: 'Launch Site Eval →',
+    href: '/assessment',
+    primary: false,
+  },
 ]
 
 export default function StartNowCTA() {
@@ -73,7 +80,7 @@ export default function StartNowCTA() {
         </div>
 
         <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
           gap: 1, background: 'rgba(255,255,255,0.08)', marginBottom: 32,
         }}>
           {doors.map((door, i) => (

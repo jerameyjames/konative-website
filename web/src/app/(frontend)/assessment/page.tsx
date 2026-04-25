@@ -1,329 +1,172 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
+const TOOL_URL = 'https://t4-infra-eval.vercel.app/'
 
-interface Question {
-  id: number;
-  text: string;
-  options: { label: string; value: string; score: number }[];
-}
-
-const questions: Question[] = [
-  {
-    id: 1,
-    text: "Do you have a site, or are you site-hunting?",
-    options: [
-      { label: "Site identified", value: "site_identified", score: 3 },
-      { label: "Site hunting", value: "site_hunting", score: 1 },
-      { label: "Not sure", value: "not_sure", score: 0 },
-    ],
-  },
-  {
-    id: 2,
-    text: "What's your target capacity?",
-    options: [
-      { label: "< 5 MW", value: "lt_5mw", score: 1 },
-      { label: "5–20 MW", value: "5_20mw", score: 2 },
-      { label: "20–100 MW", value: "20_100mw", score: 3 },
-      { label: "100+ MW", value: "100plus_mw", score: 3 },
-    ],
-  },
-  {
-    id: 3,
-    text: "Do you have a power interconnection commitment?",
-    options: [
-      { label: "Yes", value: "yes", score: 3 },
-      { label: "In progress", value: "in_progress", score: 2 },
-      { label: "No", value: "no", score: 0 },
-    ],
-  },
-  {
-    id: 4,
-    text: "What's your fiber proximity?",
-    options: [
-      { label: "On-net", value: "on_net", score: 3 },
-      { label: "Near-net", value: "near_net", score: 2 },
-      { label: "Off-net", value: "off_net", score: 1 },
-      { label: "Unknown", value: "unknown", score: 0 },
-    ],
-  },
-  {
-    id: 5,
-    text: "What's your timeline?",
-    options: [
-      { label: "< 6 months", value: "lt_6mo", score: 3 },
-      { label: "6–12 months", value: "6_12mo", score: 2 },
-      { label: "12–24 months", value: "12_24mo", score: 1 },
-      { label: "24+ months", value: "24plus_mo", score: 0 },
-    ],
-  },
-  {
-    id: 6,
-    text: "Do you have capital committed?",
-    options: [
-      { label: "Fully funded", value: "fully_funded", score: 3 },
-      { label: "Partially funded", value: "partially_funded", score: 2 },
-      { label: "Seeking capital", value: "seeking_capital", score: 1 },
-      { label: "Pre-capital", value: "pre_capital", score: 0 },
-    ],
-  },
-  {
-    id: 7,
-    text: "Is this a tribal / indigenous land project?",
-    options: [
-      { label: "Yes", value: "yes", score: 2 },
-      { label: "No", value: "no", score: 1 },
-      { label: "Exploring", value: "exploring", score: 1 },
-    ],
-  },
-  {
-    id: 8,
-    text: "What region?",
-    options: [
-      { label: "US West", value: "us_west", score: 2 },
-      { label: "US East", value: "us_east", score: 2 },
-      { label: "US Central", value: "us_central", score: 2 },
-      { label: "Canada", value: "canada", score: 1 },
-    ],
-  },
-  {
-    id: 9,
-    text: "Have you engaged other DC consultants?",
-    options: [
-      { label: "Yes", value: "yes", score: 1 },
-      { label: "No", value: "no", score: 2 },
-    ],
-  },
-  {
-    id: 10,
-    text: "What's your primary need?",
-    options: [
-      { label: "Full development readiness", value: "full_readiness", score: 3 },
-      { label: "Connectivity only", value: "connectivity", score: 2 },
-      { label: "Market intelligence", value: "market_intel", score: 1 },
-      { label: "Not sure", value: "not_sure", score: 0 },
-    ],
-  },
-];
-
-type ResultTier = "development_ready" | "needs_prerequisites" | "earlier_stage";
-
-function getResultTier(score: number): ResultTier {
-  if (score >= 20) return "development_ready";
-  if (score >= 12) return "needs_prerequisites";
-  return "earlier_stage";
-}
+const criteria = [
+  { label: 'Power availability', desc: 'Transmission access, substation proximity, available MW' },
+  { label: 'Fiber connectivity', desc: 'On-net, near-net, or off-net status and path options' },
+  { label: 'Site characteristics', desc: 'Acreage, zoning, topography, flood / environmental risk' },
+  { label: 'Development readiness', desc: 'Entitlements, permitting timeline, utility interconnection status' },
+  { label: 'Market positioning', desc: 'Demand signals, comparable transactions, buyer appetite by region' },
+]
 
 export default function AssessmentPage() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, { value: string; score: number }>>({});
-  const [showResult, setShowResult] = useState(false);
-  const [showContactForm, setShowContactForm] = useState(false);
-  const [contactSubmitted, setContactSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  const totalScore = Object.values(answers).reduce((sum, a) => sum + a.score, 0);
-  const tier = getResultTier(totalScore);
-  const progress = ((currentStep) / questions.length) * 100;
-
-  function selectAnswer(value: string, score: number) {
-    setAnswers((prev) => ({ ...prev, [currentStep]: { value, score } }));
-
-    if (currentStep < questions.length - 1) {
-      setTimeout(() => setCurrentStep(currentStep + 1), 200);
-    } else {
-      setTimeout(() => setShowResult(true), 200);
-    }
-  }
-
-  function goBack() {
-    if (currentStep > 0) setCurrentStep(currentStep - 1);
-  }
-
-  function restart() {
-    setCurrentStep(0);
-    setAnswers({});
-    setShowResult(false);
-    setShowContactForm(false);
-    setContactSubmitted(false);
-  }
-
-  async function handleContactSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitting(true);
-    const data = Object.fromEntries(new FormData(e.currentTarget));
-
-    try {
-      await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          message: `Assessment result: ${tier} (score: ${totalScore}/30). ${data.message || ""}`,
-        }),
-      });
-      setContactSubmitted(true);
-    } catch {
-      // silent fail — user can still navigate
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  if (showResult) {
-    return (
-      <section className="assessment">
-        <div className="assessment__inner">
-          <div className="assessment__result">
-            {tier === "development_ready" && (
-              <>
-                <div className="assessment__result-badge assessment__result-badge--ready">
-                  Development-Ready
-                </div>
-                <h2>Your project shows strong readiness signals.</h2>
-                <p>
-                  You have the key ingredients — site, power trajectory, and capital direction
-                  — for a structured development review. Konative can help compress your
-                  timeline and de-risk the remaining steps.
-                </p>
-                {!showContactForm && !contactSubmitted && (
-                  <button
-                    className="assessment__cta"
-                    onClick={() => setShowContactForm(true)}
-                  >
-                    Request a Readiness Review
-                  </button>
-                )}
-              </>
-            )}
-
-            {tier === "needs_prerequisites" && (
-              <>
-                <div className="assessment__result-badge assessment__result-badge--prereq">
-                  Needs Prerequisites
-                </div>
-                <h2>You&rsquo;re on the path, but there are gaps to close.</h2>
-                <p>
-                  Key areas like power interconnection, site control, or capital structure
-                  likely need attention before a full development push. Konative can help
-                  you identify exactly what&rsquo;s needed and map a path forward.
-                </p>
-                {!showContactForm && !contactSubmitted && (
-                  <button
-                    className="assessment__cta"
-                    onClick={() => setShowContactForm(true)}
-                  >
-                    Discuss Next Steps
-                  </button>
-                )}
-              </>
-            )}
-
-            {tier === "earlier_stage" && (
-              <>
-                <div className="assessment__result-badge assessment__result-badge--early">
-                  Earlier Stage
-                </div>
-                <h2>You&rsquo;re in the exploration phase.</h2>
-                <p>
-                  That&rsquo;s a great place to build your understanding of the market.
-                  Start with our curated market intelligence to understand power availability,
-                  modular build timelines, and regional dynamics before committing resources.
-                </p>
-                <div className="assessment__cta-group">
-                  <a href="/market-intel" className="assessment__cta">
-                    Explore Market Intel
-                  </a>
-                  {!showContactForm && !contactSubmitted && (
-                    <button
-                      className="assessment__cta assessment__cta--secondary"
-                      onClick={() => setShowContactForm(true)}
-                    >
-                      Get in Touch Anyway
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-
-            {showContactForm && !contactSubmitted && (
-              <form className="assessment__contact-form" onSubmit={handleContactSubmit}>
-                <h3>Leave your details</h3>
-                <input type="text" name="name" placeholder="Full Name *" required />
-                <input type="email" name="email" placeholder="Email *" required />
-                <input type="text" name="organization" placeholder="Organization *" required />
-                <textarea name="message" placeholder="Anything else you'd like to share?" rows={3} />
-                <button type="submit" disabled={submitting}>
-                  {submitting ? "Sending..." : "Submit"}
-                </button>
-              </form>
-            )}
-
-            {contactSubmitted && (
-              <p className="assessment__submitted">
-                Thanks! We&rsquo;ll be in touch within one business day.
-              </p>
-            )}
-
-            <button className="assessment__restart" onClick={restart}>
-              Retake Assessment
-            </button>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  const question = questions[currentStep];
-
   return (
-    <section className="assessment">
-      <div className="assessment__inner">
-        <div className="assessment__header">
-          <h1>DC Development Readiness Assessment</h1>
-          <p>
-            Answer 10 quick questions to understand where your modular data center
-            project stands — and what steps come next.
+    <div style={{ background: '#0C2046', minHeight: '100vh' }}>
+      {/* Header */}
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '100px 48px 0' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 12,
+          fontFamily: 'Inter, sans-serif', fontWeight: 600,
+          fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase',
+          color: '#E07B39', marginBottom: 20,
+        }}>
+          <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
+          Site Evaluation Tool
+        </div>
+
+        <h1 style={{
+          fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
+          fontSize: 'clamp(44px, 5.5vw, 80px)', lineHeight: 0.9,
+          textTransform: 'uppercase', color: '#fff',
+          letterSpacing: '0.01em', marginBottom: 20,
+        }}>
+          KNOW WHAT YOUR<br />
+          <span style={{ color: '#E07B39' }}>SITE IS WORTH.</span>
+        </h1>
+
+        <p style={{
+          fontFamily: 'Inter, sans-serif', fontSize: 16, lineHeight: 1.7,
+          color: 'rgba(255,255,255,0.5)', maxWidth: 600, marginBottom: 60,
+        }}>
+          Our infrastructure evaluation tool scores any parcel against the five factors
+          data center developers actually care about — power, fiber, site characteristics,
+          development readiness, and market demand.
+        </p>
+      </div>
+
+      {/* Two-column layout */}
+      <div style={{
+        maxWidth: 1100, margin: '0 auto', padding: '0 48px 120px',
+        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80,
+      }}>
+        {/* Left — criteria list */}
+        <div>
+          <div style={{
+            fontFamily: 'Inter, sans-serif', fontWeight: 600,
+            fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.3)', marginBottom: 28,
+          }}>
+            What gets evaluated
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            {criteria.map((item, i) => (
+              <div key={i} style={{
+                background: 'rgba(255,255,255,0.03)',
+                borderLeft: '3px solid #E07B39',
+                padding: '18px 24px',
+                display: 'flex', flexDirection: 'column', gap: 4,
+              }}>
+                <div style={{
+                  fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
+                  fontSize: 17, textTransform: 'uppercase', color: '#fff', letterSpacing: '0.02em',
+                }}>
+                  {item.label}
+                </div>
+                <div style={{
+                  fontFamily: 'Inter, sans-serif', fontSize: 13,
+                  color: 'rgba(255,255,255,0.4)', lineHeight: 1.5,
+                }}>
+                  {item.desc}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p style={{
+            fontFamily: 'Inter, sans-serif', fontSize: 12,
+            color: 'rgba(255,255,255,0.2)', marginTop: 24, lineHeight: 1.6,
+          }}>
+            Results include a scored summary you can share with buyers, lenders, or partners.
+            No account required.
           </p>
         </div>
 
-        <div className="assessment__progress">
-          <div className="assessment__progress-bar">
-            <div
-              className="assessment__progress-fill"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <span className="assessment__progress-label">
-            Question {currentStep + 1} of {questions.length}
-          </span>
-        </div>
+        {/* Right — CTA panel */}
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            padding: '52px 48px',
+          }}>
+            <div style={{
+              fontFamily: 'Inter, sans-serif', fontWeight: 600,
+              fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
+              color: '#E07B39', marginBottom: 16,
+            }}>
+              Powered by Tier IV DevCo
+            </div>
 
-        <div className="assessment__question">
-          <h2>{question.text}</h2>
-          <div className="assessment__options">
-            {question.options.map((opt) => (
-              <button
-                key={opt.value}
-                className={`assessment__option${
-                  answers[currentStep]?.value === opt.value
-                    ? " assessment__option--selected"
-                    : ""
-                }`}
-                onClick={() => selectAnswer(opt.value, opt.score)}
-              >
-                {opt.label}
-              </button>
-            ))}
+            <div style={{
+              fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
+              fontSize: 36, textTransform: 'uppercase', color: '#fff',
+              lineHeight: 1, marginBottom: 16,
+            }}>
+              T4 INFRASTRUCTURE<br />EVALUATION
+            </div>
+
+            <p style={{
+              fontFamily: 'Inter, sans-serif', fontSize: 14, lineHeight: 1.7,
+              color: 'rgba(255,255,255,0.45)', marginBottom: 36,
+            }}>
+              Built by the team that has developed mission-critical data center
+              projects across North America. Takes under 10 minutes. Get a scored
+              readiness report you can act on.
+            </p>
+
+            <a
+              href={TOOL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block', padding: '18px 44px',
+                background: '#E07B39', color: '#fff',
+                fontFamily: 'Inter, sans-serif', fontWeight: 700,
+                fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase',
+                textDecoration: 'none', marginBottom: 16,
+              }}
+            >
+              Launch Site Evaluator →
+            </a>
+
+            <div style={{
+              fontFamily: 'Inter, sans-serif', fontSize: 11,
+              color: 'rgba(255,255,255,0.2)', letterSpacing: '0.05em',
+            }}>
+              Opens in a new tab · No account required
+            </div>
+          </div>
+
+          <div style={{
+            marginTop: 24, padding: '20px 24px',
+            background: 'rgba(255,255,255,0.02)',
+            border: '1px dashed rgba(255,255,255,0.08)',
+          }}>
+            <p style={{
+              fontFamily: 'Inter, sans-serif', fontSize: 13,
+              color: 'rgba(255,255,255,0.35)', margin: 0, lineHeight: 1.6,
+            }}>
+              After your evaluation, bring the results to Konative and we&apos;ll help you
+              take next steps — whether that&apos;s finding a buyer, structuring a deal, or
+              connecting with capital.{' '}
+              <a href="/contact" style={{ color: '#E07B39', textDecoration: 'none' }}>
+                Get in touch →
+              </a>
+            </p>
           </div>
         </div>
-
-        {currentStep > 0 && (
-          <button className="assessment__back" onClick={goBack}>
-            &larr; Back
-          </button>
-        )}
       </div>
-    </section>
-  );
+    </div>
+  )
 }

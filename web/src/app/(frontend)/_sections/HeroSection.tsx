@@ -148,6 +148,14 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
             }}>
               Find Capacity →
             </Link>
+            <Link href="/assessment" style={{
+              fontFamily: 'Inter, sans-serif', fontWeight: 500,
+              fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
+              background: 'transparent', color: 'rgba(255,255,255,0.4)',
+              padding: '17px 0', textDecoration: 'none', display: 'inline-block',
+            }}>
+              Evaluate a Site →
+            </Link>
           </div>
         </div>
 
