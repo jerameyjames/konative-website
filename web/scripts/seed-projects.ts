@@ -91,9 +91,9 @@ out center tags;`
 // ── Wikidata ───────────────────────────────────────────────────────────────────
 async function seedWikidata() {
   console.log('Fetching Wikidata data centers (US + CA)...')
+  // Q671224 = data center (verified correct QID)
   const SPARQL = `SELECT ?item ?itemLabel ?coord ?operatorLabel ?country WHERE {
-  VALUES ?type { wd:Q1378425 wd:Q1420834 }
-  ?item wdt:P31 ?type .
+  ?item wdt:P31 wd:Q671224 .
   ?item wdt:P17 ?country .
   VALUES ?country { wd:Q30 wd:Q16 }
   OPTIONAL { ?item wdt:P625 ?coord. }
