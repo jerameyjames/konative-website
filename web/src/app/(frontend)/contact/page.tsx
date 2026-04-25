@@ -38,104 +38,216 @@ export default function ContactPage() {
 
   if (formState === "success") {
     return (
-      <section className="contact-page">
-        <div className="contact-page__inner">
-          <div className="contact-page__success">
-            <h1>Thank you</h1>
-            <p>
-              Your inquiry has been submitted. We&rsquo;ll be in touch within one business day.
-            </p>
-            <a href="/" className="contact-page__back-link">
-              Back to home
-            </a>
+      <div style={{ background: "#0C2046", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ maxWidth: 560, textAlign: "center", padding: "0 32px" }}>
+          <div style={{
+            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800,
+            fontSize: "clamp(48px, 6vw, 72px)", textTransform: "uppercase",
+            color: "#fff", lineHeight: 0.95, marginBottom: 20,
+          }}>
+            WE&rsquo;LL BE IN<br /><span style={{ color: "#E07B39" }}>TOUCH.</span>
           </div>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, color: "rgba(255,255,255,0.55)", marginBottom: 32 }}>
+            Your inquiry has been submitted. Expect a response within one business day.
+          </p>
+          <a href="/" style={{
+            display: "inline-block", fontFamily: "'Inter', sans-serif",
+            fontWeight: 600, fontSize: 11, letterSpacing: "0.14em",
+            textTransform: "uppercase", color: "#E07B39", textDecoration: "none",
+          }}>
+            ← Back to home
+          </a>
         </div>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className="contact-page">
-      <div className="contact-page__inner">
-        <div className="contact-page__intro">
-          <h1>Start a Conversation</h1>
-          <p>
-            Whether you&rsquo;re exploring a modular data center build, need connectivity
-            guidance, or want access to our market intelligence — we&rsquo;re here to help.
-          </p>
+    <div style={{ background: "#0C2046", minHeight: "100vh" }}>
+      {/* Header */}
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "100px 48px 0" }}>
+        <div style={{
+          display: "flex", alignItems: "center", gap: 12,
+          fontFamily: "'Inter', sans-serif", fontWeight: 600,
+          fontSize: 10, letterSpacing: "0.24em", textTransform: "uppercase",
+          color: "#E07B39", marginBottom: 20,
+        }}>
+          <span style={{ display: "block", width: 28, height: 1, background: "#E07B39" }} />
+          Get In Touch
         </div>
+        <h1 style={{
+          fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800,
+          fontSize: "clamp(44px, 5.5vw, 80px)", lineHeight: 0.9,
+          textTransform: "uppercase", color: "#fff",
+          letterSpacing: "0.01em", marginBottom: 16,
+        }}>
+          LET&rsquo;S TALK<br /><span style={{ color: "#E07B39" }}>LAND AND DEALS.</span>
+        </h1>
+        <p style={{
+          fontFamily: "'Inter', sans-serif", fontSize: 15, lineHeight: 1.65,
+          color: "rgba(255,255,255,0.5)", maxWidth: 520, marginBottom: 60,
+        }}>
+          Whether you own powered land near a substation, are raising a data center fund, or need site capacity — we connect the right parties and manage the deal from first call to close.
+        </p>
+      </div>
 
-        <form className="contact-form" onSubmit={handleSubmit}>
-          <div className="contact-form__row">
-            <div className="contact-form__field">
-              <label htmlFor="name">Full Name *</label>
-              <input type="text" id="name" name="name" required />
+      {/* Form */}
+      <div style={{
+        maxWidth: 1100, margin: "0 auto", padding: "0 48px 120px",
+        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80,
+      }}>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label style={labelStyle}>Full Name *</label>
+              <input type="text" name="name" required style={inputStyle} />
             </div>
-            <div className="contact-form__field">
-              <label htmlFor="email">Email *</label>
-              <input type="email" id="email" name="email" required />
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label style={labelStyle}>Email *</label>
+              <input type="email" name="email" required style={inputStyle} />
             </div>
           </div>
 
-          <div className="contact-form__row">
-            <div className="contact-form__field">
-              <label htmlFor="organization">Organization *</label>
-              <input type="text" id="organization" name="organization" required />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label style={labelStyle}>Organization</label>
+              <input type="text" name="organization" style={inputStyle} />
             </div>
-            <div className="contact-form__field">
-              <label htmlFor="role">Role</label>
-              <input type="text" id="role" name="role" />
-            </div>
-          </div>
-
-          <div className="contact-form__row">
-            <div className="contact-form__field">
-              <label htmlFor="projectType">Project Type</label>
-              <select id="projectType" name="projectType">
-                <option value="">Select...</option>
-                <option value="modular_dc_build">Modular Data Center Build</option>
-                <option value="connectivity">Connectivity / Fiber</option>
-                <option value="tribal_indigenous">Tribal / Indigenous Development</option>
-                <option value="market_intel">Market Intelligence Access</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div className="contact-form__field">
-              <label htmlFor="projectStage">Project Stage</label>
-              <select id="projectStage" name="projectStage">
-                <option value="">Select...</option>
-                <option value="exploring">Exploring (no site yet)</option>
-                <option value="site_identified">Site identified, power TBD</option>
-                <option value="need_connectivity">Site + power, need connectivity</option>
-                <option value="fully_sited">Fully sited, need capital intro</option>
-                <option value="in_development">Already in development</option>
-              </select>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label style={labelStyle}>Phone</label>
+              <input type="tel" name="phone" style={inputStyle} />
             </div>
           </div>
 
-          <div className="contact-form__field">
-            <label htmlFor="message">Message</label>
-            <textarea id="message" name="message" rows={5} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <label style={labelStyle}>I am reaching out about…</label>
+            <select name="inquiryType" style={inputStyle}>
+              <option value="">Select…</option>
+              <option value="land_owner">I own land near a substation / power source</option>
+              <option value="investor">I have capital to deploy into data center land</option>
+              <option value="capacity_buyer">I need powered site capacity (developer / hyperscaler)</option>
+              <option value="partnership">Partnership or joint venture inquiry</option>
+              <option value="market_intel">Market intelligence / advisory</option>
+              <option value="other">Other</option>
+            </select>
           </div>
 
-          <div className="contact-form__field">
-            <label htmlFor="referralSource">How did you hear about us?</label>
-            <input type="text" id="referralSource" name="referralSource" />
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <label style={labelStyle}>Where are you in the process?</label>
+            <select name="dealStage" style={inputStyle}>
+              <option value="">Select…</option>
+              <option value="early">Early — just exploring options</option>
+              <option value="site_identified">Have a site, evaluating buyers / partners</option>
+              <option value="capital_ready">Capital committed, need the right site</option>
+              <option value="ready_to_move">Ready to move — need execution support</option>
+              <option value="in_development">Already in development</option>
+            </select>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <label style={labelStyle}>Message</label>
+            <textarea name="message" rows={5} style={{ ...inputStyle, resize: "vertical" }} />
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <label style={labelStyle}>How did you hear about us?</label>
+            <input type="text" name="referralSource" style={inputStyle} />
           </div>
 
           {formState === "error" && (
-            <p className="contact-form__error">{errorMsg}</p>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: "#f87171", margin: 0 }}>
+              {errorMsg}
+            </p>
           )}
 
           <button
             type="submit"
-            className="contact-form__submit"
             disabled={formState === "submitting"}
+            style={{
+              padding: "16px 40px", background: "#E07B39", color: "#fff",
+              border: "none", fontFamily: "'Inter', sans-serif",
+              fontWeight: 700, fontSize: 12, textTransform: "uppercase",
+              letterSpacing: "0.16em", cursor: formState === "submitting" ? "not-allowed" : "pointer",
+              opacity: formState === "submitting" ? 0.7 : 1,
+              alignSelf: "flex-start",
+            }}
           >
-            {formState === "submitting" ? "Submitting..." : "Submit Inquiry"}
+            {formState === "submitting" ? "Sending…" : "Send Inquiry →"}
           </button>
         </form>
+
+        {/* Right side info panel */}
+        <div style={{ paddingTop: 8 }}>
+          <div style={{ marginBottom: 48 }}>
+            <div style={eyebrowStyle}>Response Time</div>
+            <div style={factHeadStyle}>Within 24 hours</div>
+            <p style={factBodyStyle}>Every inquiry is reviewed by a principal, not a form-processing queue.</p>
+          </div>
+
+          <div style={{ marginBottom: 48 }}>
+            <div style={eyebrowStyle}>What Happens Next</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 8 }}>
+              {[
+                ["01", "We review your inquiry and qualify the opportunity."],
+                ["02", "A Konative principal reaches out directly to discuss fit."],
+                ["03", "If there's a deal to run, we structure it and make introductions."],
+              ].map(([num, text]) => (
+                <div key={num} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+                  <span style={{
+                    fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                    fontSize: 22, color: "#E07B39", lineHeight: 1, minWidth: 28,
+                  }}>{num}</span>
+                  <p style={factBodyStyle}>{text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{
+            borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 32,
+          }}>
+            <div style={eyebrowStyle}>Prefer Email?</div>
+            <a href="mailto:deals@konative.com" style={{
+              fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+              fontSize: 22, textTransform: "uppercase", color: "#fff",
+              textDecoration: "none", letterSpacing: "0.02em",
+            }}>
+              deals@konative.com
+            </a>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
+
+const labelStyle: React.CSSProperties = {
+  fontFamily: "'Inter', sans-serif", fontWeight: 500,
+  fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase",
+  color: "rgba(255,255,255,0.4)",
+};
+
+const inputStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
+  color: "#fff", fontFamily: "'Inter', sans-serif", fontSize: 14,
+  padding: "12px 16px", outline: "none", borderRadius: 0, width: "100%",
+  boxSizing: "border-box",
+};
+
+const eyebrowStyle: React.CSSProperties = {
+  fontFamily: "'Inter', sans-serif", fontWeight: 600,
+  fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase",
+  color: "#E07B39", marginBottom: 8,
+};
+
+const factHeadStyle: React.CSSProperties = {
+  fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+  fontSize: 28, textTransform: "uppercase", color: "#fff",
+  lineHeight: 1, marginBottom: 8,
+};
+
+const factBodyStyle: React.CSSProperties = {
+  fontFamily: "'Inter', sans-serif", fontSize: 14, lineHeight: 1.65,
+  color: "rgba(255,255,255,0.45)", margin: 0,
+};

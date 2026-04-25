@@ -2,55 +2,51 @@
 
 import React, { useState, useEffect } from "react";
 
-interface MarketIntelPost {
+interface Article {
   id: string;
   title: string;
   summary: string;
-  sourceUrl: string;
-  sourceName: string;
+  url: string;
+  source: string;
   category: string;
-  publishedDate: string;
-  curatorNote?: string;
+  published_at: string;
 }
 
 const categoryLabels: Record<string, string> = {
-  power_grid: "Power / Grid",
-  investment_ma: "Investment / M&A",
-  modular_build: "Modular Build",
-  tribal_indigenous: "Tribal / Indigenous",
-  saudi_gulf: "Saudi / Gulf",
-  supply_chain: "Supply Chain",
-  industry_news: "Industry News",
-  regulatory: "Regulatory",
+  "Data Center": "Data Center",
+  "Power": "Power / Grid",
+  "Investment": "Investment / M&A",
+  "Supply Chain": "Supply Chain",
+  "Renewable Energy": "Renewable Energy",
+  "Real Estate": "Real Estate",
+  "Regulatory": "Regulatory",
 };
 
 export default function MarketIntelPage() {
-  const [posts, setPosts] = useState<MarketIntelPost[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
-
-  // New UI state
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [subscribing, setSubscribing] = useState(false);
 
   useEffect(() => {
-    fetch("/api/market-intel")
+    fetch("/api/v1/content?limit=100")
       .then((res) => res.json())
       .then((data) => {
-        setPosts(data.docs || []);
+        setArticles(data.articles || []);
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
 
+  const usedCategories = Array.from(new Set(articles.map((a) => a.category))).filter(Boolean);
+
   const filtered =
     activeCategory === "all"
-      ? posts
-      : posts.filter((p) => p.category === activeCategory);
-
-  const usedCategories = Array.from(new Set(posts.map((p) => p.category)));
+      ? articles
+      : articles.filter((a) => a.category === activeCategory);
 
   async function handleSubscribe() {
     if (!email || subscribing || subscribed) return;
@@ -72,320 +68,165 @@ export default function MarketIntelPage() {
   return (
     <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
       {/* Page header */}
-      <div style={{ background: "#0A0A0A", padding: "80px 32px" }}>
+      <div style={{ background: "#0C2046", padding: "80px 32px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 500,
-              fontSize: 11,
-              textTransform: "uppercase",
-              letterSpacing: "0.2em",
-              color: "#C84B1F",
-              marginBottom: 16,
-            }}
-          >
-            LIVE INTELLIGENCE
+          <div style={{
+            fontFamily: "'Inter', sans-serif", fontWeight: 600,
+            fontSize: 10, textTransform: "uppercase", letterSpacing: "0.24em",
+            color: "#E07B39", marginBottom: 16,
+            display: "flex", alignItems: "center", gap: 12,
+          }}>
+            <span style={{ display: "block", width: 28, height: 1, background: "#E07B39" }} />
+            Live Intelligence
           </div>
-          <h1
-            style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(48px, 7vw, 88px)",
-              lineHeight: 0.92,
-              textTransform: "uppercase",
-              color: "#FFFFFF",
-              letterSpacing: "0.01em",
-              margin: 0,
-            }}
-          >
+          <h1 style={{
+            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800,
+            fontSize: "clamp(48px, 7vw, 88px)", lineHeight: 0.92,
+            textTransform: "uppercase", color: "#FFFFFF",
+            letterSpacing: "0.01em", margin: "0 0 20px 0",
+          }}>
             MARKET{" "}
-            <span style={{ color: "#C84B1F" }}>INTELLIGENCE</span>
+            <span style={{ color: "#E07B39" }}>INTELLIGENCE</span>
           </h1>
-          <p
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 16,
-              lineHeight: 1.6,
-              color: "rgba(255,255,255,0.55)",
-              maxWidth: 560,
-              marginTop: 16,
-              marginBottom: 0,
-            }}
-          >
-            Curated data center industry analysis with practitioner commentary.
-            Real signal for development teams, not recycled press releases.
+          <p style={{
+            fontFamily: "'Inter', sans-serif", fontSize: 16, lineHeight: 1.6,
+            color: "rgba(255,255,255,0.55)", maxWidth: 560, margin: 0,
+          }}>
+            Real signal for data center developers, land investors, and power buyers — not recycled press releases.
+            {articles.length > 0 && (
+              <span style={{ color: "rgba(255,255,255,0.3)" }}> {articles.length} articles from {usedCategories.length} sources.</span>
+            )}
           </p>
         </div>
       </div>
 
       {/* Sticky filter bar */}
-      <div
-        style={{
-          position: "sticky",
-          top: 64,
-          zIndex: 100,
-          background: "#fff",
-          borderBottom: "1px solid #E0DDD8",
-          padding: "0 32px",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: "0 auto",
-            display: "flex",
-            gap: 0,
-          }}
-        >
-          {posts.length > 0 && (
-            <>
-              {(["all", ...usedCategories] as string[]).map((tabValue) => {
-                const isActive = activeCategory === tabValue;
-                const label =
-                  tabValue === "all"
-                    ? "ALL"
-                    : (categoryLabels[tabValue] || tabValue).toUpperCase();
-                return (
-                  <button
-                    key={tabValue}
-                    onClick={() => setActiveCategory(tabValue)}
-                    style={{
-                      fontFamily: "'Inter', sans-serif",
-                      fontWeight: 500,
-                      fontSize: 11,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.12em",
-                      padding: "14px 20px",
-                      background: "transparent",
-                      border: "none",
-                      borderBottom: isActive
-                        ? "2px solid #C84B1F"
-                        : "2px solid transparent",
-                      color: isActive ? "#C84B1F" : "#555",
-                      cursor: "pointer",
-                      marginBottom: -1,
-                    }}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </>
-          )}
+      {articles.length > 0 && (
+        <div style={{
+          position: "sticky", top: 64, zIndex: 100,
+          background: "#fff", borderBottom: "1px solid #E0DDD8", padding: "0 32px",
+        }}>
+          <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", gap: 0, overflowX: "auto" }}>
+            {(["all", ...usedCategories] as string[]).map((tabValue) => {
+              const isActive = activeCategory === tabValue;
+              const label = tabValue === "all" ? "ALL" : (categoryLabels[tabValue] || tabValue).toUpperCase();
+              return (
+                <button
+                  key={tabValue}
+                  onClick={() => setActiveCategory(tabValue)}
+                  style={{
+                    fontFamily: "'Inter', sans-serif", fontWeight: 500,
+                    fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em",
+                    padding: "14px 20px", background: "transparent", border: "none",
+                    borderBottom: isActive ? "2px solid #E07B39" : "2px solid transparent",
+                    color: isActive ? "#E07B39" : "#555",
+                    cursor: "pointer", marginBottom: -1, whiteSpace: "nowrap",
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Main content */}
       <div style={{ padding: "40px 32px 120px" }}>
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "1fr 320px",
-            gap: 80,
-          }}
-        >
+        <div style={{
+          maxWidth: 1280, margin: "0 auto",
+          display: "grid", gridTemplateColumns: "1fr 300px", gap: 60,
+        }}>
           {/* Left column — article grid */}
           <div>
             {loading ? (
-              <p
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 15,
-                  color: "#888",
-                  padding: "40px 0",
-                }}
-              >
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, color: "#888", padding: "40px 0" }}>
                 Loading intelligence feed...
               </p>
             ) : filtered.length === 0 ? (
               <div>
-                <div
-                  style={{
-                    fontFamily: "'Barlow Condensed', sans-serif",
-                    fontWeight: 700,
-                    fontSize: 32,
-                    textTransform: "uppercase",
-                    color: "#111111",
-                    marginBottom: 12,
-                  }}
-                >
-                  COMING SOON
+                <div style={{
+                  fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                  fontSize: 32, textTransform: "uppercase", color: "#111111", marginBottom: 12,
+                }}>
+                  NO RESULTS
                 </div>
-                <p
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: 15,
-                    color: "#555",
-                    margin: 0,
-                  }}
-                >
-                  Our curated market intelligence feed is launching soon.
+                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, color: "#555", margin: 0 }}>
+                  No articles match this filter. Try a different category.
                 </p>
               </div>
             ) : (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  border: "1px solid #E0DDD8",
-                }}
-              >
-                {filtered.map((post, i) => {
-                  const isHovered = hoveredCard === post.id;
-                  const isLastRow =
-                    i >= filtered.length - ((filtered.length % 3) || 3);
+              <div style={{
+                display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+                border: "1px solid #E0DDD8",
+              }}>
+                {filtered.map((article, i) => {
+                  const isHovered = hoveredCard === article.id;
+                  const totalRows = Math.ceil(filtered.length / 3);
+                  const rowIndex = Math.floor(i / 3);
+                  const isLastRow = rowIndex === totalRows - 1;
                   const isLastInRow = i % 3 === 2;
                   return (
                     <article
-                      key={post.id}
-                      onMouseEnter={() => setHoveredCard(post.id)}
+                      key={article.id}
+                      onMouseEnter={() => setHoveredCard(article.id)}
                       onMouseLeave={() => setHoveredCard(null)}
                       style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        borderLeft: isHovered
-                          ? "3px solid #C84B1F"
-                          : "3px solid transparent",
-                        borderRight: isLastInRow
-                          ? "none"
-                          : "1px solid #E0DDD8",
-                        borderBottom: isLastRow
-                          ? "none"
-                          : "1px solid #E0DDD8",
-                        boxShadow: isHovered
-                          ? "0 4px 16px rgba(0,0,0,0.08)"
-                          : "none",
-                        transition:
-                          "border-left 0.15s ease, box-shadow 0.15s ease",
+                        display: "flex", flexDirection: "column",
+                        borderLeft: isHovered ? "3px solid #E07B39" : "3px solid transparent",
+                        borderRight: isLastInRow ? "none" : "1px solid #E0DDD8",
+                        borderBottom: isLastRow ? "none" : "1px solid #E0DDD8",
+                        boxShadow: isHovered ? "0 4px 16px rgba(0,0,0,0.08)" : "none",
+                        transition: "border-left 0.15s ease, box-shadow 0.15s ease",
                       }}
                     >
-                      {/* Thumbnail placeholder */}
-                      <div
-                        className="infra-photo"
-                        style={{ height: 140, width: "100%" }}
-                      />
-
-                      {/* Card body */}
-                      <div
-                        style={{
-                          padding: "20px 20px 24px",
-                          display: "flex",
-                          flexDirection: "column",
-                          flex: 1,
-                        }}
-                      >
-                        <div style={{ marginBottom: 12 }}>
-                          <span
-                            style={{
-                              display: "inline-block",
-                              background: "#C84B1F",
-                              color: "#fff",
-                              fontFamily: "'Inter', sans-serif",
-                              fontWeight: 500,
-                              fontSize: 10,
-                              letterSpacing: "0.12em",
-                              textTransform: "uppercase",
-                              padding: "3px 8px",
-                            }}
-                          >
-                            {categoryLabels[post.category] || post.category}
+                      <div style={{ padding: "20px 20px 24px", display: "flex", flexDirection: "column", flex: 1 }}>
+                        <div style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                          <span style={{
+                            display: "inline-block", background: "#E07B39", color: "#fff",
+                            fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: 10,
+                            letterSpacing: "0.12em", textTransform: "uppercase", padding: "3px 8px",
+                          }}>
+                            {categoryLabels[article.category] || article.category}
                           </span>
-                          <span
-                            style={{
-                              fontFamily: "'Inter', sans-serif",
-                              fontSize: 11,
-                              color: "#888",
-                              marginLeft: 8,
-                            }}
-                          >
-                            {new Date(post.publishedDate).toLocaleDateString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              }
-                            )}
+                          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: "#888" }}>
+                            {new Date(article.published_at).toLocaleDateString("en-US", {
+                              year: "numeric", month: "short", day: "numeric",
+                            })}
                           </span>
                         </div>
 
-                        <div
-                          style={{
-                            fontFamily: "'Barlow Condensed', sans-serif",
-                            fontWeight: 700,
-                            fontSize: 19,
-                            lineHeight: 1.15,
-                            textTransform: "uppercase",
-                            color: "#111111",
-                            marginBottom: 12,
-                            letterSpacing: "0.01em",
-                          }}
-                        >
-                          {post.title}
+                        <div style={{
+                          fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                          fontSize: 18, lineHeight: 1.2, textTransform: "uppercase",
+                          color: "#111111", marginBottom: 10, letterSpacing: "0.01em",
+                        }}>
+                          {article.title}
                         </div>
 
-                        {post.summary && (
-                          <p
-                            style={{
-                              fontFamily: "'Inter', sans-serif",
-                              fontSize: 14,
-                              lineHeight: 1.6,
-                              color: "#555",
-                              marginBottom: 12,
-                              margin: "0 0 12px 0",
-                            }}
-                          >
-                            {post.summary}
+                        {article.summary && (
+                          <p style={{
+                            fontFamily: "'Inter', sans-serif", fontSize: 13,
+                            lineHeight: 1.6, color: "#555", margin: "0 0 12px 0",
+                          }}>
+                            {article.summary.length > 160 ? article.summary.slice(0, 157) + "…" : article.summary}
                           </p>
                         )}
 
-                        {post.curatorNote && (
-                          <div
-                            style={{
-                              fontFamily: "'Inter', sans-serif",
-                              fontSize: 13,
-                              lineHeight: 1.6,
-                              color: "#444",
-                              borderLeft: "3px solid #C84B1F",
-                              paddingLeft: 12,
-                              marginBottom: 12,
-                            }}
-                          >
-                            {post.curatorNote}
-                          </div>
-                        )}
-
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginTop: "auto",
-                            paddingTop: 12,
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontFamily: "'Inter', sans-serif",
-                              fontSize: 11,
-                              color: "#888",
-                            }}
-                          >
-                            {post.sourceName}
+                        <div style={{
+                          display: "flex", justifyContent: "space-between",
+                          alignItems: "center", marginTop: "auto", paddingTop: 12,
+                        }}>
+                          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: "#888" }}>
+                            {article.source}
                           </span>
                           <a
-                            href={post.sourceUrl}
+                            href={article.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{
-                              fontFamily: "'Inter', sans-serif",
-                              fontWeight: 600,
-                              fontSize: 11,
-                              color: "#C84B1F",
-                              textDecoration: "none",
+                              fontFamily: "'Inter', sans-serif", fontWeight: 600,
+                              fontSize: 11, color: "#E07B39", textDecoration: "none",
                             }}
                           >
                             Read →
@@ -400,67 +241,38 @@ export default function MarketIntelPage() {
           </div>
 
           {/* Right column — Newsletter rail */}
-          <div
-            style={{
-              background: "#F2F0EB",
-              padding: "40px 32px",
-              position: "sticky",
-              top: 128,
-              alignSelf: "start",
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 500,
-                fontSize: 11,
-                textTransform: "uppercase",
-                letterSpacing: "0.2em",
-                color: "#C84B1F",
-                marginBottom: 16,
-              }}
-            >
+          <div style={{
+            background: "#F2F0EB", padding: "40px 32px",
+            position: "sticky", top: 128, alignSelf: "start",
+          }}>
+            <div style={{
+              fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: 10,
+              textTransform: "uppercase", letterSpacing: "0.2em",
+              color: "#E07B39", marginBottom: 16,
+            }}>
               THE INTELLIGENCE BRIEF
             </div>
 
-            <h3
-              style={{
-                fontFamily: "'Barlow Condensed', sans-serif",
-                fontWeight: 700,
-                fontSize: 28,
-                textTransform: "uppercase",
-                color: "#111111",
-                marginBottom: 16,
-                lineHeight: 1,
-                margin: "0 0 16px 0",
-              }}
-            >
-              GET THE INTELLIGENCE IN YOUR INBOX
+            <h3 style={{
+              fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+              fontSize: 26, textTransform: "uppercase", color: "#111111",
+              lineHeight: 1, margin: "0 0 16px 0",
+            }}>
+              GET THE FEED IN YOUR INBOX
             </h3>
 
-            <p
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: 14,
-                lineHeight: 1.6,
-                color: "#555",
-                marginBottom: 24,
-                margin: "0 0 24px 0",
-              }}
-            >
-              Join decision-makers tracking the modular DC buildout. 2x/week.
+            <p style={{
+              fontFamily: "'Inter', sans-serif", fontSize: 14, lineHeight: 1.6,
+              color: "#555", margin: "0 0 24px 0",
+            }}>
+              Data center land, power, and capital movement — twice a week for developers and investors.
             </p>
 
             {subscribed ? (
-              <div
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontWeight: 600,
-                  fontSize: 14,
-                  color: "#C84B1F",
-                  padding: "14px 0",
-                }}
-              >
+              <div style={{
+                fontFamily: "'Inter', sans-serif", fontWeight: 600,
+                fontSize: 14, color: "#E07B39", padding: "14px 0",
+              }}>
                 Subscribed! ✓
               </div>
             ) : (
@@ -471,35 +283,23 @@ export default function MarketIntelPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   style={{
-                    width: "100%",
-                    padding: "12px 16px",
-                    border: "1px solid #E0DDD8",
-                    background: "#fff",
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: 14,
-                    marginBottom: 10,
-                    outline: "none",
-                    boxSizing: "border-box",
-                    borderRadius: 0,
+                    width: "100%", padding: "12px 16px",
+                    border: "1px solid #E0DDD8", background: "#fff",
+                    fontFamily: "'Inter', sans-serif", fontSize: 14,
+                    marginBottom: 10, outline: "none",
+                    boxSizing: "border-box", borderRadius: 0,
                   }}
                 />
                 <button
                   onClick={handleSubscribe}
                   disabled={subscribing}
                   style={{
-                    width: "100%",
-                    padding: 14,
-                    background: "#C84B1F",
-                    color: "#fff",
-                    border: "none",
-                    fontFamily: "'Inter', sans-serif",
-                    fontWeight: 600,
-                    fontSize: 12,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.12em",
+                    width: "100%", padding: 14, background: "#E07B39",
+                    color: "#fff", border: "none",
+                    fontFamily: "'Inter', sans-serif", fontWeight: 600,
+                    fontSize: 12, textTransform: "uppercase", letterSpacing: "0.12em",
                     cursor: subscribing ? "not-allowed" : "pointer",
-                    opacity: subscribing ? 0.7 : 1,
-                    borderRadius: 0,
+                    opacity: subscribing ? 0.7 : 1, borderRadius: 0,
                   }}
                 >
                   SUBSCRIBE FREE
@@ -507,15 +307,8 @@ export default function MarketIntelPage() {
               </>
             )}
 
-            <div
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: 11,
-                color: "#888",
-                marginTop: 12,
-              }}
-            >
-              Updated daily · 16 live feeds
+            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: "#888", marginTop: 12 }}>
+              Updated daily · {articles.length > 0 ? `${articles.length} articles indexed` : "12 live feeds"}
             </div>
           </div>
         </div>
