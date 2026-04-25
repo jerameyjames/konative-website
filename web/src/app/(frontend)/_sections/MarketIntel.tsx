@@ -217,7 +217,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
               </a>
             ))}
             <div style={{ padding: '16px 20px', marginTop: 'auto' }}>
-              <a href="/market-intel" style={{
+              <a href="/news" style={{
                 display: 'block', textAlign: 'center', padding: '14px',
                 border: '1px solid rgba(224,123,57,0.3)',
                 fontFamily: 'Inter, sans-serif', fontWeight: 600,

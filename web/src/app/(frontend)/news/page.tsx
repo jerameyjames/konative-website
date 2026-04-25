@@ -92,7 +92,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   const activeFilterCount = (country !== "all" ? 1 : 0) + (topic !== "all" ? 1 : 0);
 
   const chipActiveStyle: React.CSSProperties = {
-    background: "#C84B1F",
+    background: "#E07B39",
     color: "#fff",
     fontFamily: "'Inter', sans-serif",
     fontWeight: 500,
@@ -117,7 +117,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   return (
     <main style={{ background: "#fff", minHeight: "100vh" }}>
       {/* Page Header */}
-      <section style={{ background: "#0A0A0A", padding: "80px 32px" }}>
+      <section style={{ background: "#0C2046", padding: "80px 32px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <p
             style={{
@@ -126,7 +126,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               fontSize: 11,
               textTransform: "uppercase",
               letterSpacing: "0.2em",
-              color: "#C84B1F",
+              color: "#E07B39",
               marginBottom: 16,
               margin: "0 0 16px 0",
             }}
@@ -145,7 +145,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               margin: 0,
             }}
           >
-            DATA CENTER <span style={{ color: "#C84B1F" }}>INTELLIGENCE</span> HUB
+            DATA CENTER <span style={{ color: "#E07B39" }}>INTELLIGENCE</span> HUB
           </h1>
           <p
             style={{
@@ -358,7 +358,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                         fontSize: 10,
                         textTransform: "uppercase" as const,
                         letterSpacing: "0.12em",
-                        background: "#C84B1F",
+                        background: "#E07B39",
                         color: "#fff",
                         padding: "2px 8px",
                       }}
@@ -455,7 +455,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                   style={
                     isCurrentPage
                       ? {
-                          background: "#C84B1F",
+                          background: "#E07B39",
                           color: "#fff",
                           padding: "8px 14px",
                           fontFamily: "'Inter', sans-serif",
