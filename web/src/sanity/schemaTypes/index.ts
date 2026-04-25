@@ -1,6 +1,7 @@
 import type { SchemaTypeDefinition } from "sanity";
 
 import { capacityRequest } from "./capacityRequest";
+import { dataCenterProject } from "./dataCenterProject";
 import { contactInquiry } from "./contactInquiry";
 import { deal } from "./deal";
 import { ingestionRun } from "./ingestionRun";
@@ -21,6 +22,8 @@ import { testimonial } from "./testimonial";
 import { theme } from "./theme";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
+  // Data infrastructure
+  dataCenterProject,
   // Lead capture
   landSubmission,
   investorProfile,
