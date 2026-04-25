@@ -70,7 +70,7 @@ const PLACEHOLDER_DEALS: Deal[] = [
     status: 'ACTIVE',
     geography: 'Ontario, Canada',
     description:
-      'Multi-site modular DC development across three Ontario municipalities with First Nations partnership structure.',
+      'Multi-site data center development across three Ontario municipalities. Powered land acquisition with 230kV substation access and confirmed interconnection queue position.',
   },
   {
     id: '2',
@@ -81,7 +81,7 @@ const PLACEHOLDER_DEALS: Deal[] = [
     status: 'ANNOUNCED',
     geography: 'Pacific Northwest, USA',
     description:
-      'Hyperscale-adjacent modular builds targeting CAISO interconnection queue positions acquired in Q4 2025.',
+      'Hyperscale-adjacent powered land targeting CAISO interconnection queue positions. Ground lease structure with 500kV transmission access.',
   },
   {
     id: '3',
@@ -92,7 +92,7 @@ const PLACEHOLDER_DEALS: Deal[] = [
     status: 'ACTIVE',
     geography: 'Texas, USA',
     description:
-      'AI-optimized modular campus adjacent to ERCOT substation with confirmed 400MW capacity agreement.',
+      'AI-focused data center campus adjacent to ERCOT substation. 1,200-acre parcel with confirmed 400MW capacity and water rights secured.',
   },
   {
     id: '4',
@@ -103,7 +103,7 @@ const PLACEHOLDER_DEALS: Deal[] = [
     status: 'ANNOUNCED',
     geography: 'Alberta, Canada',
     description:
-      'Indigenous-led modular DC development with provincial economic development mandate and land certainty.',
+      'Data center land development with provincial economic development mandate. Transmission-ready parcel with confirmed fiber path and zoning certainty.',
   },
   {
     id: '5',
@@ -114,7 +114,7 @@ const PLACEHOLDER_DEALS: Deal[] = [
     status: 'ACTIVE',
     geography: 'Eastern Seaboard, USA',
     description:
-      'Multi-region edge modular deployment targeting ISONE and PJM interconnection queue positions.',
+      'Multi-region powered land portfolio targeting ISONE and PJM interconnection queue positions across the Eastern Seaboard.',
   },
 ]
 
@@ -156,7 +156,7 @@ export default function DealsPage() {
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", background: '#FFFFFF', minHeight: '100vh' }}>
       {/* Page Header */}
-      <div style={{ background: '#0A0A0A', padding: '80px 32px' }}>
+      <div style={{ background: '#0C2046', padding: '80px 32px' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <p
             style={{
@@ -165,7 +165,7 @@ export default function DealsPage() {
               fontSize: 11,
               textTransform: 'uppercase',
               letterSpacing: '0.2em',
-              color: '#C84B1F',
+              color: '#E07B39',
               marginBottom: 16,
               margin: '0 0 16px',
             }}
@@ -185,7 +185,7 @@ export default function DealsPage() {
             }}
           >
             TRACK THE{' '}
-            <span style={{ color: '#C84B1F' }}>CAPITAL</span>
+            <span style={{ color: '#E07B39' }}>CAPITAL</span>
             <br />
             MOVING INTO NORTH AMERICAN DATA CENTER.
           </h1>
@@ -210,7 +210,7 @@ export default function DealsPage() {
               }}
             >
               Live deal flow tracking across sovereign wealth, infrastructure, and development
-              capital entering the North American modular data center market.
+              capital entering the North American data center land market.
             </p>
             <p
               style={{
@@ -262,9 +262,9 @@ export default function DealsPage() {
                   border: 'none',
                   cursor: 'pointer',
                   marginBottom: -1,
-                  color: activeTab === tab ? '#C84B1F' : '#555',
+                  color: activeTab === tab ? '#E07B39' : '#555',
                   borderBottom:
-                    activeTab === tab ? '2px solid #C84B1F' : '2px solid transparent',
+                    activeTab === tab ? '2px solid #E07B39' : '2px solid transparent',
                 }}
               >
                 {tab}
@@ -507,7 +507,7 @@ export default function DealsPage() {
       </div>
 
       {/* Stats Bar */}
-      <div style={{ background: '#0A0A0A', padding: '64px 32px' }}>
+      <div style={{ background: '#0C2046', padding: '64px 32px' }}>
         <div
           style={{
             maxWidth: 1280,
@@ -583,7 +583,7 @@ export default function DealsPage() {
             TRACK DEALS BEFORE
             <br />
             THEY&apos;RE{' '}
-            <span style={{ color: '#C84B1F' }}>PUBLIC KNOWLEDGE.</span>
+            <span style={{ color: '#E07B39' }}>PUBLIC KNOWLEDGE.</span>
           </h2>
           <p
             style={{
@@ -595,8 +595,8 @@ export default function DealsPage() {
               margin: '0 auto 32px',
             }}
           >
-            Konative tracks sovereign wealth, infrastructure, and development capital entering
-            the North American modular data center market — before it hits the trade press.
+            Konative tracks sovereign wealth, infrastructure, and development capital moving
+            into North American powered land and data center development — before it hits the trade press.
           </p>
           <Link
             href="/contact"
@@ -608,7 +608,7 @@ export default function DealsPage() {
               fontSize: 13,
               textTransform: 'uppercase',
               letterSpacing: '0.12em',
-              background: hoveredCta ? '#A33D17' : '#C84B1F',
+              background: hoveredCta ? '#c96a28' : '#E07B39',
               color: '#FFFFFF',
               padding: '20px 48px',
               textDecoration: 'none',
