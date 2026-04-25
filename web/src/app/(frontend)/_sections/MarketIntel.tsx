@@ -18,6 +18,15 @@ interface MarketIntelProps {
 }
 
 const CATEGORY_IMAGES: Record<string, string> = {
+  // Sanity ingestion topic slugs
+  'construction':      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80', // server room
+  'permitting':        'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80', // city planning
+  'regulations':       'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80', // government
+  'investment':        'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80', // financial
+  'power':             'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80', // transmission lines
+  'sustainability':    'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80', // solar panels
+  'tax':               'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80', // accounting
+  // Placeholder article display names
   'Power & Energy':    'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80',
   'Investment':        'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
   'Supply Chain':      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80',
@@ -25,7 +34,7 @@ const CATEGORY_IMAGES: Record<string, string> = {
   'Policy':            'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
   'Sovereign Capital': 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80',
 }
-const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80'
+const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80' // server room fallback
 
 const PLACEHOLDER_ARTICLES: Article[] = [
   { id: '1', title: 'PJM Queue Hits Record 3,000+ GW — What It Means for Data Center Siting',            category: 'Power & Energy',    source: 'Utility Dive',            published_at: '2026-04-19' },

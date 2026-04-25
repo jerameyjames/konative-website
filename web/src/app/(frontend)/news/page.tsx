@@ -9,6 +9,21 @@ import { getSanityReadClient } from "../../../sanity/readClient";
 
 export const dynamic = "force-dynamic";
 
+const TOPIC_IMAGES: Record<string, string> = {
+  construction:   "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=240&q=75",
+  permitting:     "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=240&q=75",
+  regulations:    "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=240&q=75",
+  investment:     "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=240&q=75",
+  power:          "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=240&q=75",
+  sustainability: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=240&q=75",
+  tax:            "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=240&q=75",
+};
+const DEFAULT_TOPIC_IMAGE = "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=240&q=75";
+
+function getArticleImage(topics?: string[]): string {
+  return TOPIC_IMAGES[topics?.[0] ?? ""] ?? DEFAULT_TOPIC_IMAGE;
+}
+
 type NewsPageProps = {
   searchParams: Promise<{
     country?: string;
@@ -333,10 +348,16 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                   alignItems: "flex-start",
                 }}
               >
-                {/* Thumbnail placeholder */}
+                {/* Topic thumbnail */}
                 <div
-                  className="infra-photo"
-                  style={{ width: 120, height: 80, flexShrink: 0 }}
+                  style={{
+                    width: 120,
+                    height: 80,
+                    flexShrink: 0,
+                    backgroundImage: `url('${getArticleImage(item.topics)}')`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
                 />
 
                 {/* Article content */}
