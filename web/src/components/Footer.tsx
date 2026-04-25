@@ -98,8 +98,8 @@ export default function Footer() {
           fontFamily: 'Inter, sans-serif', fontSize: 11,
           color: 'rgba(255,255,255,0.2)',
         }}>
-          <span>© 2026 Konative · Tolowa Pacific LLC</span>
-          <span>Energy Infrastructure Brokerage &amp; Development</span>
+          <span>© 2026 Konative · tolowastudio.com</span>
+          <span>Datacenter Brokerage &amp; Development</span>
         </div>
 
       </div>
