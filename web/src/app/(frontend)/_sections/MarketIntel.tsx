@@ -17,24 +17,9 @@ interface MarketIntelProps {
   articles: Article[]
 }
 
-const CATEGORY_IMAGES: Record<string, string> = {
-  // Sanity ingestion topic slugs
-  'construction':      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80', // server room
-  'permitting':        'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80', // city planning
-  'regulations':       'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80', // government
-  'investment':        'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80', // financial
-  'power':             'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80', // transmission lines
-  'sustainability':    'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80', // solar panels
-  'tax':               'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80', // accounting
-  // Placeholder article display names
-  'Power & Energy':    'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80',
-  'Investment':        'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
-  'Supply Chain':      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80',
-  'Modular DC':        'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80',
-  'Policy':            'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
-  'Sovereign Capital': 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80',
-}
-const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80' // server room fallback
+const PLACEHOLDER_BG =
+  'repeating-linear-gradient(-55deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 18px), ' +
+  'linear-gradient(160deg, #091523 0%, #0C2046 60%, #0f2a55 100%)'
 
 const PLACEHOLDER_ARTICLES: Article[] = [
   { id: '1', title: 'PJM Queue Hits Record 3,000+ GW — What It Means for Data Center Siting',            category: 'Power & Energy',    source: 'Utility Dive',            published_at: '2026-04-19' },
@@ -45,8 +30,8 @@ const PLACEHOLDER_ARTICLES: Article[] = [
   { id: '6', title: 'CPPIB Targets 3.4 GW Across Four Modular DC Platforms Through 2028',                category: 'Sovereign Capital',  source: 'Infrastructure Investor', published_at: '2026-04-14' },
 ]
 
-function getImage(article: Article): string {
-  return article.image_url || CATEGORY_IMAGES[article.category] || DEFAULT_IMAGE
+function cardBg(imageUrl?: string | null): string {
+  return imageUrl ? `url('${imageUrl}') center/cover no-repeat` : PLACEHOLDER_BG
 }
 
 export default function MarketIntel({ articles }: MarketIntelProps) {
@@ -110,8 +95,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
               <div style={{ background: '#0C2046', overflow: 'hidden' }}>
                 <div style={{
                   height: 220, position: 'relative',
-                  backgroundImage: `url('${getImage(featured)}')`,
-                  backgroundSize: 'cover', backgroundPosition: 'center',
+                  background: cardBg(featured.image_url),
                 }}>
                   <span style={{
                     position: 'absolute', bottom: 12, left: 12,
@@ -149,8 +133,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
                   <div style={{ background: '#0C2046', overflow: 'hidden' }}>
                     <div style={{
                       height: 140, position: 'relative',
-                      backgroundImage: `url('${getImage(article)}')`,
-                      backgroundSize: 'cover', backgroundPosition: 'center',
+                      background: cardBg(article.image_url),
                     }}>
                       <span style={{
                         position: 'absolute', bottom: 8, left: 8,
