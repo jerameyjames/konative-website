@@ -4,7 +4,7 @@ import { apiVersion, assertSanityEnv } from "./env";
 
 let _client: SanityClient | null = null;
 
-/** Read-only client (CDN). Safe for Server Components and Route Handlers. */
+/** Read-only client. Safe for Server Components and Route Handlers. */
 export function getSanityReadClient(): SanityClient {
   if (_client) return _client;
   const { projectId, dataset } = assertSanityEnv();
@@ -13,6 +13,7 @@ export function getSanityReadClient(): SanityClient {
     dataset,
     apiVersion,
     useCdn: false,
+    token: process.env.SANITY_API_TOKEN,
   });
   return _client;
 }
