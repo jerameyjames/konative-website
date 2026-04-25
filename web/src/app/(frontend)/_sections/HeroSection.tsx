@@ -1,7 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
+
+const DataCenterMap = dynamic(() => import('@/components/DataCenterMap'), { ssr: false })
 
 interface Deal {
   id: string
@@ -78,16 +81,13 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
         background: '#08142D',
       }}
     >
-      <div style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: "url('https://cdn.builder.io/api/v1/image/assets%2Fe1b58026c635427ca6b6481e4535334a%2Fc981388dc46e4fc1b0cfdd72d8584e0a')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }} />
+      <div style={{ position: 'absolute', inset: 0 }}>
+        <DataCenterMap />
+      </div>
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(115deg, rgba(8,20,45,0.97) 0%, rgba(8,20,45,0.88) 45%, rgba(12,32,70,0.60) 75%, rgba(30,79,191,0.15) 100%)',
+        background: 'linear-gradient(115deg, rgba(8,20,45,0.92) 0%, rgba(8,20,45,0.80) 45%, rgba(12,32,70,0.40) 75%, rgba(30,79,191,0.08) 100%)',
       }} />
 
       <div style={{
