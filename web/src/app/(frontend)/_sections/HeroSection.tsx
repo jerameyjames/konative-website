@@ -24,11 +24,11 @@ interface HeroSectionProps {
 }
 
 const PLACEHOLDER_DEALS: Deal[] = [
-  { id: '1', name: 'Project Northstar',   entity: 'CPPIB / Digital Bridge',   size: '$3.4B', status: 'ACTIVE',    geography: 'Ontario, Canada' },
-  { id: '2', name: 'Cascade Power Build', entity: 'Blackstone Infrastructure', size: '$780M', status: 'ANNOUNCED', geography: 'Pacific Northwest' },
-  { id: '3', name: 'Mesa Verde AI Park',  entity: 'Undisclosed SWF',           size: '$1.2B', status: 'ACTIVE',    geography: 'Texas, USA' },
-  { id: '4', name: 'Ridgeline Series A',  entity: 'Emerging Markets Dev Corp', size: '$120M', status: 'ANNOUNCED', geography: 'Alberta, Canada' },
-  { id: '5', name: 'Atlantic Gateway',    entity: 'Macquarie Asset Mgmt',      size: '$2.1B', status: 'ACTIVE',    geography: 'Eastern Seaboard' },
+  { id: '1', name: 'Loudoun County Land Package',  entity: 'Undisclosed Hyperscaler',    size: '320 acres · 230kV', status: 'ACTIVE',    geography: 'Northern Virginia' },
+  { id: '2', name: 'Permian Basin Power Site',      entity: 'Infrastructure Fund',        size: '1,200 acres',       status: 'ANNOUNCED', geography: 'West Texas' },
+  { id: '3', name: 'Alberta Transmission Corridor', entity: 'Canadian Pension / AI Co.',  size: '2,400 acres',       status: 'ACTIVE',    geography: 'Alberta, Canada' },
+  { id: '4', name: 'Carolina Colo Campus',          entity: 'Colo Operator + Family JV',  size: '180MW RFP',         status: 'ANNOUNCED', geography: 'North Carolina' },
+  { id: '5', name: 'Pacific Northwest Land Play',   entity: 'Sovereign Wealth Fund',      size: '800 acres · 500kV', status: 'ACTIVE',    geography: 'Pacific Northwest' },
 ]
 
 function useCountUp(target: number, duration = 1200) {
@@ -87,7 +87,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(115deg, rgba(8,20,45,0.97) 0%, rgba(8,20,45,0.85) 45%, rgba(12,32,70,0.55) 75%, rgba(30,79,191,0.2) 100%)',
+        background: 'linear-gradient(115deg, rgba(8,20,45,0.97) 0%, rgba(8,20,45,0.88) 45%, rgba(12,32,70,0.60) 75%, rgba(30,79,191,0.15) 100%)',
       }} />
 
       <div style={{
@@ -96,7 +96,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
         maxWidth: 1320, margin: '0 auto', width: '100%',
         padding: '0 48px', gap: 80, paddingTop: 68,
       }}>
-        <div style={{ flex: 1, maxWidth: 780 }}>
+        <div style={{ flex: 1, maxWidth: 800 }}>
           <p style={{
             display: 'flex', alignItems: 'center', gap: 12,
             fontFamily: 'Inter, sans-serif', fontWeight: 600,
@@ -104,19 +104,19 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
             color: '#E07B39', marginBottom: 32,
           }}>
             <span style={{ display: 'block', width: 36, height: 1, background: '#E07B39', flexShrink: 0 }} />
-            Energy Infrastructure Brokerage &amp; Development
+            Data Center Land Brokerage
           </p>
 
           <h1 style={{
             fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
-            fontSize: 'clamp(60px, 8.5vw, 108px)', lineHeight: 0.88,
+            fontSize: 'clamp(56px, 8vw, 104px)', lineHeight: 0.88,
             textTransform: 'uppercase', letterSpacing: '0.01em',
             color: '#fff', marginBottom: 32,
           }}>
-            BRING US<br />
-            YOUR <span style={{ color: '#E07B39' }}>PROJECT.</span><br />
-            <span style={{ color: 'rgba(255,255,255,0.22)' }}>WE TAKE IT</span><br />
-            FROM HERE.
+            OWN POWERED<br />
+            <span style={{ color: '#E07B39' }}>LAND?</span><br />
+            <span style={{ color: 'rgba(255,255,255,0.22)' }}>THE AI BUILDOUT</span><br />
+            WANTS TO TALK.
           </h1>
 
           <p style={{
@@ -125,35 +125,37 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
             color: 'rgba(255,255,255,0.55)',
             maxWidth: 580, marginBottom: 44,
           }}>
-            Konative assembles end-to-end energy infrastructure deals — connecting investors, landholders, supply chain, power sourcing, and the right teams to move your project from concept to commissioned.
+            Hyperscalers and data center developers are racing to lock up powered land across North America.
+            Konative brokers those deals — sourcing sites, connecting investors, and managing the transaction
+            from first call to close.
           </p>
 
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-            <Link href="/contact" style={{
+            <Link href="/land/submit" style={{
               fontFamily: 'Inter, sans-serif', fontWeight: 600,
               fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
-              background: '#1E4FBF', color: '#fff',
+              background: '#E07B39', color: '#fff',
               padding: '18px 40px', textDecoration: 'none', display: 'inline-block',
             }}>
-              START YOUR PROJECT NOW
+              Submit Your Land →
             </Link>
-            <Link href="#capabilities" style={{
+            <Link href="/capacity" style={{
               fontFamily: 'Inter, sans-serif', fontWeight: 500,
               fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
               background: 'transparent', color: 'rgba(255,255,255,0.7)',
               padding: '17px 32px', border: '1px solid rgba(255,255,255,0.25)',
               textDecoration: 'none', display: 'inline-block',
             }}>
-              SEE HOW WE WORK
+              Find Capacity →
             </Link>
           </div>
         </div>
 
         <div style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 1 }}>
           {[
-            { val: '$7.6B+', label: 'Deal Flow Tracked', rust: true },
-            { val: '6',      label: 'End-to-End Capabilities', rust: false },
-            { val: '24h',    label: 'Response Guarantee', rust: false },
+            { val: '$12B+', label: 'Deal Flow Tracked', rust: true },
+            { val: '48h',   label: 'Response Guarantee', rust: false },
+            { val: '12',    label: 'News Sources Monitored', rust: false },
           ].map((stat, i) => (
             <div key={i} style={{
               background: 'rgba(255,255,255,0.04)',
@@ -192,12 +194,13 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
               fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
               color: 'rgba(255,255,255,0.35)',
             }}>
-              Projects in Motion
+              Transactions in Motion
             </div>
           </div>
         </div>
       </div>
 
+      {/* Deal ticker */}
       <div style={{
         position: 'relative', zIndex: 2,
         borderTop: '1px solid rgba(255,255,255,0.08)',
@@ -206,7 +209,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
       }}>
         <div style={{
           display: 'flex',
-          animation: 'ticker-scroll 28s linear infinite',
+          animation: 'ticker-scroll 32s linear infinite',
           whiteSpace: 'nowrap',
         }}>
           {tickerDeals.map((deal, i) => (

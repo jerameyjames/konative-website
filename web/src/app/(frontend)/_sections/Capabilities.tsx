@@ -4,34 +4,34 @@ import { useState } from 'react'
 
 const capabilities = [
   {
-    num: '01 — Capital',
-    title: 'Investor Matchmaking & Deal Structure',
-    body: 'We connect landholders and developers with institutional and sovereign capital. We structure the deal, run the introduction process, and stay in the room through close.',
+    num: '01 — Source',
+    title: 'Powered Land Identification',
+    body: 'We find and qualify parcels near substations and transmission corridors before they hit the market. GIS analysis, transmission queue review, and direct outreach to landowners — we do the legwork.',
   },
   {
-    num: '02 — Land',
-    title: 'Site Acquisition & Feasibility',
-    body: 'Site identification, feasibility analysis, zoning review, and landholder relationship management. We find and qualify the right land before capital is committed.',
+    num: '02 — Connect',
+    title: 'Buyer & Investor Matchmaking',
+    body: 'Our network spans hyperscalers, colo operators, infrastructure funds, and family offices. We match your site or capital to the right counterparty and run a competitive process to maximize your outcome.',
   },
   {
-    num: '03 — Supply Chain',
-    title: 'Buildings & Modular Sourcing',
-    body: 'End-to-end procurement for prefab and modular infrastructure — buildings, enclosures, cooling, and site hardware. We have the supplier relationships to move fast.',
+    num: '03 — Structure',
+    title: 'Deal Structure & Negotiation',
+    body: 'Sale, ground lease, or joint venture — we advise on structure and negotiate on your behalf. We\'ve seen enough term sheets to know what\'s market and where to push.',
   },
   {
-    num: '04 — Power',
-    title: 'Turbine & Generation Sourcing',
-    body: "Power generation procurement, turbine sourcing, and grid interconnection strategy. We know what's available, what's on lead time, and what the ISO queue looks like in your region.",
+    num: '04 — Analyze',
+    title: 'Power & Grid Strategy',
+    body: 'Interconnection queue analysis, substation capacity review, transmission voltage assessment, and utility coordination. We tell you what a site is actually worth before anyone signs anything.',
   },
   {
-    num: '05 — Energy Strategy',
-    title: 'Behind-the-Meter Design',
-    body: 'On-site generation, battery storage, and grid-independent architecture. We design the behind-the-meter strategy that protects your project from grid constraints and rate exposure.',
+    num: '05 — Transact',
+    title: 'Due Diligence & Close',
+    body: 'We stay in the deal through environmental review, title, and closing. Most brokers hand off after the LOI — we stay on to keep the timeline moving and protect your interests.',
   },
   {
-    num: '06 — People',
-    title: 'Staffing & Ops Readiness',
-    body: 'Staffing recommendations, placement support, and operational structure design. We make sure the right people are in place before your project goes live.',
+    num: '06 — Manage',
+    title: 'Project Oversight',
+    body: 'For clients who want it, we provide ongoing project management through permitting, construction milestones, and delivery. One team, one accountability, start to finish.',
   },
 ]
 
@@ -51,21 +51,22 @@ export default function Capabilities() {
               color: '#E07B39', marginBottom: 20,
             }}>
               <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
-              What We Do
+              How We Work
             </div>
             <h2 style={{
               fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
               fontSize: 'clamp(44px, 5.5vw, 80px)', lineHeight: 0.9,
               textTransform: 'uppercase', letterSpacing: '0.01em', color: '#fff',
             }}>
-              END-TO-END.<br /><span style={{ color: '#E07B39' }}>NO GAPS.</span>
+              PLAN. SOURCE.<br /><span style={{ color: '#E07B39' }}>RUN THE DEAL.</span>
             </h2>
           </div>
           <p style={{
             fontFamily: 'Inter, sans-serif', fontSize: 16, lineHeight: 1.75,
             color: 'rgba(255,255,255,0.45)', maxWidth: 480,
           }}>
-            Most projects stall because no single partner owns the full stack. Konative does — from the first feasibility call to a staffed, operating asset. Six capabilities, one team, one accountability.
+            Most brokers hand you off the moment ink hits paper. We stay in the deal — from the first site analysis
+            through closing and beyond. Six capabilities, one team, full accountability.
           </p>
         </div>
 
@@ -82,7 +83,7 @@ export default function Capabilities() {
                 background: '#08142D',
                 padding: '40px 36px',
                 borderLeft: hovered === i ? '2px solid #E07B39' : '2px solid transparent',
-                transition: 'border-color 0.2s, background 0.2s',
+                transition: 'border-color 0.2s',
               }}
             >
               <div style={{

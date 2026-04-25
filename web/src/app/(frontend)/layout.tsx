@@ -6,9 +6,9 @@ import Header from "../../components/Header";
 import "./globals.css";
 
 export const metadata = {
-  title: "Konative | Energy Infrastructure Brokerage & Development",
+  title: "Konative | Data Center Land Brokerage",
   description:
-    "End-to-end energy infrastructure deal facilitation — connecting investors, landholders, supply chain, power sourcing, and the right teams. Bring us your project. We take it from here.",
+    "Konative brokers powered land to data center developers and hyperscalers. We source sites, connect investors, and manage the deal from first call to close. Own land near a substation? We want to talk.",
 };
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {

@@ -6,24 +6,30 @@ import { useState } from 'react'
 const panels = [
   {
     num: '01',
-    title: 'Investors &\nCapital Partners',
-    desc: 'You have capital ready to work. We identify sites, structure the deal, source the supply chain, handle power strategy, and staff the project — so your investment moves from commitment to commissioned asset.',
-    cta: 'Put Your Capital to Work →',
-    href: '/contact',
+    eyebrow: 'For Landowners',
+    title: 'You hold\npowered land.',
+    desc: 'Near a substation, transmission corridor, or utility easement? Data center developers are paying significant premiums for well-sited land. We run the analysis, bring qualified buyers, and broker the deal — sale, ground lease, or joint venture.',
+    cta: 'Submit Your Land →',
+    href: '/land/submit',
+    primary: true,
   },
   {
     num: '02',
-    title: 'Landholders &\nLand Owners',
-    desc: 'You hold land with power access, zoning potential, or strategic location. We bring the capital partners, the development structure, the equipment, and the build team to turn your asset into a revenue-producing infrastructure project.',
-    cta: 'Monetize Your Land →',
-    href: '/contact',
+    eyebrow: 'For Investors',
+    title: 'You have\ncapital to deploy.',
+    desc: 'Powered land, build-to-suit data centers, and operating assets across North America. We source off-market opportunities, structure the deal, and manage the transaction from LOI to close.',
+    cta: 'Talk to Us About Investing →',
+    href: '/invest',
+    primary: false,
   },
   {
     num: '03',
-    title: 'Developers &\nBuilders',
-    desc: "You have a project in motion but missing pieces — capital, equipment supply chain, grid connection, staffing, or the right partners. We quarterback what's missing and compress your timeline from stalled to operational.",
-    cta: 'Accelerate Your Project →',
-    href: '/contact',
+    eyebrow: 'For Occupiers',
+    title: 'You need\ndata center capacity.',
+    desc: 'Looking for MW? Tell us your requirements — power, market, timeline, workload. We find the right site or operator, make the introduction, and represent your interests through lease or acquisition.',
+    cta: 'Submit Your RFP →',
+    href: '/capacity',
+    primary: false,
   },
 ]
 
@@ -41,7 +47,7 @@ export default function WhoWeServe() {
           color: '#E07B39', marginBottom: 20,
         }}>
           <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
-          Who We Serve
+          Who We Work With
         </div>
 
         <h2 style={{
@@ -50,7 +56,7 @@ export default function WhoWeServe() {
           textTransform: 'uppercase', letterSpacing: '0.01em',
           color: '#fff', marginBottom: 60,
         }}>
-          YOUR <span style={{ color: '#E07B39' }}>SITUATION.</span><br />OUR FULL STACK.
+          THREE DOORS.<br /><span style={{ color: '#E07B39' }}>ONE BROKERAGE.</span>
         </h2>
 
         <div style={{
@@ -65,35 +71,50 @@ export default function WhoWeServe() {
               style={{
                 background: '#0C2046',
                 padding: '48px 40px',
-                borderTop: hovered === i ? '3px solid #E07B39' : '3px solid transparent',
-                transition: 'border-color 0.2s, background 0.2s',
+                borderTop: panel.primary
+                  ? '3px solid #E07B39'
+                  : hovered === i ? '3px solid rgba(255,255,255,0.3)' : '3px solid transparent',
+                transition: 'border-color 0.2s',
                 cursor: 'default',
+                display: 'flex',
+                flexDirection: 'column',
               }}
             >
               <div style={{
                 fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
-                fontSize: 60, color: 'rgba(255,255,255,0.07)', lineHeight: 1, marginBottom: 16,
+                fontSize: 60, color: 'rgba(255,255,255,0.06)', lineHeight: 1, marginBottom: 16,
               }}>
                 {panel.num}
+              </div>
+              <div style={{
+                fontFamily: 'Inter, sans-serif', fontWeight: 600,
+                fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase',
+                color: panel.primary ? '#E07B39' : 'rgba(255,255,255,0.35)',
+                marginBottom: 12,
+              }}>
+                {panel.eyebrow}
               </div>
               <h3 style={{
                 fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
                 fontSize: 30, textTransform: 'uppercase', color: '#fff',
-                marginBottom: 14, lineHeight: 1, whiteSpace: 'pre-line',
+                marginBottom: 16, lineHeight: 1.05, whiteSpace: 'pre-line',
               }}>
                 {panel.title}
               </h3>
               <p style={{
                 fontFamily: 'Inter, sans-serif', fontSize: 14,
-                lineHeight: 1.75, color: 'rgba(255,255,255,0.55)', marginBottom: 24,
+                lineHeight: 1.75, color: 'rgba(255,255,255,0.55)', marginBottom: 28, flex: 1,
               }}>
                 {panel.desc}
               </p>
               <Link href={panel.href} style={{
                 fontFamily: 'Inter, sans-serif', fontWeight: 600,
                 fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase',
-                color: '#E07B39', textDecoration: 'none',
-                borderBottom: '1px solid #E07B39', paddingBottom: 2,
+                color: panel.primary ? '#E07B39' : 'rgba(255,255,255,0.6)',
+                textDecoration: 'none',
+                borderBottom: `1px solid ${panel.primary ? '#E07B39' : 'rgba(255,255,255,0.25)'}`,
+                paddingBottom: 2,
+                alignSelf: 'flex-start',
               }}>
                 {panel.cta}
               </Link>
