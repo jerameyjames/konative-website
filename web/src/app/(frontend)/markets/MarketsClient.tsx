@@ -23,9 +23,17 @@ export default function MarketsClient({ markets }: { markets: MarketsMap }) {
           <h1 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800, fontSize: 'clamp(40px, 5vw, 72px)', lineHeight: 0.93, textTransform: 'uppercase', color: '#fff', margin: '0 0 16px' }}>
             NORTH AMERICAN<br /><span style={{ color: '#E07B39' }}>DATA CENTER MARKETS</span>
           </h1>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.45)', maxWidth: 520, margin: 0 }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.45)', maxWidth: 520, margin: '0 0 20px' }}>
             Power pipeline, network infrastructure, and project data for {Object.keys(markets).length} key markets. Updated automatically from open data sources.
           </p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Link href="/canada" style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#E07B39', textDecoration: 'none', padding: '10px 18px', border: '1px solid rgba(224,123,57,0.4)', borderRadius: 4 }}>
+              Canada Deep Dive →
+            </Link>
+            <Link href="/map" style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)', textDecoration: 'none', padding: '10px 18px', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 4 }}>
+              Open Map View →
+            </Link>
+          </div>
         </div>
       </div>
 

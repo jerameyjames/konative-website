@@ -5,17 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
-  { label: "Land", url: "/land" },
-  { label: "Invest", url: "/invest" },
-  { label: "Capacity", url: "/capacity" },
-  { label: "Map", url: "/map" },
-  { label: "Projects", url: "/projects" },
   { label: "Markets", url: "/markets" },
-  { label: "Canada", url: "/canada" },
+  { label: "Projects", url: "/projects" },
   { label: "Methodology", url: "/methodology" },
-  { label: "Intelligence", url: "/news" },
-  { label: "Site Eval", url: "/assessment" },
-  { label: "Services", url: "/#capabilities" },
+  { label: "Insights", url: "/news" },
+  { label: "About", url: "/#team" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
