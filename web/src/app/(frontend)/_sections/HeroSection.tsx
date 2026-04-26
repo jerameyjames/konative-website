@@ -19,6 +19,16 @@ interface HealthStats {
   articleCount: number
   feedCount: number
   dealCount: number
+  facilitiesScored?: number
+  generatorsTracked?: number
+  waterSitesIndexed?: number
+  networkNodesIndexed?: number
+}
+
+function formatCount(n: number | undefined, fallback: string): string {
+  if (!n || n <= 0) return fallback
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}K`
+  return String(n)
 }
 
 interface HeroSectionProps {
@@ -161,9 +171,9 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
 
         <div style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 1 }}>
           {[
-            { val: '$12B+', label: 'Deal Flow Tracked', rust: true },
-            { val: '48h',   label: 'Response Guarantee', rust: false },
-            { val: '12',    label: 'News Sources Monitored', rust: false },
+            { val: formatCount(stats.facilitiesScored, '—'), label: 'DC Facilities Scored', rust: true },
+            { val: formatCount(stats.generatorsTracked, '—'), label: 'Planned Generators Tracked', rust: false },
+            { val: formatCount(stats.waterSitesIndexed, '—'), label: 'Water Sites Indexed', rust: false },
           ].map((stat, i) => (
             <div key={i} style={{
               background: 'rgba(255,255,255,0.04)',

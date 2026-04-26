@@ -12,6 +12,7 @@
     "start": "next start",
     "sanity:typegen": "sanity schema extract --path=./src/sanity/extract.json && sanity typegen generate",
     "ingest-news": "tsx scripts/ingest-news.ts",
+    "draft:saudi-tracker": "tsx scripts/draft-saudi-tracker.ts",
     "builder": "builder",
     "builder:import": "builder import -o ./builder-export",
     "builder:create": "builder create",

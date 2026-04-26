@@ -86,8 +86,22 @@ export const MARKETS: Record<string, {
     name: 'Quebec', abbr: 'QC', country: 'CA',
     iso: 'HQ', isoFull: 'Hydro-Québec',
     headline: 'LOW-CARBON HYDRO POWER AT SCALE',
-    subheadline: 'Hydro-Québec offers some of the cheapest and cleanest power in North America. Moratorium lifted for strategic projects.',
+    subheadline: 'Hydro-Québec offers some of the cheapest and cleanest power in North America. New large-DC rate (~13¢/kWh) launches H2 2026 — re-opening the door for AI infrastructure.',
     tier: 'emerging',
+  },
+  alberta: {
+    name: 'Alberta', abbr: 'AB', country: 'CA',
+    iso: 'AESO', isoFull: 'Alberta Electric System Operator',
+    headline: 'BEHIND-THE-METER GAS + DEREGULATED MARKET',
+    subheadline: 'The only Canadian market where you can credibly co-locate generation with load. 30+ AI DC projects in the AESO queue. Calgary metro is the gravity center.',
+    tier: 'emerging',
+  },
+  'british-columbia': {
+    name: 'British Columbia', abbr: 'BC', country: 'CA',
+    iso: 'BCH', isoFull: 'BC Hydro',
+    headline: 'CONSTRAINED, BUT SITE C IS FRESH MW',
+    subheadline: 'BC limits new DC interconnections in 2026 to 300 MW for AI and 100 MW general — but Site C just came online and First Nations partnerships are unlocking the bulk of viable opportunities.',
+    tier: 'developing',
   },
   queretaro: {
     name: 'Querétaro', abbr: 'QRO', country: 'MX',

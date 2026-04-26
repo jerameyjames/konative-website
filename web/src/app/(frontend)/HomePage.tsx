@@ -44,6 +44,10 @@ interface HealthStats {
   articleCount: number;
   feedCount: number;
   dealCount: number;
+  facilitiesScored?: number;
+  generatorsTracked?: number;
+  waterSitesIndexed?: number;
+  networkNodesIndexed?: number;
 }
 
 function formatUsd(v: number | null): string {
