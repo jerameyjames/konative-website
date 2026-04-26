@@ -3,26 +3,40 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { Map, Source, Layer, Popup, type MapLayerMouseEvent } from 'react-map-gl/maplibre'
 import type { CircleLayerSpecification } from 'maplibre-gl'
-import type { FeatureCollection, Point } from 'geojson'
+import type { FeatureCollection, Feature, Point } from 'geojson'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
-type Status = 'operational' | 'construction' | 'announced'
+// ── types ─────────────────────────────────────────────────────────────────────
 
-interface ProjectProps {
-  id: string
-  name: string
-  operator?: string
-  city?: string
-  state?: string
-  mw: number
-  status: Status
-  source: string
-}
+type Status = 'operational' | 'construction' | 'announced'
+export type LayerKey = 'projects' | 'facilities' | 'network' | 'power'
 
 export const STATUS_COLORS: Record<Status, string> = {
   operational: '#22d3ee',
   construction: '#E07B39',
   announced: '#a78bfa',
+}
+
+export const LAYER_COLORS: Record<LayerKey, string> = {
+  projects:   '#22d3ee',  // cyan  — status-driven but default
+  facilities: '#3b82f6',  // blue  — IM3 verified facilities
+  network:    '#a855f7',  // purple — PeeringDB colocation
+  power:      '#eab308',  // yellow — EIA planned generation
+}
+
+export const LAYER_LABELS: Record<LayerKey, string> = {
+  projects:   'DC Projects',
+  facilities: 'Facilities (IM3)',
+  network:    'Network (PeeringDB)',
+  power:      'Power Pipeline (EIA)',
+}
+
+export interface MapCounts {
+  projects: number
+  facilities: number
+  network: number
+  power: number
+  total: number
 }
 
 export interface MapStats {
@@ -33,57 +47,87 @@ export interface MapStats {
   totalMw: number
 }
 
-const STATUS_COUNT_KEY: Record<Status, keyof MapStats> = {
-  operational: 'operational',
-  construction: 'construction',
-  announced: 'announced',
+interface LayerData {
+  projects: FeatureCollection
+  facilities: FeatureCollection
+  network: FeatureCollection
+  power: FeatureCollection
+}
+
+interface Props {
+  layerData?: LayerData
+  counts?: MapCounts
 }
 
 const SOURCE_LABELS: Record<string, string> = {
-  osm: 'OpenStreetMap',
-  wikidata: 'Wikidata',
-  news_extraction: 'News',
-  ieso_queue: 'IESO',
-  manual: 'Manual',
+  osm: 'OpenStreetMap', wikidata: 'Wikidata',
+  news_extraction: 'News', ieso_queue: 'IESO', manual: 'Manual',
+  im3: 'IM3 Atlas', peeringdb: 'PeeringDB', eia_860m: 'EIA-860M',
 }
 
-export default function DataCenterMap() {
-  const [data, setData] = useState<FeatureCollection<Point, ProjectProps> | null>(null)
-  const [stats, setStats] = useState<MapStats | null>(null)
-  const [statusFilter, setStatusFilter] = useState<Status | 'all'>('all')
-  const [hover, setHover] = useState<{ lng: number; lat: number; props: ProjectProps } | null>(null)
+// ── helpers ───────────────────────────────────────────────────────────────────
 
+// Assign a colour to every feature based on its layer + status
+function colourFeature(f: Feature): Feature {
+  const layer = f.properties?.layer as LayerKey | undefined
+  const status = f.properties?.status as Status | undefined
+
+  let color: string
+  if (layer === 'projects' && status && STATUS_COLORS[status]) {
+    color = STATUS_COLORS[status]
+  } else {
+    color = LAYER_COLORS[layer ?? 'facilities']
+  }
+  return { ...f, properties: { ...f.properties, _color: color } }
+}
+
+// ── component ─────────────────────────────────────────────────────────────────
+
+export default function DataCenterMap({ layerData: propData, counts: propCounts }: Props) {
+  const [layerData, setLayerData] = useState<LayerData | null>(propData ?? null)
+  const [counts, setCounts]       = useState<MapCounts | null>(propCounts ?? null)
+  const [activeLayer, setActiveLayer] = useState<LayerKey | 'all'>('all')
+  const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, unknown> } | null>(null)
+
+  // Fetch from new endpoint if no data was passed as props
   useEffect(() => {
-    fetch('/api/v1/projects')
+    if (propData) return
+    fetch('/api/v1/map-data')
       .then(r => r.json())
-      .then(d => { setData(d); setStats(d.stats) })
-      .catch(() => {})
-  }, [])
+      .then(d => {
+        setLayerData(d.layers)
+        setCounts(d.counts)
+      })
+      .catch(() => {
+        // Fallback to old projects-only endpoint
+        fetch('/api/v1/projects')
+          .then(r => r.json())
+          .then(d => {
+            setLayerData({ projects: d, facilities: { type: 'FeatureCollection', features: [] }, network: { type: 'FeatureCollection', features: [] }, power: { type: 'FeatureCollection', features: [] } })
+            setCounts({ projects: d.stats?.total ?? 0, facilities: 0, network: 0, power: 0, total: d.stats?.total ?? 0 })
+          })
+          .catch(() => {})
+      })
+  }, [propData])
 
-  const filtered = useMemo<FeatureCollection<Point, ProjectProps>>(() => {
-    if (!data) return { type: 'FeatureCollection', features: [] }
-    return {
-      type: 'FeatureCollection',
-      features: statusFilter === 'all'
-        ? data.features
-        : data.features.filter(f => f.properties.status === statusFilter),
-    }
-  }, [data, statusFilter])
+  // Merge all active layers into one coloured FeatureCollection
+  const combined = useMemo<FeatureCollection>(() => {
+    if (!layerData) return { type: 'FeatureCollection', features: [] }
+    const layers: LayerKey[] = ['projects', 'facilities', 'network', 'power']
+    const active = activeLayer === 'all' ? layers : [activeLayer]
+    const features = active.flatMap(k => (layerData[k]?.features ?? []).map(colourFeature))
+    return { type: 'FeatureCollection', features }
+  }, [layerData, activeLayer])
 
   const circleLayer: CircleLayerSpecification = {
     id: 'dc-bubbles',
     type: 'circle',
     source: 'dc',
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['get', 'mw'],
+      'circle-radius': ['interpolate', ['linear'], ['coalesce', ['get', 'mw'], 0],
         0, 6, 50, 10, 250, 16, 1000, 26, 5000, 42,
       ],
-      'circle-color': ['match', ['get', 'status'],
-        'operational', STATUS_COLORS.operational,
-        'construction', STATUS_COLORS.construction,
-        'announced', STATUS_COLORS.announced,
-        '#888',
-      ],
+      'circle-color': ['get', '_color'],
       'circle-opacity': 0.75,
       'circle-stroke-width': 1.5,
       'circle-stroke-color': 'rgba(12,32,70,0.8)',
@@ -94,11 +138,11 @@ export default function DataCenterMap() {
     const f = e.features?.[0]
     if (!f) return setHover(null)
     const [lng, lat] = (f.geometry as Point).coordinates
-    setHover({ lng, lat, props: f.properties as ProjectProps })
+    setHover({ lng, lat, props: f.properties as Record<string, unknown> })
   }, [])
 
-  const filterCount = (s: Status | 'all') =>
-    s === 'all' ? (stats?.total ?? 0) : (stats?.[STATUS_COUNT_KEY[s]] ?? 0)
+  const layerCount = (k: LayerKey | 'all') =>
+    k === 'all' ? (counts?.total ?? 0) : (counts?.[k] ?? 0)
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -111,95 +155,70 @@ export default function DataCenterMap() {
         cursor={hover ? 'pointer' : 'default'}
         attributionControl={{ compact: true }}
       >
-        <Source id="dc" type="geojson" data={filtered}>
+        <Source id="dc" type="geojson" data={combined}>
           <Layer {...circleLayer} />
         </Source>
+
         {hover && (
           <Popup longitude={hover.lng} latitude={hover.lat} closeButton={false} offset={14} anchor="top">
-            <div style={{ fontSize: 12, color: '#0C2046', minWidth: 200, maxWidth: 260 }}>
-              <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 15, textTransform: 'uppercase', marginBottom: 2, lineHeight: 1.2 }}>
-                {hover.props.name}
-              </div>
-              {hover.props.operator && (
-                <div style={{ color: '#555', fontSize: 11, marginBottom: 6 }}>{hover.props.operator}</div>
-              )}
-              {(hover.props.city || hover.props.state) && (
-                <div style={{ color: '#777', fontSize: 11, marginBottom: 6 }}>
-                  {[hover.props.city, hover.props.state].filter(Boolean).join(', ')}
-                </div>
-              )}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                {hover.props.mw > 0 && (
-                  <span style={{ fontWeight: 700, fontSize: 12 }}>{hover.props.mw} MW</span>
-                )}
-                <span style={{ color: STATUS_COLORS[hover.props.status], textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>
-                  {hover.props.status}
-                </span>
-                <span style={{ color: '#999', fontSize: 10 }}>
-                  {SOURCE_LABELS[hover.props.source] ?? hover.props.source}
-                </span>
-              </div>
-            </div>
+            <HoverCard props={hover.props} />
           </Popup>
         )}
       </Map>
 
-      {/* Filter chips */}
-      <div style={{
-        position: 'absolute', zIndex: 10, top: 16, left: 16,
-        display: 'flex', gap: 6, flexWrap: 'wrap',
-      }}>
-        {(['all', 'operational', 'construction', 'announced'] as const).map(s => {
-          const count = filterCount(s)
-          const active = statusFilter === s
-          const color = s !== 'all' ? STATUS_COLORS[s] : '#E07B39'
+      {/* Layer toggle chips */}
+      <div style={{ position: 'absolute', zIndex: 10, top: 16, left: 16, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {(['all', 'projects', 'facilities', 'network', 'power'] as const).map(k => {
+          const count = layerCount(k)
+          const active = activeLayer === k
+          const color = k === 'all' ? '#E07B39' : LAYER_COLORS[k]
+          const label = k === 'all' ? 'All Layers' : LAYER_LABELS[k]
           return (
             <button
-              key={s}
-              onClick={() => setStatusFilter(s)}
-              disabled={count === 0 && s !== 'all'}
+              key={k}
+              onClick={() => setActiveLayer(k)}
+              disabled={count === 0 && k !== 'all'}
               style={{
                 padding: '6px 12px',
                 background: active ? color : 'rgba(8,20,45,0.88)',
-                color: active ? '#fff' : count === 0 ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.8)',
-                border: `1px solid ${active ? color : 'rgba(255,255,255,0.15)'}`,
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 600, fontSize: 10,
-                letterSpacing: '0.1em', textTransform: 'uppercase',
-                cursor: count === 0 && s !== 'all' ? 'not-allowed' : 'pointer',
+                color: active ? '#fff' : count === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.8)',
+                border: `1px solid ${active ? color : count > 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.07)'}`,
+                fontFamily: 'Inter, sans-serif', fontWeight: 600,
+                fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
+                cursor: count === 0 && k !== 'all' ? 'not-allowed' : 'pointer',
                 display: 'flex', alignItems: 'center', gap: 5,
                 backdropFilter: 'blur(8px)',
               }}
             >
-              {s !== 'all' && (
-                <span style={{ width: 7, height: 7, borderRadius: '50%', background: active ? '#fff' : color, flexShrink: 0, opacity: count === 0 ? 0.3 : 1 }} />
+              {k !== 'all' && (
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: active ? '#fff' : color, flexShrink: 0, opacity: count === 0 ? 0.25 : 1 }} />
               )}
-              {s === 'all' ? 'All' : s}
-              <span style={{ opacity: 0.7, fontWeight: 400 }}>({count.toLocaleString()})</span>
+              {label}
+              <span style={{ opacity: 0.65, fontWeight: 400 }}>({count.toLocaleString()})</span>
             </button>
           )
         })}
       </div>
 
-      {/* Empty state when filter returns nothing */}
-      {data && filtered.features.length === 0 && (
+      {/* Empty state */}
+      {layerData && combined.features.length === 0 && (
         <div style={{
-          position: 'absolute', zIndex: 10,
-          top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+          position: 'absolute', zIndex: 10, top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
           background: 'rgba(8,20,45,0.9)', border: '1px solid rgba(255,255,255,0.1)',
           padding: '20px 28px', textAlign: 'center', backdropFilter: 'blur(8px)',
         }}>
           <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontSize: 18, fontWeight: 700, color: '#fff', textTransform: 'uppercase', marginBottom: 6 }}>
-            No {statusFilter} projects yet
+            No data for this layer yet
           </div>
           <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
-            Data populates as news extraction runs daily
+            Run the ingestion scripts to populate this layer
           </div>
         </div>
       )}
 
       {/* Stats overlay */}
-      {stats && (
+      {counts && counts.total > 0 && (
         <div style={{
           position: 'absolute', zIndex: 10, bottom: 32, right: 16,
           background: 'rgba(8,20,45,0.88)', padding: '14px 18px',
@@ -207,31 +226,87 @@ export default function DataCenterMap() {
           fontFamily: 'Inter, sans-serif',
         }}>
           <div style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#E07B39', marginBottom: 10 }}>
-            Live Tracker · US + CA
+            Data Layers · US + CA
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5, fontSize: 12 }}>
-            <div style={{ color: 'rgba(255,255,255,0.85)' }}>
-              <strong style={{ color: '#fff' }}>{stats.total.toLocaleString()}</strong> total projects
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: STATUS_COLORS.operational, display: 'inline-block' }} />
-              <span style={{ color: 'rgba(255,255,255,0.65)' }}>{stats.operational.toLocaleString()} operational</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: STATUS_COLORS.construction, display: 'inline-block' }} />
-              <span style={{ color: 'rgba(255,255,255,0.65)' }}>{stats.construction.toLocaleString()} under construction</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: STATUS_COLORS.announced, display: 'inline-block' }} />
-              <span style={{ color: 'rgba(255,255,255,0.65)' }}>{stats.announced.toLocaleString()} announced</span>
-            </div>
-            {stats.totalMw > 0 && (
-              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, marginTop: 4, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 6 }}>
-                {stats.totalMw.toLocaleString()} MW tracked
+            {(['projects', 'facilities', 'network', 'power'] as LayerKey[]).map(k => (
+              <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: LAYER_COLORS[k], display: 'inline-block', opacity: counts[k] > 0 ? 0.9 : 0.2 }} />
+                <span style={{ color: counts[k] > 0 ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.2)' }}>
+                  <strong style={{ color: counts[k] > 0 ? '#fff' : 'inherit' }}>{counts[k].toLocaleString()}</strong>
+                  {' '}{LAYER_LABELS[k]}
+                </span>
               </div>
-            )}
+            ))}
+            <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, marginTop: 4, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 6 }}>
+              {counts.total.toLocaleString()} total records
+            </div>
           </div>
         </div>
+      )}
+    </div>
+  )
+}
+
+// ── hover popup ───────────────────────────────────────────────────────────────
+
+function HoverCard({ props: p }: { props: Record<string, unknown> }) {
+  const str = (v: unknown) => String(v ?? '')
+  const num = (v: unknown) => Number(v ?? 0)
+  const layer = p.layer as LayerKey
+  const color = LAYER_COLORS[layer] ?? '#888'
+
+  return (
+    <div style={{ fontSize: 12, color: '#0C2046', minWidth: 200, maxWidth: 280 }}>
+      <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 15, textTransform: 'uppercase', marginBottom: 2, lineHeight: 1.2 }}>
+        {str(p.name) || 'Unknown'}
+      </div>
+
+      {layer === 'projects' && (
+        <>
+          {p.operator && <div style={{ color: '#555', fontSize: 11, marginBottom: 4 }}>{str(p.operator)}</div>}
+          {(p.city || p.state) && <div style={{ color: '#777', fontSize: 11, marginBottom: 6 }}>{[str(p.city), str(p.state)].filter(Boolean).join(', ')}</div>}
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            {num(p.mw) > 0 && <span style={{ fontWeight: 700 }}>{num(p.mw).toLocaleString()} MW</span>}
+            {!!p.status && <span style={{ color: STATUS_COLORS[p.status as Status] ?? color, textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>{str(p.status)}</span>}
+            <span style={{ color: '#999', fontSize: 10 }}>{SOURCE_LABELS[str(p.source)] ?? str(p.source)}</span>
+          </div>
+        </>
+      )}
+
+      {layer === 'facilities' && (
+        <>
+          {p.operator && <div style={{ color: '#555', fontSize: 11, marginBottom: 4 }}>{str(p.operator)}</div>}
+          {(p.city || p.state) && <div style={{ color: '#777', fontSize: 11, marginBottom: 6 }}>{[str(p.city), str(p.state)].filter(Boolean).join(', ')}</div>}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <span style={{ color, textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>IM3 Atlas</span>
+            {!!p.sqft && <span style={{ color: '#777', fontSize: 10 }}>{num(p.sqft).toLocaleString()} sqft</span>}
+          </div>
+        </>
+      )}
+
+      {layer === 'network' && (
+        <>
+          {p.org_name && <div style={{ color: '#555', fontSize: 11, marginBottom: 4 }}>{str(p.org_name)}</div>}
+          {(p.city || p.state) && <div style={{ color: '#777', fontSize: 11, marginBottom: 6 }}>{[str(p.city), str(p.state)].filter(Boolean).join(', ')}</div>}
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            {num(p.net_count) > 0 && <span style={{ fontWeight: 600, fontSize: 11 }}>{num(p.net_count)} networks</span>}
+            {num(p.ix_count) > 0 && <span style={{ color: '#777', fontSize: 10 }}>{num(p.ix_count)} IXPs</span>}
+            <span style={{ color, textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>PeeringDB</span>
+          </div>
+        </>
+      )}
+
+      {layer === 'power' && (
+        <>
+          {p.utilityName && <div style={{ color: '#555', fontSize: 11, marginBottom: 4 }}>{str(p.utilityName)}</div>}
+          {(p.county || p.state) && <div style={{ color: '#777', fontSize: 11, marginBottom: 6 }}>{[str(p.county), str(p.state)].filter(Boolean).join(', ')}</div>}
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            {num(p.mw) > 0 && <span style={{ fontWeight: 700 }}>{num(p.mw).toLocaleString()} MW</span>}
+            {!!p.technology && <span style={{ color: '#777', fontSize: 10 }}>{str(p.technology)}</span>}
+            {!!p.plannedYear && <span style={{ color, fontWeight: 600, fontSize: 10 }}>Est. {str(p.plannedYear)}</span>}
+          </div>
+        </>
       )}
     </div>
   )
