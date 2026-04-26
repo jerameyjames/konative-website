@@ -48,7 +48,9 @@ export default function Header() {
   // Close mobile menu on route change
   useEffect(() => { closeMenu(); }, [pathname, closeMenu]);
 
-  const linkColor = scrolled ? "#fff" : "#131f36";
+  // Dark hero pages have a navy background, so unscrolled state needs light text.
+  // Light pages (scrolled === true immediately) use white once header solidifies; dark text on light bg only applies to a non-dark-hero unscrolled state, which doesn't currently exist in the route set but kept for safety.
+  const linkColor = scrolled || hasDarkHero ? "#fff" : "#131f36";
 
   const headerStyle: React.CSSProperties = {
     position: "fixed",
@@ -86,7 +88,7 @@ export default function Header() {
     fontSize: 22,
     letterSpacing: "0.04em",
     textTransform: "uppercase",
-    color: scrolled ? "#fff" : "#131f36",
+    color: scrolled || hasDarkHero ? "#fff" : "#131f36",
     transition: "color 0.3s",
   };
 
@@ -143,7 +145,7 @@ export default function Header() {
   const barStyle = (n: 0 | 1 | 2): React.CSSProperties => ({
     width: 22,
     height: 2,
-    background: scrolled ? "#fff" : "#131f36",
+    background: scrolled || hasDarkHero ? "#fff" : "#131f36",
     borderRadius: 2,
     transition: "transform 0.25s, opacity 0.25s",
     transformOrigin: "center",
