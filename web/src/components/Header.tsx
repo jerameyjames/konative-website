@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -24,6 +24,10 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(!hasDarkHero);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [ctaHovered, setCtaHovered] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   useEffect(() => {
     if (!hasDarkHero) {
@@ -35,6 +39,16 @@ export default function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [hasDarkHero]);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => { closeMenu(); }, [pathname, closeMenu]);
 
   const linkColor = scrolled ? "#fff" : "#131f36";
 
@@ -116,56 +130,159 @@ export default function Header() {
     transition: "background 0.2s",
   };
 
-  return (
-    <header style={headerStyle}>
-      <div style={innerStyle}>
-        {/* Wordmark */}
-        <Link href="/" style={wordmarkStyle}>
-          <span style={wordmarkKoStyle}>KO</span>
-          <span style={wordmarkNativeStyle}>NATIVE</span>
-        </Link>
+  const hamburgerStyle: React.CSSProperties = {
+    display: isMobile ? "flex" : "none",
+    flexDirection: "column",
+    justifyContent: "center",
+    gap: 5,
+    cursor: "pointer",
+    padding: "8px 4px",
+    marginLeft: "auto",
+    background: "none",
+    border: "none",
+  };
 
-        {/* Center nav */}
-        <nav style={navStyle}>
-          {navLinks.map((link) => {
-            const isHovered = hoveredLink === link.url;
-            const navLinkStyle: React.CSSProperties = {
+  const barStyle = (n: 0 | 1 | 2): React.CSSProperties => ({
+    width: 22,
+    height: 2,
+    background: scrolled ? "#fff" : "#131f36",
+    borderRadius: 2,
+    transition: "transform 0.25s, opacity 0.25s",
+    transformOrigin: "center",
+    transform: menuOpen
+      ? n === 0 ? "translateY(7px) rotate(45deg)"
+      : n === 2 ? "translateY(-7px) rotate(-45deg)"
+      : "scaleX(0)"
+      : "none",
+    opacity: menuOpen && n === 1 ? 0 : 1,
+  });
+
+  const drawerStyle: React.CSSProperties = {
+    position: "fixed",
+    top: 64,
+    left: 0,
+    right: 0,
+    background: "rgba(8,20,45,0.98)",
+    backdropFilter: "blur(12px)",
+    borderBottom: "1px solid rgba(255,255,255,0.08)",
+    zIndex: 999,
+    display: "flex",
+    flexDirection: "column",
+    padding: "12px 0 20px",
+    transform: menuOpen ? "translateY(0)" : "translateY(-110%)",
+    transition: "transform 0.25s ease",
+    pointerEvents: menuOpen ? "auto" : "none",
+  };
+
+  return (
+    <>
+      <header style={headerStyle}>
+        <div style={innerStyle}>
+          {/* Wordmark */}
+          <Link href="/" style={wordmarkStyle}>
+            <span style={wordmarkKoStyle}>KO</span>
+            <span style={wordmarkNativeStyle}>NATIVE</span>
+          </Link>
+
+          {/* Desktop center nav */}
+          {!isMobile && (
+            <nav style={navStyle}>
+              {navLinks.map((link) => {
+                const isHovered = hoveredLink === link.url;
+                const navLinkStyle: React.CSSProperties = {
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 500,
+                  fontSize: 12,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  color: isHovered ? "#E07B39" : linkColor,
+                  opacity: isHovered ? 1 : 0.85,
+                  transition: "color 0.3s, opacity 0.2s",
+                };
+                return (
+                  <Link
+                    key={link.url}
+                    href={link.url}
+                    style={navLinkStyle}
+                    onMouseEnter={() => setHoveredLink(link.url)}
+                    onMouseLeave={() => setHoveredLink(null)}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
+
+          {/* Desktop CTA */}
+          {!isMobile && (
+            <div style={actionsStyle}>
+              <Link
+                href="/land/submit"
+                style={ctaStyle}
+                onMouseEnter={() => setCtaHovered(true)}
+                onMouseLeave={() => setCtaHovered(false)}
+              >
+                Submit land →
+              </Link>
+            </div>
+          )}
+
+          {/* Hamburger */}
+          <button
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+            style={hamburgerStyle}
+          >
+            <span style={barStyle(0)} />
+            <span style={barStyle(1)} />
+            <span style={barStyle(2)} />
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile drawer */}
+      <nav style={drawerStyle} aria-hidden={!menuOpen}>
+        {navLinks.map((link) => (
+          <Link
+            key={link.url}
+            href={link.url}
+            style={{
               fontFamily: "'Inter', sans-serif",
               fontWeight: 500,
-              fontSize: 12,
+              fontSize: 13,
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               textDecoration: "none",
-              color: isHovered ? "#E07B39" : linkColor,
-              opacity: isHovered ? 1 : 0.85,
-              transition: "color 0.3s, opacity 0.2s",
-            };
-            return (
-              <Link
-                key={link.url}
-                href={link.url}
-                style={navLinkStyle}
-                onMouseEnter={() => setHoveredLink(link.url)}
-                onMouseLeave={() => setHoveredLink(null)}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* CTA */}
-        <div style={actionsStyle}>
-          <Link
-            href="/land/submit"
-            style={ctaStyle}
-            onMouseEnter={() => setCtaHovered(true)}
-            onMouseLeave={() => setCtaHovered(false)}
+              color: "#fff",
+              padding: "13px 28px",
+              borderBottom: "1px solid rgba(255,255,255,0.06)",
+            }}
           >
-            Submit land →
+            {link.label}
           </Link>
-        </div>
-      </div>
-    </header>
+        ))}
+        <Link
+          href="/land/submit"
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: 600,
+            fontSize: 11,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            background: "#E07B39",
+            color: "#fff",
+            padding: "13px 28px",
+            textDecoration: "none",
+            margin: "12px 28px 0",
+            textAlign: "center",
+          }}
+        >
+          Submit land →
+        </Link>
+      </nav>
+    </>
   );
 }

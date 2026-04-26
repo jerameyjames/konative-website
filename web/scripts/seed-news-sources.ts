@@ -35,7 +35,7 @@ const sources: NewsSourceSeed[] = [
     _id: "newsSource-datacenter-frontier",
     name: "Data Center Frontier",
     slug: "datacenter-frontier",
-    feedUrl: "https://www.datacenterfrontier.com/rss.xml",
+    feedUrl: "https://www.datacenterfrontier.com/__rss/website-scheduled-content.xml?input=%7B%22sectionAlias%22%3A%22home%22%7D",
     sourceType: "rss",
     active: true,
     category: "data-center",
@@ -64,7 +64,7 @@ const sources: NewsSourceSeed[] = [
     slug: "structure-research",
     feedUrl: "https://www.structureresearch.net/feed/",
     sourceType: "rss",
-    active: true,
+    active: false, // No public RSS feed — paid research firm
     category: "data-center",
   },
   {
@@ -87,9 +87,9 @@ const sources: NewsSourceSeed[] = [
   },
   {
     _id: "newsSource-ferc-news",
-    name: "FERC News Releases",
+    name: "FERC (Federal Register)",
     slug: "ferc-news",
-    feedUrl: "https://www.ferc.gov/news-events/news/rss.xml",
+    feedUrl: "https://www.federalregister.gov/api/v1/articles.rss?conditions%5Bagency_ids%5D%5B%5D=89",
     sourceType: "government",
     active: true,
     category: "power",
@@ -105,9 +105,9 @@ const sources: NewsSourceSeed[] = [
   },
   {
     _id: "newsSource-bisnow-dc",
-    name: "Bisnow (Data Center)",
+    name: "Bisnow",
     slug: "bisnow-datacenter",
-    feedUrl: "https://www.bisnow.com/rss/national/data-center",
+    feedUrl: "https://www.bisnow.com/rss",
     sourceType: "rss",
     active: true,
     category: "real-estate",
