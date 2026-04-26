@@ -8,12 +8,12 @@ const navLinks: { label: string; url: string }[] = [
   { label: "Markets", url: "/markets" },
   { label: "Projects", url: "/projects" },
   { label: "Methodology", url: "/methodology" },
-  { label: "Insights", url: "/news" },
+  { label: "Insights", url: "/intelligence" },
   { label: "About", url: "/#team" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
-const DARK_HERO_PAGES = new Set(["/", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/news", "/market-intel", "/contact", "/assessment"]);
+const DARK_HERO_PAGES = new Set(["/", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/intelligence", "/intelligence/saudi", "/news", "/market-intel", "/contact", "/assessment"]);
 
 export default function Header() {
   const pathname = usePathname();
