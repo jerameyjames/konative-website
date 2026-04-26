@@ -168,6 +168,7 @@ button {
 .site-main {
   min-height: 60dvh;
   padding-top: 64px; /* compensate for fixed nav */
+  background: #08142D; /* match dark hero pages so transparent-header zone doesn't flash white */
 }
 
 /* ─── Market Intel Search & Pagination ─── */
