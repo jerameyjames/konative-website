@@ -1,4 +1,5 @@
 import React from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
@@ -37,6 +38,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
         <Header />
         <main className="site-main">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
