@@ -7,7 +7,7 @@ import Header from "../../components/Header";
 import "./globals.css";
 
 export const metadata = {
-  title: "Konative | Data Center Land Brokerage",
+  title: "Konative | Datacenter Brokerage",
   description:
     "Konative brokers powered land to data center developers and hyperscalers. We source sites, connect investors, and manage the deal from first call to close. Own land near a substation? We want to talk.",
   metadataBase: new URL("https://konative.com"),
