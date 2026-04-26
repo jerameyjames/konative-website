@@ -24,6 +24,14 @@ const SECTIONS = [
     accent: '#E07B39',
   },
   {
+    href: '/intelligence/first-nations',
+    label: 'First Nations + Tribal DC',
+    eyebrow: 'Indigenous Land + Power',
+    headline: 'Indigenous land, Indigenous power, Indigenous equity',
+    summary: 'Cross-border intelligence on Indigenous-led DC development. Woodland Cree 650 MW, Prophet River, Innava Albuquerque, plus the federal frameworks (C$2B Sovereign AI, US$50M DOE, US$20B LPO) that make sovereign-equity deals viable.',
+    accent: '#facc15',
+  },
+  {
     href: '/methodology',
     label: 'Site Scoring Methodology',
     eyebrow: 'How We Work',

@@ -207,9 +207,12 @@ export default function CanadaPage() {
           <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, margin: '0 0 1rem', letterSpacing: '-0.005em' }}>
             FIRST NATIONS LAND + POWER
           </h2>
-          <p style={{ color: '#cbd5e1', margin: '0 0 2rem', fontSize: '1.0625rem', lineHeight: 1.65, maxWidth: 760 }}>
+          <p style={{ color: '#cbd5e1', margin: '0 0 1rem', fontSize: '1.0625rem', lineHeight: 1.65, maxWidth: 760 }}>
             Federal preference for Indigenous-partnered projects in the C$2B Sovereign AI Compute Strategy is not soft language — it is the structural advantage that determines who clears the queue. Indigenous Development Corporations across Canada control land near transmission, near hydroelectric capacity, and near fiber routes. Konative brings cross-border experience: the same partnership patterns that shaped US tribal DC plays now apply north of the border.
           </p>
+          <Link href="/intelligence/first-nations" style={{ display: 'inline-block', fontSize: '0.8rem', color: '#facc15', textDecoration: 'none', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '8px 14px', border: '1px solid rgba(250,204,21,0.4)', borderRadius: 4, marginBottom: '2rem' }}>
+            Full First Nations + Tribal DC Deep Dive →
+          </Link>
 
           <div style={{ display: 'grid', gap: '1rem' }}>
             {FIRST_NATIONS_PROJECTS.map(fn => (
