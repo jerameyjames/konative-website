@@ -35,9 +35,13 @@ async function resolveDownloadUrl(): Promise<string> {
 
   // Fetch the index page and look for the most recent .xlsx link
   const html = await fetchText(BASE_URL);
-  const match = html.match(/href="(xls\/[^"]+\.xlsx)"/i);
-  if (!match) throw new Error("Could not find .xlsx link on EIA-860M page");
-  return `https://www.eia.gov/electricity/data/eia860m/${match[1]}`;
+  // Match both /electricity/data/eia860m/xls/... and relative xls/... forms
+  // Prefer non-archive links first
+  const allMatches = [...html.matchAll(/href="([^"]*eia860m\/(?!archive)[^"]*\.xlsx)"/gi)];
+  if (allMatches.length > 0) return `https://www.eia.gov${allMatches[0][1]}`;
+  const archiveMatch = html.match(/href="([^"]*eia860m\/[^"]*\.xlsx)"/i);
+  if (archiveMatch) return `https://www.eia.gov${archiveMatch[1]}`;
+  throw new Error("Could not find .xlsx link on EIA-860M page");
 }
 
 function fetchText(url: string): Promise<string> {

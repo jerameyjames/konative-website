@@ -82,7 +82,7 @@ async function main() {
   //          operator, ref, name, sqft, lon, lat, type
   const rows = db.prepare(
     `SELECT id, name, operator, state, state_abb, county, sqft, lat, lon, type
-     FROM im3_us_data_center_locations
+     FROM point
      WHERE lat IS NOT NULL AND lon IS NOT NULL`
   ).all() as Im3Row[];
 

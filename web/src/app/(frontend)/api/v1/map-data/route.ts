@@ -73,31 +73,25 @@ async function fetchProjects() {
 async function fetchFacilities() {
   try {
     const { data, error } = await supabase
-      .from("dc_facilities")
-      .select("id,name,operator,city,state,country,status,capacity_mw,facility_type,source,source_url,location")
+      .from("dc_facilities_map")
+      .select("id,name,operator,city,state,country,status,capacity_mw,facility_type,source,source_url,lng,lat")
       .limit(2000);
     if (error || !data) return { features: [], total: 0 };
 
     const features = data
-      .filter((r) => r.location)
-      .map((r) => {
-        // location is a PostGIS geography — Supabase returns it as WKT or GeoJSON string
-        const coords = parseLocation(r.location);
-        if (!coords) return null;
-        return {
-          type: "Feature" as const,
-          geometry: point(coords[0], coords[1]),
-          properties: {
-            layer: "facilities",
-            id: r.id, name: r.name, operator: r.operator,
-            city: r.city, state: r.state, country: r.country,
-            status: r.status, mw: r.capacity_mw || 0,
-            facilityType: r.facility_type, source: r.source,
-            sourceUrl: r.source_url,
-          },
-        };
-      })
-      .filter(Boolean) as GeoJSON.Feature[];
+      .filter((r) => r.lng != null && r.lat != null)
+      .map((r) => ({
+        type: "Feature" as const,
+        geometry: point(r.lng, r.lat),
+        properties: {
+          layer: "facilities",
+          id: r.id, name: r.name, operator: r.operator,
+          city: r.city, state: r.state, country: r.country,
+          status: r.status, mw: r.capacity_mw || 0,
+          facilityType: r.facility_type, source: r.source,
+          sourceUrl: r.source_url,
+        },
+      }));
 
     return { features, total: features.length };
   } catch {
@@ -107,31 +101,34 @@ async function fetchFacilities() {
 
 async function fetchNetwork() {
   try {
-    const { data, error } = await supabase
-      .from("network_facilities")
-      .select("pdb_id,name,org_name,city,state,country,net_count,ix_count,carrier_count,status,location")
-      .limit(2000);
-    if (error || !data) return { features: [], total: 0 };
+    // Paginate to bypass PostgREST 1000-row default cap
+    const PAGE = 1000;
+    let all: unknown[] = [];
+    for (let offset = 0; ; offset += PAGE) {
+      const { data, error } = await supabase
+        .from("network_facilities_map")
+        .select("pdb_id,name,org_name,city,state,country,net_count,ix_count,carrier_count,status,lng,lat")
+        .range(offset, offset + PAGE - 1);
+      if (error || !data) break;
+      all = all.concat(data);
+      if (data.length < PAGE) break;
+    }
+    const data = all as Array<Record<string, unknown>>;
 
     const features = data
-      .filter((r) => r.location)
-      .map((r) => {
-        const coords = parseLocation(r.location);
-        if (!coords) return null;
-        return {
-          type: "Feature" as const,
-          geometry: point(coords[0], coords[1]),
-          properties: {
-            layer: "network",
-            id: r.pdb_id, name: r.name, org_name: r.org_name,
-            city: r.city, state: r.state, country: r.country,
-            net_count: r.net_count, ix_count: r.ix_count,
-            carrier_count: r.carrier_count, status: r.status,
-            source: "peeringdb",
-          },
-        };
-      })
-      .filter(Boolean) as GeoJSON.Feature[];
+      .filter((r) => r.lng != null && r.lat != null)
+      .map((r) => ({
+        type: "Feature" as const,
+        geometry: point(r.lng as number, r.lat as number),
+        properties: {
+          layer: "network",
+          id: r.pdb_id, name: r.name, org_name: r.org_name,
+          city: r.city, state: r.state, country: r.country,
+          net_count: r.net_count, ix_count: r.ix_count,
+          carrier_count: r.carrier_count, status: r.status,
+          source: "peeringdb",
+        },
+      }));
 
     return { features, total: features.length };
   } catch {
@@ -142,21 +139,19 @@ async function fetchNetwork() {
 async function fetchPower() {
   try {
     const { data, error } = await supabase
-      .from("generation_pipeline")
-      .select("plant_id,plant_name,utility_name,state,county,technology,capacity_mw,planned_year,status_code,balancing_authority,location")
-      .not("location", "is", null)
+      .from("generation_pipeline_map")
+      .select("plant_id,plant_name,utility_name,state,county,technology,capacity_mw,planned_year,status_code,balancing_authority,lng,lat")
       .not("capacity_mw", "is", null)
       .gte("planned_year", new Date().getFullYear())
       .order("capacity_mw", { ascending: false })
       .limit(500);
     if (error || !data) return { features: [], total: 0 };
 
-    const features = data.map((r) => {
-      const coords = parseLocation(r.location);
-      if (!coords) return null;
-      return {
+    const features = data
+      .filter((r) => r.lng != null && r.lat != null)
+      .map((r) => ({
         type: "Feature" as const,
-        geometry: point(coords[0], coords[1]),
+        geometry: point(r.lng, r.lat),
         properties: {
           layer: "power",
           id: r.plant_id, name: r.plant_name,
@@ -165,31 +160,12 @@ async function fetchPower() {
           plannedYear: r.planned_year, statusCode: r.status_code,
           ba: r.balancing_authority, source: "eia_860m",
         },
-      };
-    }).filter(Boolean) as GeoJSON.Feature[];
+      }));
 
     return { features, total: features.length };
   } catch {
     return { features: [], total: 0 };
   }
-}
-
-// Parse Supabase geography string. Returns [lng, lat] or null.
-// Supabase returns GEOGRAPHY as WKT: "POINT(-77.03 38.90)" or GeoJSON text
-function parseLocation(loc: unknown): [number, number] | null {
-  if (!loc) return null;
-  const s = String(loc);
-  // WKT POINT
-  const wkt = s.match(/POINT\s*\(([^ ]+)\s+([^ )]+)\)/i);
-  if (wkt) return [parseFloat(wkt[1]), parseFloat(wkt[2])];
-  // GeoJSON object
-  try {
-    const g = JSON.parse(s);
-    if (g.type === "Point" && Array.isArray(g.coordinates)) {
-      return [g.coordinates[0], g.coordinates[1]];
-    }
-  } catch { /* ignore */ }
-  return null;
 }
 
 // ── handler ───────────────────────────────────────────────────────────────────
