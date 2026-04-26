@@ -114,7 +114,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
             color: '#E07B39', marginBottom: 32,
           }}>
             <span style={{ display: 'block', width: 36, height: 1, background: '#E07B39', flexShrink: 0 }} />
-            Data Center Land Brokerage
+            Datacenter Brokerage
           </p>
 
           <h1 style={{
