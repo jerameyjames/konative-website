@@ -91,18 +91,6 @@ export default function IntelligenceIndexPage() {
               <div style={{ minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.875rem', flexWrap: 'wrap' }}>
                   <span style={{
-                    fontSize: '0.65rem',
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    color: '#0b1020',
-                    background: '#67e8f9',
-                    padding: '4px 10px',
-                    borderRadius: 3,
-                    fontWeight: 800,
-                  }}>
-                    Free Tool
-                  </span>
-                  <span style={{
                     fontSize: '0.7rem',
                     letterSpacing: '0.15em',
                     textTransform: 'uppercase',
