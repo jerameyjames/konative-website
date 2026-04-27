@@ -47,4 +47,8 @@ Source of truth for parallel work across Claude Code Desktop + Cursor. Plan: [No
 
 ## Status
 
-- 2026-04-27 — contracts committed; worktrees created. Awaiting first task pickup per stream.
+- 2026-04-27 — contracts committed; worktrees created.
+- 2026-04-27 — Stream B merged to main (`71fdb1f` → `5314d16`). Map renders Infrastructure (CA · beta) panel + PMTiles + LayerCredits popover, all manifest-driven.
+- 2026-04-27 — Stream D merged to main (`5faf8a6`). `/licenses` page + footer link + popover component live.
+- ⏳ Stream A pending Cursor pickup at `~/repos/konative-wt-etl` on `feat/etl-canada-p0`.
+- ⏳ Stream C pending Cursor pickup at `~/repos/konative-wt-queue` on `feat/queue-ingest`.
