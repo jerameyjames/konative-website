@@ -1,5 +1,5 @@
 create extension if not exists pgcrypto;
-create extension if not exists postgis with schema extensions;
+create extension if not exists postgis;
 
 create table if not exists public.interconnection_queue (
   id uuid primary key default gen_random_uuid(),
@@ -20,7 +20,7 @@ create table if not exists public.interconnection_queue (
   poi_geog geography(point, 4326) generated always as (
     case
       when poi_lat is not null and poi_lng is not null then
-        (extensions.st_setsrid(extensions.st_makepoint(poi_lng, poi_lat), 4326))::geography
+        st_setsrid(st_makepoint(poi_lng, poi_lat), 4326)::geography
       else null
     end
   ) stored,
@@ -74,7 +74,7 @@ language sql
 stable
 as $$
   with center as (
-    select (extensions.st_setsrid(extensions.st_makepoint(p_lng, p_lat), 4326))::geography as geog
+    select st_setsrid(st_makepoint(p_lng, p_lat), 4326)::geography as geog
   )
   select
     q.id,
@@ -90,11 +90,11 @@ as $$
     q.poi_lng,
     q.source_url,
     q.last_updated,
-    extensions.st_distance(q.poi_geog, c.geog) / 1000.0 as distance_km
+    st_distance(q.poi_geog, c.geog) / 1000.0 as distance_km
   from public.interconnection_queue q
   cross join center c
   where q.poi_geog is not null
-    and extensions.st_dwithin(q.poi_geog, c.geog, p_radius_km * 1000.0)
+    and st_dwithin(q.poi_geog, c.geog, p_radius_km * 1000.0)
   order by distance_km asc, q.capacity_mw desc;
 $$;
 
