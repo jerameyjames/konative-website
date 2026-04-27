@@ -1,6 +1,9 @@
 .DS_Store
 **/.DS_Store
 .vercel
+
+# ETL build artifacts (intermediate files — committed PMTiles go in tiles/v1/)
+.tmp/
 .superpowers/
 
 # Never nest a second checkout here (breaks monorepo layout and confuses agents)
