@@ -25,7 +25,8 @@ interface QueueRpcRow {
 }
 
 async function fetchQueueData(
-  supabase: ReturnType<typeof createClient>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
   lat: number,
   lng: number
 ): Promise<{
@@ -34,7 +35,8 @@ async function fetchQueueData(
   nearestQueueKm: number | null
   queueCountWithin25Km: number
 }> {
-  const { data, error } = await supabase.rpc('get_interconnection_queue_radius', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any).rpc('get_interconnection_queue_radius', {
     p_lat: lat,
     p_lng: lng,
     p_radius_km: 50,
