@@ -8,7 +8,9 @@ import type { FeatureCollection, Feature, Point, Polygon } from 'geojson'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { LayerCategory, LayerManifest, LayerManifestEntry } from '@/types/map-layers'
 import type { QueueRadiusResponse, QueueAuthority, QueueResourceType } from '@/types/queue'
+import type { CASResult } from '@/lib/availability-score'
 import LayerCredits from './LayerCredits'
+import AvailabilityScorePanel from './AvailabilityScorePanel'
 
 // ── types ─────────────────────────────────────────────────────────────────────
 
@@ -142,6 +144,12 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
     data: QueueRadiusResponse | null;
   } | null>(null)
 
+  // Phase 4 — Canadian Availability Score™
+  const [casPanel, setCasPanel] = useState<{
+    status: 'loading' | 'done' | 'error';
+    result: CASResult | null;
+  } | null>(null)
+
   // Phase 3 computed layer toggles
   const [showHeatmap, setShowHeatmap] = useState(false)
   const [showLatencyRings, setShowLatencyRings] = useState(false)
@@ -243,14 +251,25 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
   }, [])
 
   const onMapClick = useCallback((e: MapLayerMouseEvent) => {
-    // Only open queue panel when clicking empty map space (not a DC bubble)
+    // Only open panels when clicking empty map space (not a DC bubble)
     if (e.features && e.features.length > 0) return
     const { lat, lng } = e.lngLat
+
+    // Queue panel (Phase 2)
     setQueuePanel({ lat, lng, status: 'loading', data: null })
     fetch(`/api/v1/queue?lat=${lat}&lng=${lng}&radius_km=50`)
       .then(r => r.json())
       .then((data: QueueRadiusResponse) => setQueuePanel(prev => prev ? { ...prev, status: 'done', data } : null))
       .catch(() => setQueuePanel(prev => prev ? { ...prev, status: 'error', data: null } : null))
+
+    // CAS panel (Phase 4) — only for Canadian coordinates
+    if (lat >= 41 && lat <= 84 && lng >= -141 && lng <= -52) {
+      setCasPanel({ status: 'loading', result: null })
+      fetch(`/api/v1/availability-score?lat=${lat}&lng=${lng}`)
+        .then(r => r.json())
+        .then((result: CASResult) => setCasPanel({ status: 'done', result }))
+        .catch(() => setCasPanel({ status: 'error', result: null }))
+    }
   }, [])
 
   const layerCount = (k: LayerKey | 'all') =>
@@ -484,11 +503,34 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
 
       <LayerCredits layers={infraManifest?.layers ?? []} />
 
+      {/* Phase 4 — Canadian Availability Score™ Panel */}
+      {/* Positioned left of the queue panel (which is at right:16, width:340) */}
+      {casPanel && casPanel.status === 'done' && casPanel.result && (
+        <div style={{ position: 'absolute', right: queuePanel ? 372 : 16, top: 16, bottom: 32, zIndex: 20, width: 320 }}>
+          <AvailabilityScorePanel
+            result={casPanel.result}
+            onClose={() => { setCasPanel(null); setQueuePanel(null) }}
+          />
+        </div>
+      )}
+      {casPanel && casPanel.status === 'loading' && (
+        <div style={{
+          position: 'absolute', right: queuePanel ? 372 : 16, top: 16, zIndex: 20,
+          background: 'rgba(8,20,45,0.88)', border: '1px solid rgba(255,255,255,0.1)',
+          backdropFilter: 'blur(8px)', padding: '12px 16px', width: 320,
+          fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.5)',
+          display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          <span style={{ animation: 'spin 1s linear infinite', display: 'inline-block', fontSize: 16 }}>⟳</span>
+          Computing Availability Score…
+        </div>
+      )}
+
       {/* Phase 2 — Interconnection Queue Radius Panel */}
       {queuePanel && (
         <QueuePanel
           panel={queuePanel}
-          onClose={() => setQueuePanel(null)}
+          onClose={() => { setQueuePanel(null); setCasPanel(null) }}
         />
       )}
 
