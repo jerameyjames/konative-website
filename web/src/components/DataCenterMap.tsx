@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react'
 import { Map, Source, Layer, Popup, type MapLayerMouseEvent } from 'react-map-gl/maplibre'
 import maplibregl, { type CircleLayerSpecification } from 'maplibre-gl'
 import { Protocol } from 'pmtiles'
-import type { FeatureCollection, Feature, Point } from 'geojson'
+import type { FeatureCollection, Feature, Point, Polygon } from 'geojson'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { LayerCategory, LayerManifest, LayerManifestEntry } from '@/types/map-layers'
 import type { QueueRadiusResponse, QueueAuthority, QueueResourceType } from '@/types/queue'
@@ -81,6 +81,29 @@ const SOURCE_LABELS: Record<string, string> = {
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
+// Generate a GeoJSON circle polygon around [lng, lat] with radius in km
+function makeCircle(lng: number, lat: number, radiusKm: number, steps = 64): Feature<Polygon> {
+  const R = 6371 // Earth radius km
+  const lat0 = (lat * Math.PI) / 180
+  const lng0 = (lng * Math.PI) / 180
+  const d = radiusKm / R
+  const coords: [number, number][] = []
+  for (let i = 0; i <= steps; i++) {
+    const bearing = (i / steps) * 2 * Math.PI
+    const lat1 = Math.asin(Math.sin(lat0) * Math.cos(d) + Math.cos(lat0) * Math.sin(d) * Math.cos(bearing))
+    const lng1 = lng0 + Math.atan2(Math.sin(bearing) * Math.sin(d) * Math.cos(lat0), Math.cos(d) - Math.sin(lat0) * Math.sin(lat1))
+    coords.push([(lng1 * 180) / Math.PI, (lat1 * 180) / Math.PI])
+  }
+  return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [coords] }, properties: {} }
+}
+
+// Latency ring radii: ~2.5ms, ~7.5ms, ~15ms one-way in fiber (~200km/ms)
+const RING_RADII: { km: number; label: string }[] = [
+  { km: 500,  label: '~2.5ms' },
+  { km: 1500, label: '~7.5ms' },
+  { km: 3000, label: '~15ms' },
+]
+
 // Assign a colour to every feature based on its layer + status
 function colourFeature(f: Feature): Feature {
   const layer = f.properties?.layer as LayerKey | undefined
@@ -118,6 +141,10 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
     status: 'loading' | 'done' | 'error';
     data: QueueRadiusResponse | null;
   } | null>(null)
+
+  // Phase 3 computed layer toggles
+  const [showHeatmap, setShowHeatmap] = useState(false)
+  const [showLatencyRings, setShowLatencyRings] = useState(false)
 
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
@@ -175,6 +202,24 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
     return { type: 'FeatureCollection', features }
   }, [layerData, activeLayer])
 
+  // Build latency ring polygons for the first 20 DCs
+  const latencyRingsGeoJSON = useMemo<FeatureCollection>(() => {
+    if (!showLatencyRings) return { type: 'FeatureCollection', features: [] }
+    const features: Feature[] = []
+    const pts = combined.features.slice(0, 20)
+    for (const pt of pts) {
+      if (pt.geometry.type !== 'Point') continue
+      const [lng, lat] = (pt.geometry as Point).coordinates
+      const color = (pt.properties?._color as string | undefined) ?? '#22d3ee'
+      for (const { km } of RING_RADII) {
+        const circle = makeCircle(lng, lat, km)
+        circle.properties = { _color: color }
+        features.push(circle)
+      }
+    }
+    return { type: 'FeatureCollection', features }
+  }, [showLatencyRings, combined])
+
   const circleLayer: CircleLayerSpecification = {
     id: 'dc-bubbles',
     type: 'circle',
@@ -224,8 +269,45 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
         attributionControl={{ compact: true }}
       >
         <Source id="dc" type="geojson" data={combined}>
+          {showHeatmap && (
+            <Layer
+              id="dc-heat"
+              type="heatmap"
+              maxzoom={9}
+              paint={{
+                'heatmap-weight': ['interpolate', ['linear'], ['coalesce', ['get', 'mw'], 1], 0, 0, 1000, 1],
+                'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
+                'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'],
+                  0, 'rgba(0,0,0,0)',
+                  0.2, '#0C2046',
+                  0.4, '#22d3ee',
+                  0.6, '#E07B39',
+                  0.8, '#fff',
+                  1, '#fff',
+                ],
+                'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 20, 9, 40],
+                'heatmap-opacity': 0.7,
+              }}
+            />
+          )}
           <Layer {...circleLayer} />
         </Source>
+
+        {/* Latency rings layer */}
+        {showLatencyRings && (
+          <Source id="latency-rings" type="geojson" data={latencyRingsGeoJSON}>
+            <Layer
+              id="latency-rings-line"
+              type="line"
+              paint={{
+                'line-color': ['get', '_color'],
+                'line-width': 1,
+                'line-opacity': 0.2,
+                'line-dasharray': [3, 3],
+              }}
+            />
+          </Source>
+        )}
 
         {/* Infrastructure (CA · beta) PMTiles sources + layers */}
         {INFRA_CATEGORIES.flatMap(cat =>
@@ -268,6 +350,40 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
 
       {/* Layer toggle chips */}
       <div style={{ position: 'absolute', zIndex: 10, top: 16, left: 16, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {/* DC Heatmap toggle */}
+        <button
+          onClick={() => setShowHeatmap(v => !v)}
+          style={{
+            padding: '6px 12px',
+            background: showHeatmap ? '#22d3ee' : 'rgba(8,20,45,0.88)',
+            color: showHeatmap ? '#fff' : 'rgba(255,255,255,0.8)',
+            border: `1px solid ${showHeatmap ? '#22d3ee' : 'rgba(255,255,255,0.2)'}`,
+            fontFamily: 'Inter, sans-serif', fontWeight: 600,
+            fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          <span style={{ width: 7, height: 7, borderRadius: '50%', background: showHeatmap ? '#fff' : '#22d3ee', flexShrink: 0 }} />
+          DC Heatmap
+        </button>
+        {/* Latency Rings toggle */}
+        <button
+          onClick={() => setShowLatencyRings(v => !v)}
+          style={{
+            padding: '6px 12px',
+            background: showLatencyRings ? '#64748b' : 'rgba(8,20,45,0.88)',
+            color: showLatencyRings ? '#fff' : 'rgba(255,255,255,0.8)',
+            border: `1px solid ${showLatencyRings ? '#64748b' : 'rgba(255,255,255,0.2)'}`,
+            fontFamily: 'Inter, sans-serif', fontWeight: 600,
+            fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          <span style={{ width: 7, height: 7, borderRadius: '50%', background: showLatencyRings ? '#fff' : '#64748b', flexShrink: 0 }} />
+          Latency Rings
+        </button>
         {(['all', 'projects', 'facilities', 'network', 'power'] as const).map(k => {
           const count = layerCount(k)
           const active = activeLayer === k
@@ -314,6 +430,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
             const count = infraLayersByCategory[cat.key].length
             const disabled = count === 0
             const active = infraEnabled[cat.key]
+            const isPhase3 = cat.key === 'water' || cat.key === 'climate' || cat.key === 'land'
             return (
               <button
                 key={cat.key}
@@ -330,6 +447,9 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
               >
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: cat.color, opacity: disabled ? 0.3 : 1 }} />
                 {cat.label}
+                {isPhase3 && disabled && (
+                  <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.3)', fontWeight: 400, letterSpacing: '0.08em', textTransform: 'uppercase' }}>P3</span>
+                )}
                 <span style={{ opacity: 0.6, fontWeight: 400, marginLeft: 'auto' }}>{count}</span>
               </button>
             )
@@ -337,9 +457,12 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
         </div>
         {(infraManifest?.layers.length ?? 0) === 0 && (
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 8, maxWidth: 180, lineHeight: 1.4 }}>
-            Awaiting Phase 1 ETL.
+            Awaiting ETL data.
           </div>
         )}
+        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.2)', marginTop: 6, maxWidth: 180, lineHeight: 1.4, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+          Phase 3 · Water · Climate · Land coming soon
+        </div>
       </div>
 
       {/* Empty state */}
