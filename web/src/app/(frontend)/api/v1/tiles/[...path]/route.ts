@@ -30,9 +30,10 @@ function ext(filePath: string): string {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ): Promise<NextResponse> {
-  const segments = params.path ?? [];
+  const { path: pathSegments } = await params;
+  const segments = pathSegments ?? [];
 
   // Prevent path traversal
   const joined = segments.join("/");
