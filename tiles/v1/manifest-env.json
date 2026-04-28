@@ -31,6 +31,21 @@
       "sourceUrl": "https://cwfis.cfs.nrcan.gc.ca",
       "lastUpdated": "2026-04-28T02:11:55.289Z",
       "defaultVisible": false
+    },
+    {
+      "id": "ca_cpcad_protected_areas",
+      "title": "CPCAD Protected Areas (Canada, December 2023)",
+      "category": "land",
+      "country": "CA",
+      "tilesUrl": "/tiles/v1/ca_cpcad_protected_areas.pmtiles",
+      "sourceLayer": "protected_areas",
+      "minZoom": 3,
+      "maxZoom": 10,
+      "license": "OGL-Canada-2.0",
+      "attribution": "Environment and Climate Change Canada, CPCAD December 2023. Contains information licensed under the Open Government Licence - Canada.",
+      "sourceUrl": "https://www.canada.ca/en/environment-climate-change/services/national-wildlife-areas/protected-areas-database.html",
+      "lastUpdated": "2026-04-28T05:37:03.282Z",
+      "defaultVisible": false
     }
   ]
 }
