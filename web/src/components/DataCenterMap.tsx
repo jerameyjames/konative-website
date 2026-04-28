@@ -299,7 +299,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                   key={layer.id}
                   id={`infra-${layer.id}`}
                   type="vector"
-                  url={`pmtiles://${layer.tilesUrl}`}
+                  url={`pmtiles://${window.location.origin}${layer.tilesUrl}`}
                   attribution={layer.attribution}
                 >
                   {/* Fill — renders polygon/multipolygon geometries (water risk, fire zones, protected areas, etc.) */}
