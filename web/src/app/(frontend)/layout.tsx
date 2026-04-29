@@ -1,10 +1,16 @@
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
+import type { Viewport } from "next";
 
-import Footer from "../../components/Footer";
+import ConditionalFooter from "../../components/ConditionalFooter";
 import Header from "../../components/Header";
 
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata = {
   title: "Konative | Datacenter Brokerage",
@@ -37,7 +43,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
       <body>
         <Header />
         <main className="site-main">{children}</main>
-        <Footer />
+        <ConditionalFooter />
         <Analytics />
       </body>
     </html>
