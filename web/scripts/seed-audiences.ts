@@ -5,6 +5,11 @@
 import { createClient } from '@sanity/client'
 import { tribesSeed } from '../src/content/audiences/seed-data/tribes'
 import { advisorsSeed } from '../src/content/audiences/seed-data/advisors'
+import { investorsSeed } from '../src/content/audiences/seed-data/investors'
+import { landownersSeed } from '../src/content/audiences/seed-data/landowners'
+import { utilitiesSeed } from '../src/content/audiences/seed-data/utilities'
+import { developersEpcsSeed } from '../src/content/audiences/seed-data/developers-epcs'
+import { operatorsSeed } from '../src/content/audiences/seed-data/operators'
 import type { AudiencePage } from '../src/content/audiences/types'
 
 const sanity = createClient({
@@ -15,7 +20,15 @@ const sanity = createClient({
   useCdn: false,
 })
 
-const seeds: AudiencePage[] = [tribesSeed, advisorsSeed]
+const seeds: AudiencePage[] = [
+  tribesSeed,
+  advisorsSeed,
+  investorsSeed,
+  landownersSeed,
+  utilitiesSeed,
+  developersEpcsSeed,
+  operatorsSeed,
+]
 
 async function upsert(page: AudiencePage) {
   const docId = `audiencePage.${page.slug}`
