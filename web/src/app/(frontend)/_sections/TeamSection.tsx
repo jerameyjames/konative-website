@@ -14,7 +14,9 @@ const members = [
     name: 'Scott Swartzbaugh',
     role: 'Partner — Supply Chain & Procurement',
     bio: "20+ years building high-performance supply chains and strategic supplier partnerships. The person who knows what's available, what's on lead time, and how to move equipment when everyone else is waiting.",
-    photo: 'https://media.licdn.com/dms/image/v2/D5603AQFXTBCdoZynYw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1695852926095?e=1778716800&v=beta&t=FtBHyfJBkZxY92RkLKTb8eoZfDzF_E6sCdF25_6Q-LA',
+    photo: '/team/scott-swartzbaugh.png',
+    photoSize: 'cover' as const,
+    photoPosition: 'center top',
     linkedin: 'https://www.linkedin.com/in/scott-swartzbaugh-ab156b1/',
   },
   {
