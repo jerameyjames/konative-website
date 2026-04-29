@@ -86,6 +86,8 @@ Critical to GTM. This is where someone like Jerry self-identifies and signs up t
 - **First Engagement:** A 30-minute onboarding call + ambassador kit.
 - **Trust Layer:** Founder access; the ambassador is treated as a partner, not a tipster.
 
+**Advisors and monetization.** At launch, advisors are a *distribution cost*, not a revenue line — Konative pays them on closed referrals (fee on Readiness Reviews, share on commissioned deals). The economics are simple: ambassadors unlock buyer relationships paid acquisition cannot reach. A paid **Konative Certified Advisor** tier (badge, training, directory profile, priority lead routing) is a year-2 monetization layer, only added once deal flow makes certification worth paying for. The launch program is invite-only and free to the advisor.
+
 ### Implementation notes for the router
 
 - Pages live under `web/src/app/(frontend)/for/[audience]/page.tsx` (dynamic) or as static MDX-driven pages, depending on whether we want non-engineers to edit copy. Recommend Sanity-backed structured content (headline, sections, partner logos) so copy can be tuned without a deploy. Decide during the implementation plan, not here.
@@ -108,6 +110,13 @@ Sections:
 
 This page does *not* expose the internal P&L thinking. It exposes the surface area where outsiders can transact with the platform.
 
+**Minimum credible footprint at launch.** `/platform` cannot ship empty. Each surface listed in "Who Plugs In" must meet at least one of these bars before the page goes live:
+
+- A real intake form that routes to a real human and sets expectations on response time, *and*
+- At least one named launch sponsor, design partner, or pilot listing per bucket — even if anonymized ("Founding sponsor — modular DC manufacturer, name on request").
+
+If a bucket cannot meet that bar at launch, it is removed from the page, not shown as "coming soon." The page expands as each bucket earns its slot. The launch version may be only two buckets (e.g., Sponsor Directory + Verified Site Listings) and that is acceptable; an empty page that promises future products is not.
+
 ## Part 3 — Internal Monetization Strategy (Notion)
 
 Lives in Notion under the existing Konative project hub, not in the public site. One page titled "Konative Monetization Architecture" with these sections:
@@ -121,7 +130,10 @@ Lives in Notion under the existing Konative project hub, not in the public site.
    - Tribal Membership / Konative for Nations (annual)
    - Annual Tribal Data Center Summit (year-2)
    - Lead-gen / referral fees (passive)
-3. **First 90 Days Launch Plan.** Stand up #1 (Sponsor Directory), #4 (Reports), and #5 (Tribal Membership). They reinforce each other and #5 gives Jerry a concrete on-ramp to sell.
+3. **Phased Launch Plan.**
+   - **Phase 1 (first 90 days) — Sponsor Directory + Quarterly Reports.** Sponsor Directory is the simplest recurring stream to stand up and produces immediate proof that the platform has commercial gravity. Quarterly Reports — leading with the *Tribal Data Center Opportunity Index* — drive earned media and feed the audience pages with credibility. Tribal Membership is *not* launched yet; the value prop must be reviewed and validated against real tribal feedback first, and at least one anchor pilot should be in motion before charging for membership.
+   - **Phase 2 (months 4–9) — Tribal Membership + Verified Site Listings.** Once anchor pilots exist and the membership value prop has been pressure-tested with tribal econ dev leaders, launch membership and verified site listings together. Membership becomes the on-ramp Jerry sells; verified listings become the inventory investors and operators come to Konative for.
+   - **Phase 3 (year 2) — Konative Intelligence subscription, Certified Advisor tier, Annual Summit.** Each requires Phase 1 + 2 traction to be credible.
 4. **Big-Bang Layer.** Project Readiness Review fees + commissions on closed deals. These remain the largest revenue lines and benefit from the recurring layer's demand-generation effect.
 5. **KPIs and Cadence.** Audience growth, sponsor count, member count, report sales, qualified inbounds per audience page, conversions to readiness review, closed commission revenue. Reviewed monthly.
 6. **Risks and Counters.** Conflicts of interest (neutral clearinghouse vs. commissioned developer), pricing discipline, content cadence (reports require real research bandwidth), tribal trust (membership must be earned, not sold).
@@ -143,6 +155,16 @@ Lives in Notion under the existing Konative project hub, not in the public site.
 - Notion monetization doc is the founder's working source of truth and is updated at least monthly.
 - The audience router does not regress homepage conversion to Project Readiness Review.
 
+## Tribal Membership — value prop review (gate before Phase 2)
+
+Membership is deferred until its value prop survives contact with real tribal econ dev leaders. Before any launch, draft and pressure-test the following against at least three tribal/IDC contacts (Jerry can help source):
+
+- **What a member gets:** access to playbooks (site eval, power request, IDC governance fit, sovereignty-preserving deal structures), a private peer benchmarking forum across IDCs, quarterly briefings with the Konative team, discounted Project Readiness Review, early access to verified site listings, ambassador-rate referral fees on intros, and inclusion in the *Tribal Data Center Opportunity Index*.
+- **What it costs and who signs the check:** annual fee paid by the IDC or tribal enterprise, not the council. Tier on enterprise size, not nation size.
+- **What kills it:** if it feels like a paid newsletter or a sales pipe disguised as a club, it dies. The bar is "would a tribal econ dev director defend this line item to their CEO." If three out of three tribal leaders cannot articulate the value back unprompted, do not launch.
+
+This review and decision belongs in the Notion monetization doc, not on the public site.
+
 ## Open Questions for the Implementation Plan
 
 - Is the audience-page content authored in Sanity (recommended for non-engineer editing) or in MDX/typed config?
@@ -159,7 +181,7 @@ Lives in Notion under the existing Konative project hub, not in the public site.
 - [ ] `/for/investors`, `/for/landowners`, `/for/utilities`, `/for/developers-epcs`, `/for/operators` pages
 - [ ] Shared `<AudienceLanding />` component + content schema
 - [ ] `/platform` public partner page
-- [ ] Notion: "Konative Monetization Architecture" doc
+- [ ] Notion: "Konative Monetization Architecture" doc (with phased plan + tribal membership value-prop review)
 - [ ] Ambassador kit (page + tracked link + 1-page intro deck)
 - [ ] Site nav update — top-level "For" entry; `/platform` reachable from footer or "Partner" footer link
 - [ ] Analytics events on each audience page CTA, segmented by audience
