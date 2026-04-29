@@ -421,7 +421,9 @@ export default function LayerControlPanel({
   }
 
   return (
-    <div style={{
+    <div
+      onWheel={e => e.stopPropagation()}
+      style={{
       position: 'absolute',
       zIndex: 10,
       top: 16,
