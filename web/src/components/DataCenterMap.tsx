@@ -52,7 +52,7 @@ const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] =
   { key: 'fiber',       label: 'Fiber',              color: '#a855f7' },
   { key: 'water',       label: 'Water',              color: '#38bdf8' },
   { key: 'climate',     label: 'Climate',            color: '#94a3b8' },
-  { key: 'rail',        label: 'Rail',               color: '#a16207' },
+  { key: 'rail',        label: 'Rail',               color: '#22c55e' },
 ]
 
 export interface MapCounts {
