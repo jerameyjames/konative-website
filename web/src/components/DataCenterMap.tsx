@@ -151,7 +151,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
   const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
-    indigenous: true, exclusions: false, 'land-use': false, power: false, gas: false, fiber: false, water: false, climate: false, rail: false,
+    indigenous: true, exclusions: true, 'land-use': false, power: true, gas: false, fiber: false, water: false, climate: false, rail: true,
   })
 
   useEffect(() => { ensurePMTilesProtocol() }, [])
@@ -175,16 +175,17 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     return map
   }, [infraManifest])
 
-  // Minimum zoom required for any currently-enabled infra layer
+  // Lowest minZoom across all currently-enabled infra layers — show hint only when
+  // the map hasn't reached the point where ANY enabled layer becomes visible.
   const infraMinZoomNeeded = useMemo(() => {
-    let min = 0
+    let lowest = Infinity
     for (const cat of INFRA_CATEGORIES) {
       if (!infraEnabled[cat.key]) continue
       for (const layer of infraLayersByCategory[cat.key]) {
-        if (layer.minZoom > min) min = layer.minZoom
+        if (layer.minZoom < lowest) lowest = layer.minZoom
       }
     }
-    return min
+    return lowest === Infinity ? 0 : lowest
   }, [infraEnabled, infraLayersByCategory])
 
   const needsZoomIn = infraMinZoomNeeded > 0 && mapZoom < infraMinZoomNeeded
