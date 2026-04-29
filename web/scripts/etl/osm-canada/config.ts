@@ -71,7 +71,7 @@ export const OSM_LAYERS: OsmLayerConfig[] = [
   {
     id: "osm_ca_industrial",
     title: "Industrial land use (Canada, OSM)",
-    category: "land",
+    category: "land-use",
     osmiumFilters: ["a/landuse=industrial"],
     ogrGeometryType: "MULTIPOLYGON",
     ogrLayer: "multipolygons",

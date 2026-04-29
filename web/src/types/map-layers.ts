@@ -6,9 +6,11 @@ export type LayerCategory =
   | "gas"
   | "fiber"
   | "water"
-  | "land"
+  | "exclusions"
+  | "land-use"
   | "climate"
-  | "rail";
+  | "rail"
+  | "indigenous";
 
 export type LayerCountry = "CA" | "US" | "GLOBAL";
 

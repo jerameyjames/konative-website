@@ -12,6 +12,7 @@ export interface DemoViewLayers {
   pipelines: boolean
   rail: boolean
   industrial: boolean
+  exclusions: boolean
   hotCorridors: boolean
 }
 
@@ -31,48 +32,50 @@ const PRESETS: DemoViewPreset[] = [
     description: 'Dense energy corridor NE of Edmonton — power, pipelines, industrial',
     center: [-113.2, 53.5],
     zoom: 6.5,
-    layers: { dc: true, transmission: true, pipelines: true, rail: true, industrial: true, hotCorridors: false },
+    layers: { dc: true, transmission: true, pipelines: true, rail: true, industrial: true, exclusions: true, hotCorridors: false },
   },
   {
     name: 'BC Lower Mainland',
     description: 'Metro Vancouver — transmission grid, CN/CP rail corridors, industrial zones',
     center: [-122.7, 49.2],
     zoom: 8,
-    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: true, hotCorridors: false },
+    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: true, exclusions: true, hotCorridors: false },
   },
   {
     name: 'NE BC Energy Corridor',
     description: 'Fort St John / Peace River — NGTL pipelines, rail, remote industrial',
     center: [-120.8, 56.25],
     zoom: 7,
-    layers: { dc: false, transmission: true, pipelines: true, rail: true, industrial: true, hotCorridors: false },
+    layers: { dc: false, transmission: true, pipelines: true, rail: true, industrial: true, exclusions: false, hotCorridors: false },
   },
   {
     name: 'GTA / Greater Toronto',
     description: 'Ontario grid node — full infra overlay for site selection',
     center: [-79.4, 43.7],
     zoom: 7.5,
-    layers: { dc: true, transmission: true, pipelines: true, rail: true, industrial: true, hotCorridors: false },
+    layers: { dc: true, transmission: true, pipelines: true, rail: true, industrial: true, exclusions: true, hotCorridors: false },
   },
   {
     name: 'Quebec Hydro Corridor',
     description: 'Hydro-Québec backbone — power + rail from Montréal to Trois-Rivières',
     center: [-72.5, 46.8],
     zoom: 6,
-    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: false, hotCorridors: false },
+    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: false, exclusions: false, hotCorridors: false },
   },
 ]
 
 // Map DemoViewLayers → infraEnabled Record<LayerCategory, boolean>
 function toInfraEnabled(v: DemoViewLayers): Record<LayerCategory, boolean> {
   return {
-    power:   v.transmission,
-    gas:     v.pipelines,
-    fiber:   v.transmission,   // fiber follows transmission toggle
-    water:   false,
-    land:    v.industrial,
-    climate: false,
-    rail:    v.rail,
+    indigenous: true,
+    exclusions: v.exclusions,
+    'land-use': v.industrial,
+    power:      v.transmission,
+    gas:        v.pipelines,
+    fiber:      v.transmission,
+    water:      false,
+    climate:    false,
+    rail:       v.rail,
   }
 }
 

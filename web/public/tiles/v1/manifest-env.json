@@ -37,7 +37,7 @@
     {
       "id": "ca_cpcad_protected_areas",
       "title": "CPCAD Protected Areas (Canada, December 2023)",
-      "category": "land",
+      "category": "exclusions",
       "country": "CA",
       "tilesUrl": "/tiles/v1/ca_cpcad_protected_areas.pmtiles",
       "sourceLayer": "protected_areas",
