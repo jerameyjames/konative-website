@@ -1,53 +1,60 @@
-# Audience Router (Plan A) — `/for/tribes` + `/for/advisors` Implementation Plan
+# Audience Router (Plan A) — `/for/tribes` + `/for/advisors` Implementation Plan (Sanity-backed)
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Ship a reusable audience-page architecture on `konative.com` and the first two audience pages — `/for/tribes` (Jerry's deliverable) and `/for/advisors` (ambassador funnel) — with a working CTA wired into the existing contact-inquiry pipeline.
+**Goal:** Ship a reusable audience-page architecture on `konative.com` and the first two audience pages — `/for/tribes` (Jerry's deliverable) and `/for/advisors` (ambassador funnel). Audience copy lives as Sanity documents so it can be edited without a deploy and reused for newsletter (beehiiv) and other content surfaces.
 
-**Architecture:** Typed TypeScript content registry (`web/src/content/audiences/`) drives a shared `AudienceLanding` server component. A dynamic route `/for/[audience]/page.tsx` reads from the registry and renders the page; `/for/page.tsx` is a hub of audience tiles. The existing `/api/contact` endpoint accepts a new `audience` discriminator field that flows into the existing Sanity `contactInquiry` document.
+**Architecture:** A new `audiencePage` Sanity schema models the full landing-page structure (hero, why-now, what-you-already-have, capability bands, engagement steps, trust items, adjacent-audience pointers, final CTA). Two seed scripts populate the tribes and advisors documents. A typed fetcher `getAudiencePage(slug)` runs GROQ against the read client. The dynamic route `/for/[audience]/page.tsx` fetches per request (Next 16 default cache; revalidate on demand later) and renders the `AudienceLanding` server component. The CTA form posts to the existing `/api/contact` endpoint with a new `audience` discriminator field.
 
-**Tech Stack:** Next.js 16 App Router, React 19 server components, TypeScript, Zod, Sanity (write-through for form submissions), Vitest, inline styling matching existing `markets/[state]` patterns (Konative palette: `#08142D` navy bg, `#E07B39` orange accent, Barlow Condensed display, Inter body).
+**Tech Stack:** Next.js 16 App Router, React 19 server components, TypeScript, Zod (form schema), Sanity (content + form-write store), `next-sanity` for fetching, Vitest, inline styling matching existing `markets/[state]` patterns (Konative palette: `#08142D` navy bg, `#E07B39` orange accent, Barlow Condensed display, Inter body).
 
 ---
 
 ## File Structure
 
 **New files:**
-- `web/src/content/audiences/types.ts` — `Audience`, `Section`, `CapabilityBand`, `EngagementStep` types
-- `web/src/content/audiences/tribes.ts` — full tribal page content
-- `web/src/content/audiences/advisors.ts` — advisor page content (lean but credible)
-- `web/src/content/audiences/index.ts` — `AUDIENCES` registry + helpers
-- `web/src/content/audiences/__tests__/registry.test.ts` — registry shape + completeness tests
+- `web/src/content/audiences/types.ts` — TypeScript shape that both the Sanity schema and the React component conform to
+- `web/src/sanity/schemaTypes/audiencePage.ts` — Sanity document + nested object types (capabilityBand, engagementStep, trustItem, ctaVariant, etc.)
+- `web/src/lib/audiences/fetch.ts` — `getAudiencePage(slug)` and `listAudiencePages()` GROQ helpers
+- `web/src/lib/audiences/__tests__/fetch.test.ts` — fetcher tests (mocked Sanity client)
+- `web/scripts/seed-audience-tribes.ts` — one-time idempotent seed for the tribes document
+- `web/scripts/seed-audience-advisors.ts` — one-time idempotent seed for the advisors document
+- `web/scripts/_audience-seed-helpers.ts` — shared helper to upsert by `slug.current`
 - `web/src/components/audience/AudienceLanding.tsx` — shared skeleton (server component)
-- `web/src/components/audience/AudienceCTAForm.tsx` — client form component, posts to `/api/contact` with `audience` field
-- `web/src/components/audience/__tests__/AudienceLanding.test.tsx` — render test with tribes config
-- `web/src/components/audience/__tests__/AudienceCTAForm.test.tsx` — form submit test
-- `web/src/app/(frontend)/for/page.tsx` — audience hub tile grid
+- `web/src/components/audience/AudienceCTAForm.tsx` — client form, posts to `/api/contact`
+- `web/src/components/audience/__tests__/AudienceLanding.test.tsx`
+- `web/src/components/audience/__tests__/AudienceCTAForm.test.tsx`
+- `web/src/app/(frontend)/for/page.tsx` — audience hub
 - `web/src/app/(frontend)/for/[audience]/page.tsx` — dynamic audience page
+- `web/src/content/audiences/seed-data/tribes.ts` — typed seed payload (the canonical first-cut copy)
+- `web/src/content/audiences/seed-data/advisors.ts` — typed seed payload
 
 **Modified files:**
+- `web/src/sanity/schemaTypes/index.ts` — register `audiencePage`
 - `web/src/lib/forms/schemas/contact.ts` — add optional `audience` field
 - `web/src/sanity/schemaTypes/contactInquiry.ts` — add `audience` field
-- `web/src/components/Header.tsx` — add "For" nav entry; widen `DARK_HERO_PAGES` to support `/for` prefix
+- `web/src/components/Header.tsx` — add "For" nav entry; widen `DARK_HERO_PAGES` to include `/for/*`
 - `web/src/lib/forms/__tests__/submit.test.ts` — add audience round-trip test
+- `web/package.json` — add `seed:audience:tribes` and `seed:audience:advisors` scripts
 
 **Untouched:**
 - `/api/contact/route.ts` — already passes the full payload through `submitForm`; no change needed.
-- Existing pages, sitemap, robots.
 
 ---
 
 ## Working Conventions (read first)
 
-- All work runs from `web/`. The app dev server is `npm run dev` on port 3005.
-- Tests are Vitest. Run `npm test` from `web/`. Test files live in `__tests__` next to the code they cover.
+- All work runs from `web/`. The dev server is `npm run dev` on port 3005.
+- Tests are Vitest. Run `npm test` from `web/`. Test files live in `__tests__` next to the code.
 - TypeScript path alias `@/` maps to `web/src/`.
-- Visual style: copy patterns from `web/src/app/(frontend)/markets/[state]/page.tsx`. Inline styles, Konative palette, sharp brutalist boxes (no rounded corners), Barlow Condensed for headlines.
-- Commit after every task using conventional commits (`feat:`, `test:`, `chore:`). The repo prefers small commits.
+- Visual style: copy patterns from `web/src/app/(frontend)/markets/[state]/page.tsx`. Inline styles, Konative palette, sharp brutalist boxes, Barlow Condensed headlines.
+- Sanity writes use `getSanityWriteClient()` (token-backed, requires `SANITY_API_TOKEN` env var). Reads use `getSanityReadClient()`.
+- Seed scripts run via `tsx`. Pattern: `npx tsx scripts/seed-audience-tribes.ts`. They must be idempotent — re-running updates the existing document by slug.
+- Commit after every task using conventional commits (`feat:`, `test:`, `chore:`).
 
 ---
 
-## Task 1: Audience content types
+## Task 1: Audience content types (the data contract)
 
 **Files:**
 - Create: `web/src/content/audiences/types.ts`
@@ -59,7 +66,8 @@
 
 /**
  * Shared types for audience landing pages under /for/<slug>.
- * Each audience config drives the AudienceLanding component.
+ * Both the Sanity schema and the AudienceLanding component conform to this shape.
+ * Newsletter and other downstream consumers (beehiiv, OG, social) can reuse the same shape.
  */
 
 export type AudienceSlug =
@@ -99,7 +107,7 @@ export type CTAVariant = {
   href: string;
 };
 
-export type Audience = {
+export type AudiencePage = {
   slug: AudienceSlug;
   /** Audience name as shown in nav and tiles, e.g. "Tribal Nations". */
   displayName: string;
@@ -109,12 +117,11 @@ export type Audience = {
   metaTitle: string;
   /** SEO description for OG + meta. */
   metaDescription: string;
+  /** Display order on the /for hub. Lower numbers come first. */
+  order: number;
   hero: {
-    /** Eyebrow above the headline, all caps small. */
     eyebrow: string;
-    /** Main headline. Will render in display font. */
     headline: string;
-    /** Subhead, one or two sentences. */
     subhead: string;
     primaryCta: CTAVariant;
   };
@@ -144,7 +151,6 @@ export type Audience = {
   };
   adjacentAudiences: {
     title: string;
-    /** Pointers to other audience pages by slug. */
     pointers: AudienceSlug[];
   };
   finalCta: {
@@ -155,32 +161,293 @@ export type Audience = {
 };
 ```
 
-- [ ] **Step 2: Sanity check the file compiles**
+- [ ] **Step 2: Compile check**
 
 Run: `cd web && npx tsc --noEmit`
-Expected: PASS (no type errors).
+Expected: PASS.
 
 - [ ] **Step 3: Commit**
 
 ```bash
 git add web/src/content/audiences/types.ts
-git commit -m "feat(audiences): shared audience content types"
+git commit -m "feat(audiences): shared AudiencePage type"
 ```
 
 ---
 
-## Task 2: Tribes audience config (the lead deliverable)
+## Task 2: Sanity schema for `audiencePage`
 
 **Files:**
-- Create: `web/src/content/audiences/tribes.ts`
+- Create: `web/src/sanity/schemaTypes/audiencePage.ts`
+- Modify: `web/src/sanity/schemaTypes/index.ts`
 
-- [ ] **Step 1: Create the tribes content file**
+- [ ] **Step 1: Create the schema file**
 
 ```typescript
-// web/src/content/audiences/tribes.ts
-import type { Audience } from "./types";
+// web/src/sanity/schemaTypes/audiencePage.ts
+import { defineArrayMember, defineField, defineType } from "sanity";
 
-export const tribes: Audience = {
+const AUDIENCE_SLUG_OPTIONS = [
+  { title: "Tribes", value: "tribes" },
+  { title: "Advisors", value: "advisors" },
+  { title: "Investors", value: "investors" },
+  { title: "Landowners", value: "landowners" },
+  { title: "Utilities", value: "utilities" },
+  { title: "Developers / EPCs", value: "developers-epcs" },
+  { title: "Operators", value: "operators" },
+];
+
+const ctaVariant = defineField({
+  name: "primaryCta",
+  title: "Primary CTA",
+  type: "object",
+  fields: [
+    defineField({ name: "label", type: "string", validation: r => r.required() }),
+    defineField({
+      name: "href",
+      type: "string",
+      description: "Anchor like #cta or a URL. Defaults to the on-page form.",
+      initialValue: "#cta",
+      validation: r => r.required(),
+    }),
+  ],
+});
+
+const capabilityBand = defineArrayMember({
+  type: "object",
+  name: "capabilityBand",
+  title: "Capability Band",
+  fields: [
+    defineField({ name: "title", type: "string", validation: r => r.required() }),
+    defineField({ name: "body", type: "text", rows: 3, validation: r => r.required() }),
+  ],
+  preview: { select: { title: "title", subtitle: "body" } },
+});
+
+const engagementStep = defineArrayMember({
+  type: "object",
+  name: "engagementStep",
+  title: "Engagement Step",
+  fields: [
+    defineField({ name: "label", type: "string", validation: r => r.required() }),
+    defineField({ name: "body", type: "text", rows: 3, validation: r => r.required() }),
+  ],
+  preview: { select: { title: "label", subtitle: "body" } },
+});
+
+const trustItem = defineArrayMember({
+  type: "object",
+  name: "trustItem",
+  title: "Trust Item",
+  fields: [
+    defineField({ name: "label", type: "string", validation: r => r.required() }),
+    defineField({ name: "body", type: "text", rows: 3, validation: r => r.required() }),
+  ],
+  preview: { select: { title: "label", subtitle: "body" } },
+});
+
+export const audiencePage = defineType({
+  name: "audiencePage",
+  title: "Audience Page",
+  type: "document",
+  fields: [
+    defineField({
+      name: "slug",
+      type: "slug",
+      options: { maxLength: 64 },
+      validation: r =>
+        r.required().custom(value => {
+          const v = value?.current;
+          if (!v) return "Slug is required";
+          const ok = AUDIENCE_SLUG_OPTIONS.some(opt => opt.value === v);
+          return ok ? true : `Slug must be one of ${AUDIENCE_SLUG_OPTIONS.map(o => o.value).join(", ")}`;
+        }),
+    }),
+    defineField({ name: "displayName", type: "string", validation: r => r.required() }),
+    defineField({ name: "tileDescription", type: "text", rows: 2, validation: r => r.required() }),
+    defineField({ name: "metaTitle", type: "string", validation: r => r.required() }),
+    defineField({ name: "metaDescription", type: "text", rows: 2, validation: r => r.required() }),
+    defineField({
+      name: "order",
+      type: "number",
+      description: "Display order on the /for hub. Lower numbers come first.",
+      initialValue: 100,
+      validation: r => r.required().min(0),
+    }),
+    defineField({
+      name: "hero",
+      type: "object",
+      validation: r => r.required(),
+      fields: [
+        defineField({ name: "eyebrow", type: "string", validation: r => r.required() }),
+        defineField({ name: "headline", type: "text", rows: 3, validation: r => r.required() }),
+        defineField({ name: "subhead", type: "text", rows: 4, validation: r => r.required() }),
+        ctaVariant,
+      ],
+    }),
+    defineField({
+      name: "whyNow",
+      type: "object",
+      validation: r => r.required(),
+      fields: [
+        defineField({ name: "title", type: "string", validation: r => r.required() }),
+        defineField({ name: "intro", type: "text", rows: 2 }),
+        defineField({
+          name: "bullets",
+          type: "array",
+          of: [{ type: "string" }],
+          validation: r => r.required().min(1),
+        }),
+      ],
+    }),
+    defineField({
+      name: "whatYouAlreadyHave",
+      type: "object",
+      validation: r => r.required(),
+      fields: [
+        defineField({ name: "title", type: "string", validation: r => r.required() }),
+        defineField({ name: "intro", type: "text", rows: 2 }),
+        defineField({
+          name: "bullets",
+          type: "array",
+          of: [{ type: "string" }],
+          validation: r => r.required().min(1),
+        }),
+      ],
+    }),
+    defineField({
+      name: "whatKonativeDoes",
+      type: "object",
+      validation: r => r.required(),
+      fields: [
+        defineField({ name: "title", type: "string", validation: r => r.required() }),
+        defineField({
+          name: "bands",
+          type: "array",
+          of: [capabilityBand],
+          validation: r => r.required().min(3),
+        }),
+      ],
+    }),
+    defineField({
+      name: "firstEngagement",
+      type: "object",
+      validation: r => r.required(),
+      fields: [
+        defineField({ name: "title", type: "string", validation: r => r.required() }),
+        defineField({ name: "intro", type: "text", rows: 2 }),
+        defineField({
+          name: "steps",
+          type: "array",
+          of: [engagementStep],
+          validation: r => r.required().min(1),
+        }),
+        defineField({ name: "pricingPosture", type: "string", validation: r => r.required() }),
+      ],
+    }),
+    defineField({
+      name: "trust",
+      type: "object",
+      validation: r => r.required(),
+      fields: [
+        defineField({ name: "title", type: "string", validation: r => r.required() }),
+        defineField({
+          name: "items",
+          type: "array",
+          of: [trustItem],
+          validation: r => r.required().min(1),
+        }),
+      ],
+    }),
+    defineField({
+      name: "adjacentAudiences",
+      type: "object",
+      validation: r => r.required(),
+      fields: [
+        defineField({ name: "title", type: "string", validation: r => r.required() }),
+        defineField({
+          name: "pointers",
+          type: "array",
+          of: [
+            { type: "string", options: { list: AUDIENCE_SLUG_OPTIONS } },
+          ],
+          description: "Other audience slugs to link to from the bottom of this page.",
+        }),
+      ],
+    }),
+    defineField({
+      name: "finalCta",
+      type: "object",
+      validation: r => r.required(),
+      fields: [
+        defineField({ name: "headline", type: "text", rows: 2, validation: r => r.required() }),
+        defineField({ name: "subhead", type: "text", rows: 3, validation: r => r.required() }),
+        ctaVariant,
+      ],
+    }),
+  ],
+  preview: {
+    select: { title: "displayName", slug: "slug.current", order: "order" },
+    prepare({ title, slug, order }) {
+      return {
+        title: title || "Untitled audience",
+        subtitle: [slug ? `/for/${slug}` : null, order != null ? `order ${order}` : null]
+          .filter(Boolean)
+          .join(" · "),
+      };
+    },
+  },
+});
+```
+
+- [ ] **Step 2: Register the schema**
+
+Open `web/src/sanity/schemaTypes/index.ts`. Add the import alongside the other imports:
+
+```typescript
+import { audiencePage } from "./audiencePage";
+```
+
+Add `audiencePage` to the `schemaTypes` export array. Find a comment that groups schemas (e.g. "Site structure" or similar) and put it there. Example placement (the exact neighboring lines may differ — preserve existing entries):
+
+```typescript
+  // Site structure
+  audiencePage,
+  page,
+  navigation,
+  // …rest unchanged
+```
+
+- [ ] **Step 3: Compile + Sanity typegen**
+
+Run:
+```bash
+cd web && npx tsc --noEmit
+cd web && npm run sanity:typegen
+```
+Expected: tsc passes; typegen completes (writes updated `extract.json` and types). If typegen errors due to missing local Sanity auth, log it and continue — typegen is not blocking.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add web/src/sanity/schemaTypes/audiencePage.ts web/src/sanity/schemaTypes/index.ts web/src/sanity/extract.json 2>/dev/null || git add web/src/sanity/schemaTypes/audiencePage.ts web/src/sanity/schemaTypes/index.ts
+git commit -m "feat(sanity): audiencePage schema"
+```
+
+---
+
+## Task 3: Tribes seed-data file
+
+**Files:**
+- Create: `web/src/content/audiences/seed-data/tribes.ts`
+
+- [ ] **Step 1: Create the seed payload**
+
+```typescript
+// web/src/content/audiences/seed-data/tribes.ts
+import type { AudiencePage } from "../types";
+
+export const tribesSeed: AudiencePage = {
   slug: "tribes",
   displayName: "Tribal Nations",
   tileDescription:
@@ -188,21 +455,18 @@ export const tribes: Audience = {
   metaTitle: "Konative for Tribal Nations | Land + Power → Data Center",
   metaDescription:
     "You already hold the two scarcest assets in the AI buildout — land and interconnect. Konative is the development partner that converts them into a financeable data center project, on your terms.",
+  order: 10,
   hero: {
     eyebrow: "For Tribal Nations and Indigenous Development Corporations",
     headline:
       "You already have what the AI buildout needs. Konative is how you put it to work.",
     subhead:
       "Land and interconnect rights are the two scarcest assets in North American data center development. Konative is the development partner that turns them into a credible, financeable project — on terms that preserve sovereignty and serve your nation.",
-    primaryCta: {
-      label: "Request a Project Readiness Review",
-      href: "#cta",
-    },
+    primaryCta: { label: "Request a Project Readiness Review", href: "#cta" },
   },
   whyNow: {
     title: "Why now",
-    intro:
-      "The window to participate as a principal — not a lessee — is closing.",
+    intro: "The window to participate as a principal — not a lessee — is closing.",
     bullets: [
       "AI infrastructure demand is pulling decades of buildout into the next 36 months.",
       "Power and interconnect capacity is the constraint nationwide; nations with both have unusual leverage.",
@@ -253,8 +517,7 @@ export const tribes: Audience = {
   },
   firstEngagement: {
     title: "What the first 60-90 days look like",
-    intro:
-      "The Project Readiness Review produces decision-grade clarity for your council and IDC.",
+    intro: "The Project Readiness Review produces decision-grade clarity for your council and IDC.",
     steps: [
       {
         label: "Discovery",
@@ -304,15 +567,12 @@ export const tribes: Audience = {
     headline: "Ready to talk through a real project?",
     subhead:
       "Tell us about the land, the energy posture, and what the council has authorized so far. We'll come back with a fit assessment and a path.",
-    primaryCta: {
-      label: "Request a Project Readiness Review",
-      href: "#cta",
-    },
+    primaryCta: { label: "Request a Project Readiness Review", href: "#cta" },
   },
 };
 ```
 
-- [ ] **Step 2: Compile check**
+- [ ] **Step 2: Compile**
 
 Run: `cd web && npx tsc --noEmit`
 Expected: PASS.
@@ -320,24 +580,24 @@ Expected: PASS.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add web/src/content/audiences/tribes.ts
-git commit -m "feat(audiences): tribal nations content"
+git add web/src/content/audiences/seed-data/tribes.ts
+git commit -m "feat(audiences): tribes seed data"
 ```
 
 ---
 
-## Task 3: Advisors audience config
+## Task 4: Advisors seed-data file
 
 **Files:**
-- Create: `web/src/content/audiences/advisors.ts`
+- Create: `web/src/content/audiences/seed-data/advisors.ts`
 
-- [ ] **Step 1: Create the advisors content file**
+- [ ] **Step 1: Create the seed payload**
 
 ```typescript
-// web/src/content/audiences/advisors.ts
-import type { Audience } from "./types";
+// web/src/content/audiences/seed-data/advisors.ts
+import type { AudiencePage } from "../types";
 
-export const advisors: Audience = {
+export const advisorsSeed: AudiencePage = {
   slug: "advisors",
   displayName: "Advisors and Introducers",
   tileDescription:
@@ -345,6 +605,7 @@ export const advisors: Audience = {
   metaTitle: "Konative for Advisors and Introducers | Ambassador Program",
   metaDescription:
     "If you work with tribal nations, investors, landowners, or utilities, you can introduce them to Konative and earn referral fees on closed engagements. Co-branded materials, tracked links, founder access.",
+  order: 20,
   hero: {
     eyebrow: "For Advisors, Consultants, and Introducers",
     headline: "You know who needs this. We make it easy to introduce them.",
@@ -441,7 +702,7 @@ export const advisors: Audience = {
 };
 ```
 
-- [ ] **Step 2: Compile check**
+- [ ] **Step 2: Compile**
 
 Run: `cd web && npx tsc --noEmit`
 Expected: PASS.
@@ -449,407 +710,465 @@ Expected: PASS.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add web/src/content/audiences/advisors.ts
-git commit -m "feat(audiences): advisors content"
+git add web/src/content/audiences/seed-data/advisors.ts
+git commit -m "feat(audiences): advisors seed data"
 ```
 
 ---
 
-## Task 4: Audience registry + helpers
+## Task 5: Seed scripts (idempotent upsert into Sanity)
 
 **Files:**
-- Create: `web/src/content/audiences/index.ts`
-- Test: `web/src/content/audiences/__tests__/registry.test.ts`
+- Create: `web/scripts/_audience-seed-helpers.ts`
+- Create: `web/scripts/seed-audience-tribes.ts`
+- Create: `web/scripts/seed-audience-advisors.ts`
+- Modify: `web/package.json`
 
-- [ ] **Step 1: Write the failing test first**
+- [ ] **Step 1: Create the shared helper**
 
 ```typescript
-// web/src/content/audiences/__tests__/registry.test.ts
-import { describe, it, expect } from "vitest";
-import { AUDIENCES, getAudience, listAudiences } from "../index";
+// web/scripts/_audience-seed-helpers.ts
+import type { AudiencePage } from "@/content/audiences/types";
+import { getSanityWriteClient } from "@/sanity/writeClient";
 
-describe("audience registry", () => {
-  it("exports tribes and advisors at minimum", () => {
-    expect(AUDIENCES.tribes).toBeDefined();
-    expect(AUDIENCES.advisors).toBeDefined();
+/**
+ * Convert an AudiencePage TypeScript value into a Sanity document body.
+ * Sanity slug fields are objects: { _type: "slug", current: "..." }.
+ */
+function toSanityDoc(page: AudiencePage): Record<string, unknown> {
+  return {
+    _type: "audiencePage",
+    slug: { _type: "slug", current: page.slug },
+    displayName: page.displayName,
+    tileDescription: page.tileDescription,
+    metaTitle: page.metaTitle,
+    metaDescription: page.metaDescription,
+    order: page.order,
+    hero: page.hero,
+    whyNow: page.whyNow,
+    whatYouAlreadyHave: page.whatYouAlreadyHave,
+    whatKonativeDoes: {
+      title: page.whatKonativeDoes.title,
+      bands: page.whatKonativeDoes.bands.map(b => ({ _type: "capabilityBand", _key: keyFor(b.title), ...b })),
+    },
+    firstEngagement: {
+      title: page.firstEngagement.title,
+      intro: page.firstEngagement.intro,
+      steps: page.firstEngagement.steps.map(s => ({ _type: "engagementStep", _key: keyFor(s.label), ...s })),
+      pricingPosture: page.firstEngagement.pricingPosture,
+    },
+    trust: {
+      title: page.trust.title,
+      items: page.trust.items.map(i => ({ _type: "trustItem", _key: keyFor(i.label), ...i })),
+    },
+    adjacentAudiences: {
+      title: page.adjacentAudiences.title,
+      pointers: page.adjacentAudiences.pointers,
+    },
+    finalCta: page.finalCta,
+  };
+}
+
+function keyFor(seed: string): string {
+  return seed
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40) || "k";
+}
+
+/**
+ * Upsert an audience page document by slug. Idempotent: re-running updates the existing doc.
+ */
+export async function upsertAudiencePage(page: AudiencePage): Promise<{ id: string; created: boolean }> {
+  const client = getSanityWriteClient();
+  const body = toSanityDoc(page);
+
+  const existing = await client.fetch<{ _id: string } | null>(
+    `*[_type == "audiencePage" && slug.current == $slug][0]{_id}`,
+    { slug: page.slug },
+  );
+
+  if (existing) {
+    await client.createOrReplace({ _id: existing._id, ...body });
+    return { id: existing._id, created: false };
+  }
+  const created = await client.create(body);
+  return { id: created._id, created: true };
+}
+```
+
+- [ ] **Step 2: Create the tribes seed script**
+
+```typescript
+// web/scripts/seed-audience-tribes.ts
+import { tribesSeed } from "@/content/audiences/seed-data/tribes";
+import { upsertAudiencePage } from "./_audience-seed-helpers";
+
+async function main() {
+  const result = await upsertAudiencePage(tribesSeed);
+  console.log(`[seed] tribes ${result.created ? "created" : "updated"}: ${result.id}`);
+}
+
+main().catch(err => {
+  console.error("[seed] tribes failed:", err);
+  process.exit(1);
+});
+```
+
+- [ ] **Step 3: Create the advisors seed script**
+
+```typescript
+// web/scripts/seed-audience-advisors.ts
+import { advisorsSeed } from "@/content/audiences/seed-data/advisors";
+import { upsertAudiencePage } from "./_audience-seed-helpers";
+
+async function main() {
+  const result = await upsertAudiencePage(advisorsSeed);
+  console.log(`[seed] advisors ${result.created ? "created" : "updated"}: ${result.id}`);
+}
+
+main().catch(err => {
+  console.error("[seed] advisors failed:", err);
+  process.exit(1);
+});
+```
+
+- [ ] **Step 4: Add npm scripts**
+
+Open `web/package.json`. In the `scripts` block, add:
+
+```json
+"seed:audience:tribes": "tsx scripts/seed-audience-tribes.ts",
+"seed:audience:advisors": "tsx scripts/seed-audience-advisors.ts"
+```
+
+(Place them next to the other `seed:` / `etl:` scripts; preserve existing entries.)
+
+- [ ] **Step 5: Run the seeds**
+
+Make sure `SANITY_API_TOKEN` is in `web/.env.local`. Then:
+
+```bash
+cd web && npm run seed:audience:tribes
+cd web && npm run seed:audience:advisors
+```
+
+Expected output:
+- `[seed] tribes created: <id>` (or `updated: <id>` on rerun)
+- `[seed] advisors created: <id>`
+
+Verify in Sanity Studio (`http://localhost:3005/studio` once dev is running) that two `audiencePage` documents exist.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add web/scripts/_audience-seed-helpers.ts web/scripts/seed-audience-tribes.ts web/scripts/seed-audience-advisors.ts web/package.json
+git commit -m "feat(audiences): idempotent Sanity seed scripts for tribes + advisors"
+```
+
+---
+
+## Task 6: GROQ fetcher with tests
+
+**Files:**
+- Create: `web/src/lib/audiences/fetch.ts`
+- Create: `web/src/lib/audiences/__tests__/fetch.test.ts`
+
+- [ ] **Step 1: Write the failing test**
+
+```typescript
+// web/src/lib/audiences/__tests__/fetch.test.ts
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { AudiencePage } from "@/content/audiences/types";
+
+const fetchMock = vi.fn();
+
+vi.mock("@/sanity/readClient", () => ({
+  getSanityReadClient: () => ({ fetch: fetchMock }),
+}));
+
+const sample: AudiencePage = {
+  slug: "tribes",
+  displayName: "Tribal Nations",
+  tileDescription: "tile",
+  metaTitle: "title",
+  metaDescription: "meta",
+  order: 10,
+  hero: {
+    eyebrow: "eyebrow",
+    headline: "Headline",
+    subhead: "Subhead",
+    primaryCta: { label: "CTA", href: "#cta" },
+  },
+  whyNow: { title: "Why", bullets: ["a"] },
+  whatYouAlreadyHave: { title: "Have", bullets: ["b"] },
+  whatKonativeDoes: { title: "Does", bands: [{ title: "Path", body: "x" }, { title: "Power", body: "y" }, { title: "Cap", body: "z" }] },
+  firstEngagement: {
+    title: "First",
+    steps: [{ label: "Discovery", body: "x" }],
+    pricingPosture: "Engagement-based.",
+  },
+  trust: { title: "Why us", items: [{ label: "Geo", body: "x" }] },
+  adjacentAudiences: { title: "Other?", pointers: ["advisors"] },
+  finalCta: { headline: "Final", subhead: "Sub", primaryCta: { label: "Submit", href: "#cta" } },
+};
+
+describe("getAudiencePage", () => {
+  beforeEach(() => {
+    fetchMock.mockReset();
   });
 
-  it("each audience config has required top-level shape", () => {
-    for (const [slug, audience] of Object.entries(AUDIENCES)) {
-      expect(audience.slug, `${slug} slug field`).toBe(slug);
-      expect(audience.displayName, `${slug} displayName`).toBeTruthy();
-      expect(audience.tileDescription, `${slug} tileDescription`).toBeTruthy();
-      expect(audience.metaTitle, `${slug} metaTitle`).toBeTruthy();
-      expect(audience.metaDescription, `${slug} metaDescription`).toBeTruthy();
-      expect(audience.hero.headline, `${slug} hero headline`).toBeTruthy();
-      expect(audience.hero.primaryCta.label, `${slug} primaryCta label`).toBeTruthy();
-      expect(audience.whyNow.bullets.length, `${slug} whyNow bullets`).toBeGreaterThan(0);
-      expect(audience.whatYouAlreadyHave.bullets.length, `${slug} alreadyHave bullets`).toBeGreaterThan(0);
-      expect(audience.whatKonativeDoes.bands.length, `${slug} bands`).toBeGreaterThanOrEqual(3);
-      expect(audience.firstEngagement.steps.length, `${slug} steps`).toBeGreaterThan(0);
-      expect(audience.trust.items.length, `${slug} trust items`).toBeGreaterThan(0);
-      expect(audience.finalCta.primaryCta.label, `${slug} finalCta label`).toBeTruthy();
-    }
+  it("returns the matching audience page when found", async () => {
+    fetchMock.mockResolvedValue(sample);
+    const { getAudiencePage } = await import("../fetch");
+    const result = await getAudiencePage("tribes");
+    expect(result).toEqual(sample);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const [query, params] = fetchMock.mock.calls[0];
+    expect(typeof query).toBe("string");
+    expect(query).toContain('_type == "audiencePage"');
+    expect(params).toEqual({ slug: "tribes" });
   });
 
-  it("getAudience returns the audience for a known slug", () => {
-    expect(getAudience("tribes")?.displayName).toBe("Tribal Nations");
+  it("returns null when no document exists for the slug", async () => {
+    fetchMock.mockResolvedValue(null);
+    const { getAudiencePage } = await import("../fetch");
+    const result = await getAudiencePage("does-not-exist");
+    expect(result).toBeNull();
+  });
+});
+
+describe("listAudiencePages", () => {
+  beforeEach(() => {
+    fetchMock.mockReset();
   });
 
-  it("getAudience returns undefined for an unknown slug", () => {
-    expect(getAudience("nonexistent" as never)).toBeUndefined();
-  });
-
-  it("listAudiences returns audiences in insertion order", () => {
-    const list = listAudiences();
-    expect(list[0].slug).toBe("tribes");
-    expect(list.map(a => a.slug)).toContain("advisors");
-  });
-
-  it("adjacentAudiences pointers reference real registered audiences", () => {
-    for (const [slug, audience] of Object.entries(AUDIENCES)) {
-      for (const pointer of audience.adjacentAudiences.pointers) {
-        if (AUDIENCES[pointer as keyof typeof AUDIENCES]) continue;
-        // Pointer references an audience not yet registered (e.g. landowners in Plan B).
-        // This is allowed; the renderer will skip unregistered pointers.
-        // We just record that the pointer is structurally a string.
-        expect(typeof pointer, `${slug} pointer`).toBe("string");
-      }
-    }
+  it("returns all audience pages ordered by order asc, then displayName", async () => {
+    fetchMock.mockResolvedValue([sample, { ...sample, slug: "advisors", order: 20, displayName: "Advisors" }]);
+    const { listAudiencePages } = await import("../fetch");
+    const all = await listAudiencePages();
+    expect(all).toHaveLength(2);
+    expect(all[0].slug).toBe("tribes");
+    const [query] = fetchMock.mock.calls[0];
+    expect(query).toContain("order(order asc, displayName asc)");
   });
 });
 ```
 
-- [ ] **Step 2: Run the test to confirm it fails**
+- [ ] **Step 2: Run the test, confirm it fails**
 
-Run: `cd web && npm test -- src/content/audiences`
-Expected: FAIL — module `../index` not found.
+Run: `cd web && npm test -- src/lib/audiences`
+Expected: FAIL — module `../fetch` not found.
 
-- [ ] **Step 3: Write the registry**
+- [ ] **Step 3: Implement the fetcher**
 
 ```typescript
-// web/src/content/audiences/index.ts
-import type { Audience, AudienceSlug } from "./types";
-import { tribes } from "./tribes";
-import { advisors } from "./advisors";
+// web/src/lib/audiences/fetch.ts
+import type { AudiencePage } from "@/content/audiences/types";
+import { getSanityReadClient } from "@/sanity/readClient";
 
-/**
- * Registry of all audience landing pages. Insertion order = display order
- * on the /for hub. Add new audiences here.
- */
-export const AUDIENCES = {
-  tribes,
-  advisors,
-} as const satisfies Partial<Record<AudienceSlug, Audience>>;
+const AUDIENCE_PROJECTION = `{
+  "slug": slug.current,
+  displayName,
+  tileDescription,
+  metaTitle,
+  metaDescription,
+  order,
+  hero,
+  whyNow,
+  whatYouAlreadyHave,
+  whatKonativeDoes,
+  firstEngagement,
+  trust,
+  adjacentAudiences,
+  finalCta
+}`;
 
-export type RegisteredAudienceSlug = keyof typeof AUDIENCES;
-
-export function getAudience(slug: string): Audience | undefined {
-  return (AUDIENCES as Record<string, Audience>)[slug];
+export async function getAudiencePage(slug: string): Promise<AudiencePage | null> {
+  const client = getSanityReadClient();
+  const result = await client.fetch<AudiencePage | null>(
+    `*[_type == "audiencePage" && slug.current == $slug][0]${AUDIENCE_PROJECTION}`,
+    { slug },
+  );
+  return result ?? null;
 }
 
-export function listAudiences(): Audience[] {
-  return Object.values(AUDIENCES);
+export async function listAudiencePages(): Promise<AudiencePage[]> {
+  const client = getSanityReadClient();
+  const result = await client.fetch<AudiencePage[]>(
+    `*[_type == "audiencePage"] | order(order asc, displayName asc)${AUDIENCE_PROJECTION}`,
+  );
+  return result ?? [];
 }
-
-export type { Audience, AudienceSlug } from "./types";
 ```
 
-- [ ] **Step 4: Run the test to confirm it passes**
+- [ ] **Step 4: Run the test, confirm it passes**
 
-Run: `cd web && npm test -- src/content/audiences`
+Run: `cd web && npm test -- src/lib/audiences`
 Expected: PASS.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add web/src/content/audiences/index.ts web/src/content/audiences/__tests__/registry.test.ts
-git commit -m "feat(audiences): registry + listAudiences/getAudience helpers"
+git add web/src/lib/audiences/fetch.ts web/src/lib/audiences/__tests__/fetch.test.ts
+git commit -m "feat(audiences): GROQ fetcher (getAudiencePage + listAudiencePages)"
 ```
 
 ---
 
-## Task 5: AudienceLanding component (shared skeleton)
+## Task 7: Extend `contactSchema` to accept `audience`
 
 **Files:**
-- Create: `web/src/components/audience/AudienceLanding.tsx`
-- Test: `web/src/components/audience/__tests__/AudienceLanding.test.tsx`
+- Modify: `web/src/lib/forms/schemas/contact.ts`
+- Modify: `web/src/lib/forms/__tests__/submit.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [ ] **Step 1: Add the failing test**
+
+Append to `web/src/lib/forms/__tests__/submit.test.ts`:
 
 ```typescript
-// web/src/components/audience/__tests__/AudienceLanding.test.tsx
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { AudienceLanding } from "../AudienceLanding";
-import { tribes } from "@/content/audiences/tribes";
+import { contactSchema } from "@/lib/forms/schemas/contact";
 
-describe("AudienceLanding", () => {
-  it("renders the audience hero headline", () => {
-    render(<AudienceLanding audience={tribes} />);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      tribes.hero.headline,
-    );
-  });
-
-  it("renders all capability bands", () => {
-    render(<AudienceLanding audience={tribes} />);
-    for (const band of tribes.whatKonativeDoes.bands) {
-      expect(screen.getByText(band.title)).toBeInTheDocument();
+describe("contactSchema audience field", () => {
+  it("preserves a known audience slug on the parsed payload", () => {
+    const parsed = contactSchema.safeParse({
+      name: "Jane",
+      email: "jane@example.com",
+      organization: "Test",
+      audience: "tribes",
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data.audience).toBe("tribes");
     }
   });
 
-  it("renders the primary CTA label twice (top and bottom)", () => {
-    render(<AudienceLanding audience={tribes} />);
-    const ctas = screen.getAllByText(tribes.hero.primaryCta.label);
-    expect(ctas.length).toBeGreaterThanOrEqual(2);
-  });
-
-  it("renders engagement steps", () => {
-    render(<AudienceLanding audience={tribes} />);
-    for (const step of tribes.firstEngagement.steps) {
-      expect(screen.getByText(step.label)).toBeInTheDocument();
-    }
-  });
-
-  it("renders trust items", () => {
-    render(<AudienceLanding audience={tribes} />);
-    for (const item of tribes.trust.items) {
-      expect(screen.getByText(item.label)).toBeInTheDocument();
-    }
+  it("treats audience as optional", () => {
+    const parsed = contactSchema.safeParse({
+      name: "Jane",
+      email: "jane@example.com",
+      organization: "Test",
+    });
+    expect(parsed.success).toBe(true);
   });
 });
 ```
 
-- [ ] **Step 2: Confirm the test setup supports React Testing Library**
+- [ ] **Step 2: Run the test, confirm it fails**
 
-Run: `cd web && grep -E "@testing-library/react|jsdom" package.json`
-Expected: both present. If not, install:
+Run: `cd web && npm test -- submit`
+Expected: FAIL — Zod strips unknown keys, so `parsed.data.audience` is `undefined` and the first test fails.
 
-```bash
-cd web && npm i -D @testing-library/react @testing-library/jest-dom jsdom
-```
-
-Then verify `web/vitest.config.ts` (or `vite.config.ts`) has `test.environment = "jsdom"`. Add it if missing:
+- [ ] **Step 3: Update the schema**
 
 ```typescript
-// in defineConfig({ test: { ... } })
-environment: "jsdom",
+// web/src/lib/forms/schemas/contact.ts
+import { z } from "zod";
+
+export const contactSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Valid email required"),
+  organization: z.string().min(1, "Organization is required"),
+  role: z.string().optional(),
+  projectType: z.string().optional(),
+  projectStage: z.string().optional(),
+  message: z.string().optional(),
+  referralSource: z.string().optional(),
+  audience: z.string().optional(),
+});
+
+export type ContactFormData = z.infer<typeof contactSchema>;
 ```
 
-Re-run: `cd web && npm test -- AudienceLanding`
-Expected: FAIL — `AudienceLanding` not found.
+- [ ] **Step 4: Re-run the test**
 
-- [ ] **Step 3: Implement the component**
-
-```tsx
-// web/src/components/audience/AudienceLanding.tsx
-import Link from "next/link";
-import type { Audience } from "@/content/audiences/types";
-import { getAudience } from "@/content/audiences";
-import { AudienceCTAForm } from "./AudienceCTAForm";
-
-const NAVY = "#08142D";
-const ORANGE = "#E07B39";
-const TEXT_DIM = "rgba(255,255,255,0.55)";
-const TEXT_FAINT = "rgba(255,255,255,0.35)";
-const BORDER = "rgba(255,255,255,0.07)";
-const DISPLAY_FONT = '"Barlow Condensed", sans-serif';
-const BODY_FONT = "Inter, sans-serif";
-
-export function AudienceLanding({ audience }: { audience: Audience }) {
-  return (
-    <div style={{ background: NAVY, minHeight: "100vh", fontFamily: BODY_FONT, color: "#fff" }}>
-      {/* Hero */}
-      <section style={{ paddingTop: 96, paddingBottom: 64, paddingLeft: 48, paddingRight: 48, borderBottom: `1px solid ${BORDER}` }}>
-        <div style={{ maxWidth: 1080, margin: "0 auto" }}>
-          <div style={{ fontFamily: BODY_FONT, fontSize: 11, color: ORANGE, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 24 }}>
-            {audience.hero.eyebrow}
-          </div>
-          <h1 style={{ fontFamily: DISPLAY_FONT, fontWeight: 800, fontSize: "clamp(40px, 5vw, 72px)", lineHeight: 0.95, textTransform: "uppercase", margin: "0 0 24px" }}>
-            {audience.hero.headline}
-          </h1>
-          <p style={{ fontFamily: BODY_FONT, fontSize: 17, lineHeight: 1.6, color: TEXT_DIM, maxWidth: 760, margin: "0 0 32px" }}>
-            {audience.hero.subhead}
-          </p>
-          <CTAButton cta={audience.hero.primaryCta} />
-        </div>
-      </section>
-
-      <SectionBlock title={audience.whyNow.title} intro={audience.whyNow.intro}>
-        <BulletList bullets={audience.whyNow.bullets} />
-      </SectionBlock>
-
-      <SectionBlock title={audience.whatYouAlreadyHave.title} intro={audience.whatYouAlreadyHave.intro}>
-        <BulletList bullets={audience.whatYouAlreadyHave.bullets} />
-      </SectionBlock>
-
-      <SectionBlock title={audience.whatKonativeDoes.title}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-          {audience.whatKonativeDoes.bands.map(band => (
-            <div key={band.title} style={{ border: `1px solid ${BORDER}`, padding: "20px 22px", background: "rgba(255,255,255,0.02)" }}>
-              <div style={{ fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 18, textTransform: "uppercase", marginBottom: 10 }}>{band.title}</div>
-              <p style={{ fontFamily: BODY_FONT, fontSize: 14, lineHeight: 1.55, color: TEXT_DIM, margin: 0 }}>{band.body}</p>
-            </div>
-          ))}
-        </div>
-      </SectionBlock>
-
-      <SectionBlock title={audience.firstEngagement.title} intro={audience.firstEngagement.intro}>
-        <ol style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 16 }}>
-          {audience.firstEngagement.steps.map((step, i) => (
-            <li key={step.label} style={{ display: "grid", gridTemplateColumns: "48px 1fr", gap: 16, alignItems: "start" }}>
-              <span style={{ fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 28, color: ORANGE, lineHeight: 1 }}>{String(i + 1).padStart(2, "0")}</span>
-              <div>
-                <div style={{ fontFamily: BODY_FONT, fontSize: 11, fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: "#fff", marginBottom: 6 }}>{step.label}</div>
-                <p style={{ fontFamily: BODY_FONT, fontSize: 14, lineHeight: 1.55, color: TEXT_DIM, margin: 0 }}>{step.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <p style={{ fontFamily: BODY_FONT, fontSize: 12, color: TEXT_FAINT, marginTop: 24, marginBottom: 0, letterSpacing: "0.05em" }}>
-          {audience.firstEngagement.pricingPosture}
-        </p>
-      </SectionBlock>
-
-      <SectionBlock title={audience.trust.title}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-          {audience.trust.items.map(item => (
-            <div key={item.label}>
-              <div style={{ fontFamily: BODY_FONT, fontSize: 11, fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: ORANGE, marginBottom: 8 }}>{item.label}</div>
-              <p style={{ fontFamily: BODY_FONT, fontSize: 14, lineHeight: 1.55, color: TEXT_DIM, margin: 0 }}>{item.body}</p>
-            </div>
-          ))}
-        </div>
-      </SectionBlock>
-
-      {/* Adjacent audiences */}
-      <SectionBlock title={audience.adjacentAudiences.title}>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-          {audience.adjacentAudiences.pointers.map(slug => {
-            const target = getAudience(slug);
-            if (!target) return null;
-            return (
-              <Link key={slug} href={`/for/${slug}`} style={{ fontFamily: BODY_FONT, fontSize: 13, fontWeight: 500, color: "#fff", border: `1px solid ${ORANGE}`, padding: "10px 16px", textDecoration: "none", letterSpacing: "0.02em" }}>
-                {target.displayName} →
-              </Link>
-            );
-          })}
-        </div>
-      </SectionBlock>
-
-      {/* Final CTA + form */}
-      <section id="cta" style={{ borderTop: `1px solid ${BORDER}`, padding: "64px 48px 96px" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "left" }}>
-          <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 800, fontSize: "clamp(32px, 4vw, 52px)", lineHeight: 0.95, textTransform: "uppercase", margin: "0 0 16px" }}>
-            {audience.finalCta.headline}
-          </h2>
-          <p style={{ fontFamily: BODY_FONT, fontSize: 16, lineHeight: 1.6, color: TEXT_DIM, margin: "0 0 32px" }}>
-            {audience.finalCta.subhead}
-          </p>
-          <AudienceCTAForm audienceSlug={audience.slug} submitLabel={audience.finalCta.primaryCta.label} />
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function CTAButton({ cta }: { cta: { label: string; href: string } }) {
-  return (
-    <a
-      href={cta.href}
-      style={{
-        display: "inline-block",
-        padding: "14px 24px",
-        background: ORANGE,
-        color: "#fff",
-        fontFamily: BODY_FONT,
-        fontWeight: 600,
-        fontSize: 13,
-        textTransform: "uppercase",
-        letterSpacing: "0.1em",
-        textDecoration: "none",
-      }}
-    >
-      {cta.label} →
-    </a>
-  );
-}
-
-function SectionBlock({ title, intro, children }: { title: string; intro?: string; children: React.ReactNode }) {
-  return (
-    <section style={{ padding: "64px 48px", borderBottom: `1px solid ${BORDER}` }}>
-      <div style={{ maxWidth: 1080, margin: "0 auto" }}>
-        <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 800, fontSize: "clamp(28px, 3.5vw, 44px)", lineHeight: 1, textTransform: "uppercase", margin: "0 0 16px" }}>
-          {title}
-        </h2>
-        {intro && (
-          <p style={{ fontFamily: BODY_FONT, fontSize: 15, lineHeight: 1.6, color: TEXT_DIM, maxWidth: 760, margin: "0 0 32px" }}>{intro}</p>
-        )}
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function BulletList({ bullets }: { bullets: string[] }) {
-  return (
-    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-      {bullets.map((b, i) => (
-        <li key={i} style={{ display: "grid", gridTemplateColumns: "12px 1fr", gap: 12, alignItems: "start" }}>
-          <span aria-hidden style={{ display: "inline-block", width: 8, height: 8, background: ORANGE, marginTop: 8 }} />
-          <span style={{ fontFamily: BODY_FONT, fontSize: 15, lineHeight: 1.55, color: TEXT_DIM }}>{b}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-```
-
-- [ ] **Step 4: Run the test, expect failure due to missing AudienceCTAForm import**
-
-Run: `cd web && npm test -- AudienceLanding`
-Expected: FAIL — `AudienceCTAForm` not found. This is fine; Task 6 creates it.
-
-- [ ] **Step 5: Stub `AudienceCTAForm` so this test passes**
-
-Create a placeholder file (it gets a real implementation in Task 6):
-
-```tsx
-// web/src/components/audience/AudienceCTAForm.tsx
-"use client";
-import { useState } from "react";
-
-export function AudienceCTAForm({ audienceSlug, submitLabel }: { audienceSlug: string; submitLabel: string }) {
-  const [name, setName] = useState("");
-  return (
-    <form data-audience={audienceSlug}>
-      <input name="name" value={name} onChange={e => setName(e.target.value)} placeholder="Name" />
-      <button type="submit">{submitLabel}</button>
-    </form>
-  );
-}
-```
-
-- [ ] **Step 6: Run the test, confirm it passes**
-
-Run: `cd web && npm test -- AudienceLanding`
+Run: `cd web && npm test -- submit`
 Expected: PASS.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
-git add web/src/components/audience/AudienceLanding.tsx web/src/components/audience/AudienceCTAForm.tsx web/src/components/audience/__tests__/AudienceLanding.test.tsx
-git commit -m "feat(audiences): AudienceLanding shared skeleton + form stub"
+git add web/src/lib/forms/schemas/contact.ts web/src/lib/forms/__tests__/submit.test.ts
+git commit -m "feat(forms): accept optional audience field on contact submissions"
 ```
 
 ---
 
-## Task 6: AudienceCTAForm — real implementation
+## Task 8: Extend Sanity `contactInquiry` schema for `audience`
 
 **Files:**
-- Modify: `web/src/components/audience/AudienceCTAForm.tsx`
-- Test: `web/src/components/audience/__tests__/AudienceCTAForm.test.tsx`
+- Modify: `web/src/sanity/schemaTypes/contactInquiry.ts`
+
+- [ ] **Step 1: Add the audience field**
+
+```typescript
+// web/src/sanity/schemaTypes/contactInquiry.ts
+import { defineField, defineType } from "sanity";
+
+export const contactInquiry = defineType({
+  name: "contactInquiry",
+  title: "Contact Inquiry",
+  type: "document",
+  fields: [
+    defineField({ name: "name", type: "string", validation: r => r.required() }),
+    defineField({ name: "email", type: "string", validation: r => r.required().email() }),
+    defineField({ name: "organization", type: "string", validation: r => r.required() }),
+    defineField({ name: "role", type: "string" }),
+    defineField({ name: "projectType", type: "string" }),
+    defineField({ name: "projectStage", type: "string" }),
+    defineField({ name: "message", type: "text" }),
+    defineField({ name: "referralSource", type: "string" }),
+    defineField({
+      name: "audience",
+      type: "string",
+      title: "Source audience page",
+      description: "Set when the inquiry came from a /for/<slug> page. Empty for the generic /contact form.",
+      options: {
+        list: [
+          { title: "Tribes", value: "tribes" },
+          { title: "Advisors", value: "advisors" },
+          { title: "Investors", value: "investors" },
+          { title: "Landowners", value: "landowners" },
+          { title: "Utilities", value: "utilities" },
+          { title: "Developers / EPCs", value: "developers-epcs" },
+          { title: "Operators", value: "operators" },
+        ],
+      },
+    }),
+    defineField({ name: "status", type: "string", options: { list: ["new", "contacted", "qualified", "dead"] }, initialValue: "new" }),
+    defineField({ name: "utmSource", type: "string" }),
+    defineField({ name: "submittedAt", type: "datetime" }),
+  ],
+  preview: {
+    select: { name: "name", org: "organization", audience: "audience", status: "status" },
+    prepare({ name, org, audience, status }: Record<string, string>) {
+      const tail = [audience ? `[${audience}]` : null, org || null, status || "new"].filter(Boolean).join(" · ");
+      return { title: name || "Unknown", subtitle: tail };
+    },
+  },
+});
+```
+
+- [ ] **Step 2: Regenerate Sanity types**
+
+Run: `cd web && npm run sanity:typegen`
+Expected: completes without error (or logs a non-blocking auth warning).
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add web/src/sanity/schemaTypes/contactInquiry.ts web/src/sanity/extract.json 2>/dev/null || git add web/src/sanity/schemaTypes/contactInquiry.ts
+git commit -m "feat(sanity): add audience field to contactInquiry"
+```
+
+---
+
+## Task 9: AudienceCTAForm (client form, posts to /api/contact)
+
+**Files:**
+- Create: `web/src/components/audience/AudienceCTAForm.tsx`
+- Create: `web/src/components/audience/__tests__/AudienceCTAForm.test.tsx`
 
 - [ ] **Step 1: Write the failing test**
 
@@ -898,12 +1217,24 @@ describe("AudienceCTAForm", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to confirm it fails**
+- [ ] **Step 2: Confirm RTL+jsdom are available; install if missing**
+
+```bash
+cd web && grep -E "@testing-library/react|jsdom" package.json
+```
+If both are not present:
+```bash
+cd web && npm i -D @testing-library/react @testing-library/jest-dom jsdom
+```
+
+Verify `web/vitest.config.ts` (or `vite.config.ts`) sets `test.environment = "jsdom"`. If missing, add it.
+
+- [ ] **Step 3: Run the test to confirm failure**
 
 Run: `cd web && npm test -- AudienceCTAForm`
-Expected: FAIL — labels/inputs not present.
+Expected: FAIL — `AudienceCTAForm` not found.
 
-- [ ] **Step 3: Implement the form**
+- [ ] **Step 4: Implement the form**
 
 ```tsx
 // web/src/components/audience/AudienceCTAForm.tsx
@@ -956,7 +1287,7 @@ export function AudienceCTAForm({ audienceSlug, submitLabel }: { audienceSlug: s
   if (status === "success") {
     return (
       <p style={{ fontFamily: BODY_FONT, fontSize: 15, color: "#fff" }}>
-        Thanks. We'll be in touch within one business day.
+        Thanks. We&apos;ll be in touch within one business day.
       </p>
     );
   }
@@ -1030,173 +1361,272 @@ function Field({
 }
 ```
 
-- [ ] **Step 4: Run the test, confirm it passes**
+- [ ] **Step 5: Run the test, confirm pass**
 
 Run: `cd web && npm test -- AudienceCTAForm`
-Expected: PASS.
-
-- [ ] **Step 5: Re-run the AudienceLanding test to confirm no regression**
-
-Run: `cd web && npm test -- AudienceLanding`
 Expected: PASS.
 
 - [ ] **Step 6: Commit**
 
 ```bash
 git add web/src/components/audience/AudienceCTAForm.tsx web/src/components/audience/__tests__/AudienceCTAForm.test.tsx
-git commit -m "feat(audiences): wire AudienceCTAForm to /api/contact with audience field"
+git commit -m "feat(audiences): AudienceCTAForm posts to /api/contact with audience field"
 ```
 
 ---
 
-## Task 7: Extend `contactSchema` to accept `audience`
+## Task 10: AudienceLanding component (shared skeleton)
 
 **Files:**
-- Modify: `web/src/lib/forms/schemas/contact.ts`
-- Test: `web/src/lib/forms/__tests__/submit.test.ts`
+- Create: `web/src/components/audience/AudienceLanding.tsx`
+- Create: `web/src/components/audience/__tests__/AudienceLanding.test.tsx`
 
-- [ ] **Step 1: Add a failing test for the audience field round-trip**
-
-Append to `web/src/lib/forms/__tests__/submit.test.ts`:
+- [ ] **Step 1: Write the failing test**
 
 ```typescript
-import { contactSchema } from "@/lib/forms/schemas/contact";
+// web/src/components/audience/__tests__/AudienceLanding.test.tsx
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { AudienceLanding } from "../AudienceLanding";
+import { tribesSeed } from "@/content/audiences/seed-data/tribes";
 
-describe("contactSchema audience field", () => {
-  it("preserves a known audience slug on the parsed payload", () => {
-    const parsed = contactSchema.safeParse({
-      name: "Jane",
-      email: "jane@example.com",
-      organization: "Test",
-      audience: "tribes",
-    });
-    expect(parsed.success).toBe(true);
-    if (parsed.success) {
-      expect(parsed.data.audience).toBe("tribes");
+describe("AudienceLanding", () => {
+  it("renders the audience hero headline", () => {
+    render(<AudienceLanding audience={tribesSeed} adjacentTitles={{}} />);
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(tribesSeed.hero.headline);
+  });
+
+  it("renders all capability bands", () => {
+    render(<AudienceLanding audience={tribesSeed} adjacentTitles={{}} />);
+    for (const band of tribesSeed.whatKonativeDoes.bands) {
+      expect(screen.getByText(band.title)).toBeInTheDocument();
     }
   });
 
-  it("treats audience as optional", () => {
-    const parsed = contactSchema.safeParse({
-      name: "Jane",
-      email: "jane@example.com",
-      organization: "Test",
-    });
-    expect(parsed.success).toBe(true);
+  it("renders the primary CTA label twice (top and bottom)", () => {
+    render(<AudienceLanding audience={tribesSeed} adjacentTitles={{}} />);
+    const ctas = screen.getAllByText(new RegExp(tribesSeed.hero.primaryCta.label, "i"));
+    expect(ctas.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("renders engagement steps", () => {
+    render(<AudienceLanding audience={tribesSeed} adjacentTitles={{}} />);
+    for (const step of tribesSeed.firstEngagement.steps) {
+      expect(screen.getByText(step.label)).toBeInTheDocument();
+    }
+  });
+
+  it("renders trust items", () => {
+    render(<AudienceLanding audience={tribesSeed} adjacentTitles={{}} />);
+    for (const item of tribesSeed.trust.items) {
+      expect(screen.getByText(item.label)).toBeInTheDocument();
+    }
+  });
+
+  it("only renders adjacent-audience pointers that have a known title", () => {
+    render(<AudienceLanding audience={tribesSeed} adjacentTitles={{ advisors: "Advisors" }} />);
+    expect(screen.getByText(/Advisors\s*→/)).toBeInTheDocument();
+    expect(screen.queryByText(/investors\s*→/i)).not.toBeInTheDocument();
   });
 });
 ```
 
-- [ ] **Step 2: Run the test, confirm it fails**
+- [ ] **Step 2: Run, confirm failure**
 
-Run: `cd web && npm test -- submit`
-Expected: FAIL — Zod strips unknown keys by default, so `parsed.data.audience` is `undefined` and the first test fails on `expect(parsed.data.audience).toBe("tribes")`.
+Run: `cd web && npm test -- AudienceLanding`
+Expected: FAIL — module not found.
 
-- [ ] **Step 3: Update the schema**
+- [ ] **Step 3: Implement the component**
 
-```typescript
-// web/src/lib/forms/schemas/contact.ts
-import { z } from "zod";
+```tsx
+// web/src/components/audience/AudienceLanding.tsx
+import Link from "next/link";
+import type { AudiencePage, AudienceSlug } from "@/content/audiences/types";
+import { AudienceCTAForm } from "./AudienceCTAForm";
 
-export const contactSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Valid email required"),
-  organization: z.string().min(1, "Organization is required"),
-  role: z.string().optional(),
-  projectType: z.string().optional(),
-  projectStage: z.string().optional(),
-  message: z.string().optional(),
-  referralSource: z.string().optional(),
-  audience: z.string().optional(),
-});
+const NAVY = "#08142D";
+const ORANGE = "#E07B39";
+const TEXT_DIM = "rgba(255,255,255,0.55)";
+const TEXT_FAINT = "rgba(255,255,255,0.35)";
+const BORDER = "rgba(255,255,255,0.07)";
+const DISPLAY_FONT = '"Barlow Condensed", sans-serif';
+const BODY_FONT = "Inter, sans-serif";
 
-export type ContactFormData = z.infer<typeof contactSchema>;
+export type AdjacentTitleMap = Partial<Record<AudienceSlug, string>>;
+
+export function AudienceLanding({
+  audience,
+  adjacentTitles,
+}: {
+  audience: AudiencePage;
+  /** Map of slug -> displayName for adjacent-audience pointers known to exist. Pointers not in this map are skipped. */
+  adjacentTitles: AdjacentTitleMap;
+}) {
+  return (
+    <div style={{ background: NAVY, minHeight: "100vh", fontFamily: BODY_FONT, color: "#fff" }}>
+      {/* Hero */}
+      <section style={{ paddingTop: 96, paddingBottom: 64, paddingLeft: 48, paddingRight: 48, borderBottom: `1px solid ${BORDER}` }}>
+        <div style={{ maxWidth: 1080, margin: "0 auto" }}>
+          <div style={{ fontFamily: BODY_FONT, fontSize: 11, color: ORANGE, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 24 }}>
+            {audience.hero.eyebrow}
+          </div>
+          <h1 style={{ fontFamily: DISPLAY_FONT, fontWeight: 800, fontSize: "clamp(40px, 5vw, 72px)", lineHeight: 0.95, textTransform: "uppercase", margin: "0 0 24px" }}>
+            {audience.hero.headline}
+          </h1>
+          <p style={{ fontFamily: BODY_FONT, fontSize: 17, lineHeight: 1.6, color: TEXT_DIM, maxWidth: 760, margin: "0 0 32px" }}>
+            {audience.hero.subhead}
+          </p>
+          <CTAButton cta={audience.hero.primaryCta} />
+        </div>
+      </section>
+
+      <SectionBlock title={audience.whyNow.title} intro={audience.whyNow.intro}>
+        <BulletList bullets={audience.whyNow.bullets} />
+      </SectionBlock>
+
+      <SectionBlock title={audience.whatYouAlreadyHave.title} intro={audience.whatYouAlreadyHave.intro}>
+        <BulletList bullets={audience.whatYouAlreadyHave.bullets} />
+      </SectionBlock>
+
+      <SectionBlock title={audience.whatKonativeDoes.title}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+          {audience.whatKonativeDoes.bands.map(band => (
+            <div key={band.title} style={{ border: `1px solid ${BORDER}`, padding: "20px 22px", background: "rgba(255,255,255,0.02)" }}>
+              <div style={{ fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 18, textTransform: "uppercase", marginBottom: 10 }}>{band.title}</div>
+              <p style={{ fontFamily: BODY_FONT, fontSize: 14, lineHeight: 1.55, color: TEXT_DIM, margin: 0 }}>{band.body}</p>
+            </div>
+          ))}
+        </div>
+      </SectionBlock>
+
+      <SectionBlock title={audience.firstEngagement.title} intro={audience.firstEngagement.intro}>
+        <ol style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+          {audience.firstEngagement.steps.map((step, i) => (
+            <li key={step.label} style={{ display: "grid", gridTemplateColumns: "48px 1fr", gap: 16, alignItems: "start" }}>
+              <span style={{ fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 28, color: ORANGE, lineHeight: 1 }}>{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <div style={{ fontFamily: BODY_FONT, fontSize: 11, fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: "#fff", marginBottom: 6 }}>{step.label}</div>
+                <p style={{ fontFamily: BODY_FONT, fontSize: 14, lineHeight: 1.55, color: TEXT_DIM, margin: 0 }}>{step.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p style={{ fontFamily: BODY_FONT, fontSize: 12, color: TEXT_FAINT, marginTop: 24, marginBottom: 0, letterSpacing: "0.05em" }}>
+          {audience.firstEngagement.pricingPosture}
+        </p>
+      </SectionBlock>
+
+      <SectionBlock title={audience.trust.title}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+          {audience.trust.items.map(item => (
+            <div key={item.label}>
+              <div style={{ fontFamily: BODY_FONT, fontSize: 11, fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: ORANGE, marginBottom: 8 }}>{item.label}</div>
+              <p style={{ fontFamily: BODY_FONT, fontSize: 14, lineHeight: 1.55, color: TEXT_DIM, margin: 0 }}>{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </SectionBlock>
+
+      <SectionBlock title={audience.adjacentAudiences.title}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+          {audience.adjacentAudiences.pointers.map(slug => {
+            const title = adjacentTitles[slug];
+            if (!title) return null;
+            return (
+              <Link
+                key={slug}
+                href={`/for/${slug}`}
+                style={{ fontFamily: BODY_FONT, fontSize: 13, fontWeight: 500, color: "#fff", border: `1px solid ${ORANGE}`, padding: "10px 16px", textDecoration: "none", letterSpacing: "0.02em" }}
+              >
+                {title} →
+              </Link>
+            );
+          })}
+        </div>
+      </SectionBlock>
+
+      <section id="cta" style={{ borderTop: `1px solid ${BORDER}`, padding: "64px 48px 96px" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto" }}>
+          <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 800, fontSize: "clamp(32px, 4vw, 52px)", lineHeight: 0.95, textTransform: "uppercase", margin: "0 0 16px" }}>
+            {audience.finalCta.headline}
+          </h2>
+          <p style={{ fontFamily: BODY_FONT, fontSize: 16, lineHeight: 1.6, color: TEXT_DIM, margin: "0 0 32px" }}>
+            {audience.finalCta.subhead}
+          </p>
+          <AudienceCTAForm audienceSlug={audience.slug} submitLabel={audience.finalCta.primaryCta.label} />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CTAButton({ cta }: { cta: { label: string; href: string } }) {
+  return (
+    <a
+      href={cta.href}
+      style={{
+        display: "inline-block",
+        padding: "14px 24px",
+        background: ORANGE,
+        color: "#fff",
+        fontFamily: BODY_FONT,
+        fontWeight: 600,
+        fontSize: 13,
+        textTransform: "uppercase",
+        letterSpacing: "0.1em",
+        textDecoration: "none",
+      }}
+    >
+      {cta.label} →
+    </a>
+  );
+}
+
+function SectionBlock({ title, intro, children }: { title: string; intro?: string; children: React.ReactNode }) {
+  return (
+    <section style={{ padding: "64px 48px", borderBottom: `1px solid ${BORDER}` }}>
+      <div style={{ maxWidth: 1080, margin: "0 auto" }}>
+        <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 800, fontSize: "clamp(28px, 3.5vw, 44px)", lineHeight: 1, textTransform: "uppercase", margin: "0 0 16px" }}>
+          {title}
+        </h2>
+        {intro && (
+          <p style={{ fontFamily: BODY_FONT, fontSize: 15, lineHeight: 1.6, color: TEXT_DIM, maxWidth: 760, margin: "0 0 32px" }}>{intro}</p>
+        )}
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function BulletList({ bullets }: { bullets: string[] }) {
+  return (
+    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+      {bullets.map((b, i) => (
+        <li key={i} style={{ display: "grid", gridTemplateColumns: "12px 1fr", gap: 12, alignItems: "start" }}>
+          <span aria-hidden style={{ display: "inline-block", width: 8, height: 8, background: ORANGE, marginTop: 8 }} />
+          <span style={{ fontFamily: BODY_FONT, fontSize: 15, lineHeight: 1.55, color: TEXT_DIM }}>{b}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 ```
 
-- [ ] **Step 4: Re-run the test, confirm it passes**
+- [ ] **Step 4: Run, confirm pass**
 
-Run: `cd web && npm test -- submit`
+Run: `cd web && npm test -- AudienceLanding`
 Expected: PASS.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add web/src/lib/forms/schemas/contact.ts web/src/lib/forms/__tests__/submit.test.ts
-git commit -m "feat(forms): accept optional audience field on contact submissions"
+git add web/src/components/audience/AudienceLanding.tsx web/src/components/audience/__tests__/AudienceLanding.test.tsx
+git commit -m "feat(audiences): AudienceLanding shared landing-page skeleton"
 ```
 
 ---
 
-## Task 8: Extend Sanity `contactInquiry` schema for `audience`
-
-**Files:**
-- Modify: `web/src/sanity/schemaTypes/contactInquiry.ts`
-
-- [ ] **Step 1: Add the audience field**
-
-```typescript
-// web/src/sanity/schemaTypes/contactInquiry.ts
-import { defineField, defineType } from "sanity";
-
-export const contactInquiry = defineType({
-  name: "contactInquiry",
-  title: "Contact Inquiry",
-  type: "document",
-  fields: [
-    defineField({ name: "name", type: "string", validation: r => r.required() }),
-    defineField({ name: "email", type: "string", validation: r => r.required().email() }),
-    defineField({ name: "organization", type: "string", validation: r => r.required() }),
-    defineField({ name: "role", type: "string" }),
-    defineField({ name: "projectType", type: "string" }),
-    defineField({ name: "projectStage", type: "string" }),
-    defineField({ name: "message", type: "text" }),
-    defineField({ name: "referralSource", type: "string" }),
-    defineField({
-      name: "audience",
-      type: "string",
-      title: "Source audience page",
-      description: "Set when the inquiry came from a /for/<slug> page. Empty for the generic /contact form.",
-      options: {
-        list: [
-          { title: "Tribes", value: "tribes" },
-          { title: "Advisors", value: "advisors" },
-          { title: "Investors", value: "investors" },
-          { title: "Landowners", value: "landowners" },
-          { title: "Utilities", value: "utilities" },
-          { title: "Developers / EPCs", value: "developers-epcs" },
-          { title: "Operators", value: "operators" },
-        ],
-      },
-    }),
-    defineField({ name: "status", type: "string", options: { list: ["new", "contacted", "qualified", "dead"] }, initialValue: "new" }),
-    defineField({ name: "utmSource", type: "string" }),
-    defineField({ name: "submittedAt", type: "datetime" }),
-  ],
-  preview: {
-    select: { name: "name", org: "organization", audience: "audience", status: "status" },
-    prepare({ name, org, audience, status }: Record<string, string>) {
-      const tail = [audience ? `[${audience}]` : null, org || null, status || "new"].filter(Boolean).join(" · ");
-      return { title: name || "Unknown", subtitle: tail };
-    },
-  },
-});
-```
-
-- [ ] **Step 2: Regenerate Sanity types**
-
-Run: `cd web && npm run sanity:typegen`
-Expected: completes without error. (If it errors due to missing local Sanity auth, log the error and continue — typegen is not blocking deploy.)
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add web/src/sanity/schemaTypes/contactInquiry.ts web/src/sanity/extract.json web/src/sanity.types.ts 2>/dev/null || git add web/src/sanity/schemaTypes/contactInquiry.ts
-git commit -m "feat(sanity): add audience field to contactInquiry"
-```
-
----
-
-## Task 9: `/for` audience hub page
+## Task 11: `/for` audience hub page (Sanity-driven)
 
 **Files:**
 - Create: `web/src/app/(frontend)/for/page.tsx`
@@ -1207,7 +1637,7 @@ git commit -m "feat(sanity): add audience field to contactInquiry"
 // web/src/app/(frontend)/for/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
-import { listAudiences } from "@/content/audiences";
+import { listAudiencePages } from "@/lib/audiences/fetch";
 
 const NAVY = "#08142D";
 const ORANGE = "#E07B39";
@@ -1222,8 +1652,10 @@ export const metadata: Metadata = {
     "Konative serves tribal nations, investors, landowners, utilities, developers, operators, and advisors. Pick the page written for you.",
 };
 
-export default function AudienceHubPage() {
-  const audiences = listAudiences();
+export const revalidate = 300;
+
+export default async function AudienceHubPage() {
+  const audiences = await listAudiencePages();
   return (
     <div style={{ background: NAVY, minHeight: "100vh", color: "#fff", fontFamily: BODY_FONT }}>
       <section style={{ padding: "96px 48px 48px", borderBottom: `1px solid ${BORDER}` }}>
@@ -1235,7 +1667,7 @@ export default function AudienceHubPage() {
             Find the page written for you.
           </h1>
           <p style={{ fontFamily: BODY_FONT, fontSize: 17, lineHeight: 1.6, color: TEXT_DIM, maxWidth: 720, margin: 0 }}>
-            Konative serves multiple audiences across the data center development stack. Pick the one closest to your role and we'll lead with what matters most to you.
+            Konative serves multiple audiences across the data center development stack. Pick the one closest to your role and we&apos;ll lead with what matters most to you.
           </p>
         </div>
       </section>
@@ -1273,21 +1705,21 @@ export default function AudienceHubPage() {
 }
 ```
 
-- [ ] **Step 2: Confirm the page builds**
+- [ ] **Step 2: Compile**
 
-Run: `cd web && npx next build` (or `npm run build`)
-Expected: build completes. If build is slow, use `npx tsc --noEmit` for a fast check; full build is only required before commit on Task 13.
+Run: `cd web && npx tsc --noEmit`
+Expected: PASS.
 
 - [ ] **Step 3: Commit**
 
 ```bash
 git add web/src/app/\(frontend\)/for/page.tsx
-git commit -m "feat(audiences): /for audience hub"
+git commit -m "feat(audiences): /for hub fetches audiences from Sanity"
 ```
 
 ---
 
-## Task 10: `/for/[audience]` dynamic page
+## Task 12: `/for/[audience]` dynamic page
 
 **Files:**
 - Create: `web/src/app/(frontend)/for/[audience]/page.tsx`
@@ -1298,11 +1730,14 @@ git commit -m "feat(audiences): /for audience hub"
 // web/src/app/(frontend)/for/[audience]/page.tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { AUDIENCES, getAudience } from "@/content/audiences";
-import { AudienceLanding } from "@/components/audience/AudienceLanding";
+import { AudienceLanding, type AdjacentTitleMap } from "@/components/audience/AudienceLanding";
+import { getAudiencePage, listAudiencePages } from "@/lib/audiences/fetch";
+
+export const revalidate = 300;
 
 export async function generateStaticParams() {
-  return Object.keys(AUDIENCES).map(audience => ({ audience }));
+  const all = await listAudiencePages();
+  return all.map(a => ({ audience: a.slug }));
 }
 
 export async function generateMetadata({
@@ -1311,15 +1746,12 @@ export async function generateMetadata({
   params: Promise<{ audience: string }>;
 }): Promise<Metadata> {
   const { audience } = await params;
-  const a = getAudience(audience);
-  if (!a) return {};
+  const page = await getAudiencePage(audience);
+  if (!page) return {};
   return {
-    title: a.metaTitle,
-    description: a.metaDescription,
-    openGraph: {
-      title: a.metaTitle,
-      description: a.metaDescription,
-    },
+    title: page.metaTitle,
+    description: page.metaDescription,
+    openGraph: { title: page.metaTitle, description: page.metaDescription },
   };
 }
 
@@ -1329,9 +1761,17 @@ export default async function AudiencePage({
   params: Promise<{ audience: string }>;
 }) {
   const { audience } = await params;
-  const a = getAudience(audience);
-  if (!a) notFound();
-  return <AudienceLanding audience={a} />;
+  const page = await getAudiencePage(audience);
+  if (!page) notFound();
+
+  // Build adjacent-title map from the registry of pages that actually exist.
+  const all = await listAudiencePages();
+  const adjacentTitles: AdjacentTitleMap = {};
+  for (const a of all) {
+    adjacentTitles[a.slug] = a.displayName;
+  }
+
+  return <AudienceLanding audience={page} adjacentTitles={adjacentTitles} />;
 }
 ```
 
@@ -1340,31 +1780,27 @@ export default async function AudiencePage({
 Run: `cd web && npm run dev`
 Visit:
 - `http://localhost:3005/for` — hub renders both tiles
-- `http://localhost:3005/for/tribes` — tribes page renders end-to-end
+- `http://localhost:3005/for/tribes` — tribes page renders end-to-end (data loads from Sanity)
 - `http://localhost:3005/for/advisors` — advisors page renders end-to-end
-- `http://localhost:3005/for/nonexistent` — returns the 404 page
-
-Expected: all four behave correctly.
+- `http://localhost:3005/for/nonexistent` — returns 404
 
 - [ ] **Step 3: Commit**
 
 ```bash
 git add web/src/app/\(frontend\)/for/\[audience\]/page.tsx
-git commit -m "feat(audiences): /for/[audience] dynamic page"
+git commit -m "feat(audiences): /for/[audience] dynamic page driven by Sanity"
 ```
 
 ---
 
-## Task 11: Header nav — add "For" entry and dark-hero handling
+## Task 13: Header nav — add "For" + dark-hero handling
 
 **Files:**
 - Modify: `web/src/components/Header.tsx`
 
-- [ ] **Step 1: Add the nav link and broaden dark-hero matching**
+- [ ] **Step 1: Add the nav link**
 
-Open `web/src/components/Header.tsx`. Two edits:
-
-**Edit A** — add `For` to `navLinks`. Insert before `About`:
+In `web/src/components/Header.tsx`, update `navLinks`:
 
 ```typescript
 const navLinks: { label: string; url: string }[] = [
@@ -1378,17 +1814,11 @@ const navLinks: { label: string; url: string }[] = [
 ];
 ```
 
-**Edit B** — replace the `DARK_HERO_PAGES` set lookup with a function that also matches `/for` and `/for/<slug>`. Change:
+- [ ] **Step 2: Widen dark-hero matching to cover `/for/*`**
+
+Below the existing `DARK_HERO_PAGES` set, add a helper:
 
 ```typescript
-const DARK_HERO_PAGES = new Set(["/", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/intelligence", "/intelligence/saudi", "/intelligence/first-nations", "/news", "/market-intel", "/contact", "/assessment"]);
-```
-
-to:
-
-```typescript
-const DARK_HERO_PAGES = new Set(["/", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/intelligence", "/intelligence/saudi", "/intelligence/first-nations", "/news", "/market-intel", "/contact", "/assessment"]);
-
 function isDarkHeroPath(pathname: string): boolean {
   if (DARK_HERO_PAGES.has(pathname)) return true;
   if (pathname === "/for" || pathname.startsWith("/for/")) return true;
@@ -1396,7 +1826,7 @@ function isDarkHeroPath(pathname: string): boolean {
 }
 ```
 
-Then update the line:
+Then change the existing line:
 ```typescript
 const hasDarkHero = DARK_HERO_PAGES.has(pathname);
 ```
@@ -1405,105 +1835,90 @@ to:
 const hasDarkHero = isDarkHeroPath(pathname);
 ```
 
-- [ ] **Step 2: Smoke test header treatment in dev**
+- [ ] **Step 3: Smoke test header in dev**
 
-Run: `cd web && npm run dev`
-Visit `/for` and `/for/tribes`. The header should render in dark-hero mode (white text over the navy hero, transitioning on scroll).
+Visit `/for` and `/for/tribes`. Header should render in dark-hero mode.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
 git add web/src/components/Header.tsx
-git commit -m "feat(nav): add For link, dark-hero treatment for /for routes"
+git commit -m "feat(nav): add For link + dark-hero handling for /for routes"
 ```
 
 ---
 
-## Task 12: Final test sweep + build
+## Task 14: Final test sweep + production build
 
-- [ ] **Step 1: Run the full Vitest suite**
+- [ ] **Step 1: Full Vitest run**
 
 Run: `cd web && npm test`
-Expected: PASS for all suites. Existing tests must not regress.
+Expected: all suites PASS.
 
-- [ ] **Step 2: Run a production build**
-
-Run: `cd web && npm run build`
-Expected: build succeeds. The new pages should appear in the route list (`/for`, `/for/[audience]`).
-
-- [ ] **Step 3: Type check**
+- [ ] **Step 2: Type check**
 
 Run: `cd web && npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 4: Commit (only if any auto-fixes were needed)**
+- [ ] **Step 3: Production build**
+
+Run: `cd web && npm run build`
+Expected: build succeeds. Routes `/for` and `/for/[audience]` appear in the route list.
+
+- [ ] **Step 4: Optional housekeeping commit**
 
 ```bash
 git status
-# if there are unstaged changes from formatters/codegen:
+# if there are auto-formatter or codegen changes:
 git add -A && git commit -m "chore: post-build housekeeping"
-# else skip this step.
 ```
 
 ---
 
-## Task 13: Manual QA + Sanity Studio verification
+## Task 15: Manual QA + Sanity Studio verification
 
-- [ ] **Step 1: Run dev server and walk through both audience pages**
+- [ ] **Step 1: Walk through both audience pages in dev**
 
-Run: `cd web && npm run dev`
-
-Visit `http://localhost:3005/for/tribes`:
-- Confirm hero, why-now, "what you already have", capability bands, engagement steps, trust items, adjacent-audiences pointers all render with content from the config.
-- Confirm primary CTAs jump to the `#cta` form anchor.
-- Submit the form with a real-looking payload. Expect a "Thanks. We'll be in touch within one business day." success message.
-
-Visit `http://localhost:3005/for/advisors`:
-- Same checks.
-- Submit the form. Expect success.
-
-Visit `http://localhost:3005/for`:
-- Tiles for tribes and advisors render, each linking to its page.
+Run: `cd web && npm run dev`. Visit both `/for/tribes` and `/for/advisors`. For each:
+- All sections render with data sourced from Sanity (edit a field in Studio, reload — change appears within ~5 minutes due to `revalidate = 300`, or restart dev for instant).
+- Primary CTAs jump to the `#cta` form anchor.
+- Submit the form. Expect "Thanks. We'll be in touch within one business day."
 
 - [ ] **Step 2: Verify the inquiry landed in Sanity**
 
-Open the Sanity Studio: `http://localhost:3005/studio` (or the deployed studio).
-Open the Contact Inquiry document type. Confirm the two test submissions appear, each with the `audience` field populated (`tribes` or `advisors`).
+Open `http://localhost:3005/studio` → Contact Inquiry. Confirm both submissions appear with `audience` populated.
 
-- [ ] **Step 3: Verify the Resend email**
+- [ ] **Step 3: Verify Resend email**
 
-Check the inbox configured in `RESEND_TO` (or your local logs if running without `RESEND_API_KEY`). Each submission should produce one email with the audience visible in the JSON payload.
+Check the inbox at `RESEND_TO` (or local logs). Each submission should produce one email with the audience visible.
 
-- [ ] **Step 4: Final commit (housekeeping if needed)**
+- [ ] **Step 4: Try editing copy in Studio**
 
-```bash
-git status
-# expect clean working tree if no manual edits were needed
-```
+In Studio, open the tribes audience page, change the hero subhead, save. Wait for cache or restart dev. Reload `/for/tribes`. Change appears.
 
 ---
 
 ## Spec Coverage Check
 
-- ✅ Audience router under `/for` with hub + dynamic per-audience pages — Tasks 9, 10
-- ✅ Shared `<AudienceLanding />` skeleton driven by typed config — Tasks 1, 5
-- ✅ Tribal page as the lead deliverable — Task 2
-- ✅ Advisor page (lean but credible) — Task 3
-- ✅ "I'm actually a __" pointer block to other audiences — built into `AudienceLanding` — Task 5
-- ✅ CTA wired to the existing inquiry pipeline with `audience` discriminator — Tasks 6, 7, 8
-- ✅ Top-level "For" nav entry; dark-hero treatment — Task 11
-- ✅ Per-audience SEO title + OG metadata — Task 10 (`generateMetadata`)
-- ⏭ Per-audience OG **image** — deferred. The default OpenGraph image at `web/src/app/opengraph-image.tsx` will serve all `/for/*` URLs at launch. Adding per-audience OG images is a small follow-on once the pages stabilize.
-- ⏭ `/platform` page — out of scope (Plan C).
-- ⏭ Notion monetization doc — out of scope (you author directly in Notion).
-- ⏭ Ambassador kit (intro deck, tracked link generator) — out of scope (Plan E, after this ships).
-- ⏭ Remaining 5 audience pages — Plan B; Plan A intentionally ships only tribes + advisors.
-- ⏭ Analytics events on CTAs — recommended next iteration; not blocking launch. Note: page views are already covered by `@vercel/analytics`. CTA-click events can be added with a small `track("audience_cta_click", { audience })` call in `AudienceCTAForm.onSubmit`.
-
----
+- ✅ Audience router under `/for` with hub + dynamic per-audience pages — Tasks 11, 12
+- ✅ Shared `<AudienceLanding />` skeleton — Task 10
+- ✅ Sanity-backed copy (editable in Studio, reusable for beehiiv) — Tasks 2, 3, 4, 5, 6
+- ✅ Tribal page as the lead deliverable — Task 3 (seed) + Task 5 (run)
+- ✅ Advisor page (lean but credible) — Task 4 (seed) + Task 5 (run)
+- ✅ Adjacent-audience pointers, only rendered when target exists — Task 10
+- ✅ CTA wired to existing `/api/contact` with `audience` discriminator — Tasks 7, 8, 9
+- ✅ Top-level "For" nav entry; dark-hero treatment — Task 13
+- ✅ Per-audience SEO title + OG metadata — Task 12 (`generateMetadata`)
+- ⏭ Per-audience OG **image** — deferred; default OG image at `web/src/app/opengraph-image.tsx` covers `/for/*` at launch.
+- ⏭ `/platform` page — Plan C.
+- ⏭ Notion monetization doc — author directly.
+- ⏭ Ambassador kit — Plan E.
+- ⏭ Remaining 5 audience pages — Plan B (clones the same Sanity schema + a new seed script per audience).
+- ⏭ Analytics CTA events — small follow-on; add `track("audience_cta_submitted", { audience })` in `AudienceCTAForm` when desired.
+- ⏭ beehiiv integration — out of scope for this plan, but unblocked: a beehiiv-feeding script can now query `*[_type == "audiencePage" && slug.current == "tribes"]{...}` to pull copy.
 
 ## Open Questions (do not block launch)
 
-- **Per-audience OG images.** Add as a follow-on once the copy stabilizes; can be generated via Next 16's `opengraph-image.tsx` per route segment.
-- **Analytics CTA events.** Add `track("audience_cta_submitted", { audience })` in `AudienceCTAForm` when ready. Not blocking.
-- **Form field set per audience.** Today every audience page uses the same five-field form. If the advisor form needs different fields (e.g., "who do you typically introduce?"), generalize `AudienceCTAForm` to accept a per-audience `fields` config in a follow-on.
+- **Should Studio editors be able to add brand-new audiences without code?** Today the slug is constrained to a fixed list and a new audience requires updating `AudienceSlug` in `types.ts`. If you want fully data-driven audiences later, lift the slug constraint and turn `AudienceSlug` into `string`. Not needed for V1.
+- **Cache invalidation.** `revalidate = 300` means edits take up to 5 minutes to appear. If you want instant invalidation, add a Sanity webhook → `/api/revalidate?path=/for/tribes` route. Future task.
+- **Form fields per audience.** All audience pages share the same five-field form. If an audience needs different fields (e.g., advisor "who do you typically introduce?"), generalize `AudienceCTAForm` to accept a per-audience `fields` config in a follow-on.
