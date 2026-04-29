@@ -44,7 +44,7 @@ export const LAYER_LABELS: Record<LayerKey, string> = {
 
 // Infrastructure (CA · beta) — populated from tiles/v1/manifest.json (Stream A).
 const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] = [
-  { key: 'indigenous', label: 'Indigenous Lands', color: '#c17f3b' },
+  { key: 'indigenous', label: 'Indigenous Lands', color: '#2d7a4f' },
   { key: 'power',   label: 'Power',   color: '#eab308' },
   { key: 'gas',     label: 'Gas',     color: '#f97316' },
   { key: 'fiber',   label: 'Fiber',   color: '#a855f7' },
@@ -697,7 +697,7 @@ function HoverCard({ props: p, layerId }: { props: Record<string, unknown>; laye
           {name}
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ color: '#c17f3b', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Indigenous Lands</span>
+          <span style={{ color: '#2d7a4f', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Indigenous Lands</span>
           {areaDisplay && <span style={{ color: '#777', fontSize: 10 }}>{areaDisplay}</span>}
         </div>
         <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>{source}</div>
