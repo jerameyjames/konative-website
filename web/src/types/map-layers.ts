@@ -6,7 +6,8 @@ export type LayerCategory =
   | "gas"
   | "fiber"
   | "water"
-  | "land"
+  | "exclusions"
+  | "land-use"
   | "climate"
   | "rail"
   | "indigenous";

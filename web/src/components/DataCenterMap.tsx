@@ -44,14 +44,15 @@ export const LAYER_LABELS: Record<LayerKey, string> = {
 
 // Infrastructure (CA · beta) — populated from tiles/v1/manifest.json (Stream A).
 const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] = [
-  { key: 'indigenous', label: 'Indigenous Lands', color: '#2d7a4f' },
-  { key: 'power',   label: 'Power',   color: '#eab308' },
-  { key: 'gas',     label: 'Gas',     color: '#f97316' },
-  { key: 'fiber',   label: 'Fiber',   color: '#a855f7' },
-  { key: 'water',   label: 'Water',   color: '#38bdf8' },
-  { key: 'land',    label: 'Land',    color: '#84cc16' },
-  { key: 'climate', label: 'Climate', color: '#94a3b8' },
-  { key: 'rail',    label: 'Rail',    color: '#a16207' },
+  { key: 'indigenous',  label: 'Indigenous Lands',  color: '#2d7a4f' },
+  { key: 'exclusions',  label: 'Exclusion Zones',   color: '#dc2626' },
+  { key: 'land-use',    label: 'Industrial Land Use', color: '#b45309' },
+  { key: 'power',       label: 'Power',              color: '#eab308' },
+  { key: 'gas',         label: 'Gas',                color: '#f97316' },
+  { key: 'fiber',       label: 'Fiber',              color: '#a855f7' },
+  { key: 'water',       label: 'Water',              color: '#38bdf8' },
+  { key: 'climate',     label: 'Climate',            color: '#94a3b8' },
+  { key: 'rail',        label: 'Rail',               color: '#a16207' },
 ]
 
 export interface MapCounts {
@@ -150,7 +151,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
   const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
-    indigenous: true, power: false, gas: false, fiber: false, water: false, land: false, climate: false, rail: false,
+    indigenous: true, exclusions: false, 'land-use': false, power: false, gas: false, fiber: false, water: false, climate: false, rail: false,
   })
 
   useEffect(() => { ensurePMTilesProtocol() }, [])
@@ -164,7 +165,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
 
   const infraLayersByCategory = useMemo(() => {
     const map: Record<LayerCategory, LayerManifestEntry[]> = {
-      indigenous: [], power: [], gas: [], fiber: [], water: [], land: [], climate: [], rail: [],
+      indigenous: [], exclusions: [], 'land-use': [], power: [], gas: [], fiber: [], water: [], climate: [], rail: [],
     }
     for (const layer of infraManifest?.layers ?? []) {
       // Indigenous layers are shown for all countries; other layers are CA/GLOBAL only
@@ -284,9 +285,11 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         mapStyle="https://tiles.openfreemap.org/styles/dark"
         interactiveLayerIds={backgroundMode ? [] : [
           'dc-bubbles',
-          ...infraLayersByCategory.indigenous
-            .filter(l => infraEnabled.indigenous)
-            .map(l => `infra-${l.id}-fill`),
+          ...((['indigenous', 'exclusions', 'land-use'] as LayerCategory[]).flatMap(cat =>
+            infraLayersByCategory[cat]
+              .filter(() => infraEnabled[cat])
+              .map(l => `infra-${l.id}-fill`)
+          )),
         ]}
         onMouseMove={backgroundMode ? undefined : onMove}
         onMouseLeave={backgroundMode ? undefined : () => { setHover(null) }}
@@ -332,7 +335,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                   url={`pmtiles://${window.location.origin}${layer.tilesUrl}`}
                   attribution={layer.attribution}
                 >
-                  {/* Fill — renders polygon/multipolygon geometries (water risk, fire zones, protected areas, etc.) */}
+                  {/* Fill — renders polygon/multipolygon geometries */}
                   <Layer
                     id={`infra-${layer.id}-fill`}
                     type="fill"
@@ -341,10 +344,13 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                     maxzoom={layer.maxZoom}
                     paint={{
                       'fill-color': cat.color,
-                      'fill-opacity': cat.key === 'indigenous' ? 0.35 : 0.18,
+                      'fill-opacity': cat.key === 'indigenous' ? 0.35
+                        : cat.key === 'exclusions' ? 0.28
+                        : cat.key === 'land-use' ? 0.22
+                        : 0.18,
                     }}
                   />
-                  {/* Line — renders linestrings (transmission lines, pipelines) AND polygon outlines */}
+                  {/* Line — renders linestrings AND polygon outlines */}
                   <Layer
                     id={`infra-${layer.id}-line`}
                     type="line"
@@ -353,7 +359,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                     maxzoom={layer.maxZoom}
                     paint={{
                       'line-color': cat.color,
-                      'line-width': cat.key === 'indigenous' ? 1.5 : 2.5,
+                      'line-width': (cat.key === 'indigenous' || cat.key === 'exclusions' || cat.key === 'land-use') ? 1.5 : 2.5,
                       'line-opacity': 0.9,
                     }}
                   />
@@ -703,7 +709,6 @@ function HoverCard({ props: p, layerId }: { props: Record<string, unknown>; laye
 
   if (layerId?.includes('indigenous') || layerId?.includes('aiannh')) {
     const name = str(p.NAMELSAD || p.BAND_NAME || p.NAME || p.name || 'Unknown Territory')
-    const area = num(p.ALAND || p.AREA_SQ_KM)
     const areaDisplay = p.ALAND
       ? `${(num(p.ALAND) / 1_000_000).toFixed(1)} km²`
       : p.AREA_SQ_KM
@@ -720,6 +725,38 @@ function HoverCard({ props: p, layerId }: { props: Record<string, unknown>; laye
           {areaDisplay && <span style={{ color: '#777', fontSize: 10 }}>{areaDisplay}</span>}
         </div>
         <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>{source}</div>
+      </div>
+    )
+  }
+
+  if (layerId?.includes('cpcad') || layerId?.includes('protected')) {
+    const name = str(p.NAME || p.NAME_E || p.AICHI_TARGETS || 'Protected Area')
+    const desig = str(p.DESIG || p.DESIG_E || p.TYPE || '')
+    return (
+      <div style={{ fontSize: 12, color: '#0C2046', minWidth: 180, maxWidth: 260 }}>
+        <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: 4 }}>
+          {name}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ color: '#dc2626', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>⊘ Exclusion Zone</span>
+          {desig && <span style={{ color: '#777', fontSize: 10 }}>{desig}</span>}
+        </div>
+        <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>CPCAD · Environment Canada</div>
+      </div>
+    )
+  }
+
+  if (layerId?.includes('industrial')) {
+    const name = str(p.name || p.NAME || 'Industrial Zone')
+    return (
+      <div style={{ fontSize: 12, color: '#0C2046', minWidth: 180, maxWidth: 260 }}>
+        <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: 4 }}>
+          {name !== 'Industrial Zone' ? name : 'Industrial Land Use'}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ color: '#b45309', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Industrial Zoning</span>
+        </div>
+        <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>OpenStreetMap · not authoritative zoning</div>
       </div>
     )
   }

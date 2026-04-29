@@ -50,7 +50,7 @@
     {
       "id": "osm_ca_industrial",
       "title": "Industrial land use (Canada, OSM)",
-      "category": "land",
+      "category": "land-use",
       "country": "CA",
       "tilesUrl": "/tiles/v1/osm_ca_industrial.pmtiles",
       "sourceLayer": "osm_ca_industrial",
