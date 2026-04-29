@@ -254,7 +254,9 @@ export default function DemoViews({ mapRef, onApply }: Props) {
 
       {/* Dropdown */}
       {open && (
-        <div style={{
+        <div
+          onWheel={e => e.stopPropagation()}
+          style={{
           position: 'absolute',
           top: 'calc(100% + 4px)',
           right: 0,
