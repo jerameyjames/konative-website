@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-30T17:41:49.402Z",
+  "layers": [
+    {
+      "id": "bc_er_pipelines_permitted",
+      "title": "BC pipelines — permitted (BCER)",
+      "category": "gas",
+      "country": "CA",
+      "tilesUrl": "/tiles/v1/bc_er_pipelines_permitted.pmtiles",
+      "sourceLayer": "bc_er_pipelines_permitted",
+      "minZoom": 4,
+      "maxZoom": 14,
+      "license": "OGL-Provincial",
+      "attribution": "© BC Energy Regulator (Open Government Licence — British Columbia)",
+      "sourceUrl": "https://data-bc-er.opendata.arcgis.com/datasets/bc-er::pipeline-segments-permitted",
+      "lastUpdated": "2026-04-30T17:41:43.926Z",
+      "defaultVisible": true,
+      "geometryHint": "line"
+    },
+    {
+      "id": "bc_er_pipeline_installations_permitted",
+      "title": "BC pipeline installations — permitted (BCER)",
+      "category": "gas",
+      "country": "CA",
+      "tilesUrl": "/tiles/v1/bc_er_pipeline_installations_permitted.pmtiles",
+      "sourceLayer": "bc_er_pipeline_installations_permitted",
+      "minZoom": 6,
+      "maxZoom": 14,
+      "license": "OGL-Provincial",
+      "attribution": "© BC Energy Regulator (Open Government Licence — British Columbia)",
+      "sourceUrl": "https://data-bc-er.opendata.arcgis.com/datasets/bc-er::pipeline-installations-permitted",
+      "lastUpdated": "2026-04-30T17:41:49.402Z",
+      "defaultVisible": false,
+      "geometryHint": "point"
+    }
+  ]
+}

@@ -151,7 +151,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
   const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
-    indigenous: true, exclusions: true, 'land-use': false, power: true, gas: false, fiber: false, water: false, climate: false, rail: true,
+    indigenous: true, exclusions: true, 'land-use': false, power: true, gas: true, fiber: false, water: false, climate: false, rail: true,
   })
 
   useEffect(() => { ensurePMTilesProtocol() }, [])
