@@ -128,9 +128,9 @@ function toGeoJSON(elements: OverpassElement[]): FeatureCollection {
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { category: string } }
+  { params }: { params: Promise<{ category: string }> }
 ) {
-  const category = params.category
+  const { category } = await params
 
   // Broadband: CRTC data requires offline ETL — return empty FC so the
   // empty-state insight fires in the Layer Control Panel.
