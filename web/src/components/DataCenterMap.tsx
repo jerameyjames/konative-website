@@ -398,14 +398,82 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                   : cat.key === 'land-use'   ? 0.22
                   : 0.18
 
-                // ── Shared sub-layers (work for both source types) ──────────────
-                const subLayers = (
-                  <>
+                // ── GeoJSON source (live Overpass data) ─────────────────────────
+                // Layer children must be direct (non-Fragment) children of Source so
+                // react-map-gl can inject the source ID via React.Children.forEach.
+                if (layer.sourceType === 'geojson') {
+                  const data = liveInfraData[layer.id]
+                  if (!data) return null  // still loading; spinner shown below
+                  return (
+                    <Source
+                      key={layer.id}
+                      id={`infra-${layer.id}`}
+                      type="geojson"
+                      data={data}
+                      attribution={layer.attribution}
+                    >
+                      {showFill && (
+                        <Layer
+                          id={`infra-${layer.id}-fill`}
+                          type="fill"
+                          minzoom={layer.minZoom}
+                          paint={{ 'fill-color': cat.color, 'fill-opacity': fillOpacity }}
+                        />
+                      )}
+                      {showLine && hint === 'line' && (
+                        <Layer
+                          id={`infra-${layer.id}-line-casing`}
+                          type="line"
+                          minzoom={layer.minZoom}
+                          paint={{
+                            'line-color': 'rgba(8,20,45,0.85)',
+                            'line-width': ['interpolate', ['linear'], ['zoom'], 4, 3.5, 8, 5, 12, 7],
+                            'line-opacity': 0.7,
+                          }}
+                        />
+                      )}
+                      {showLine && (
+                        <Layer
+                          id={`infra-${layer.id}-line`}
+                          type="line"
+                          minzoom={layer.minZoom}
+                          paint={hint === 'line' ? {
+                            'line-color': cat.color,
+                            'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.5, 8, 2.5, 12, 4],
+                            'line-opacity': 0.9,
+                          } : {
+                            'line-color': cat.color,
+                            'line-width': 1.5,
+                            'line-opacity': 0.6,
+                          }}
+                        />
+                      )}
+                      {showCircle && (
+                        <Layer
+                          id={`infra-${layer.id}-point`}
+                          type="circle"
+                          minzoom={layer.minZoom}
+                          paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
+                        />
+                      )}
+                    </Source>
+                  )
+                }
+
+                // ── PMTiles source (default) ────────────────────────────────────
+                return (
+                  <Source
+                    key={layer.id}
+                    id={`infra-${layer.id}`}
+                    type="vector"
+                    url={`pmtiles://${window.location.origin}${layer.tilesUrl}`}
+                    attribution={layer.attribution}
+                  >
                     {showFill && (
                       <Layer
                         id={`infra-${layer.id}-fill`}
                         type="fill"
-                        source-layer={layer.sourceType === 'geojson' ? undefined : layer.sourceLayer}
+                        source-layer={layer.sourceLayer}
                         minzoom={layer.minZoom}
                         paint={{ 'fill-color': cat.color, 'fill-opacity': fillOpacity }}
                       />
@@ -414,7 +482,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                       <Layer
                         id={`infra-${layer.id}-line-casing`}
                         type="line"
-                        source-layer={layer.sourceType === 'geojson' ? undefined : layer.sourceLayer}
+                        source-layer={layer.sourceLayer}
                         minzoom={layer.minZoom}
                         paint={{
                           'line-color': 'rgba(8,20,45,0.85)',
@@ -427,7 +495,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                       <Layer
                         id={`infra-${layer.id}-line`}
                         type="line"
-                        source-layer={layer.sourceType === 'geojson' ? undefined : layer.sourceLayer}
+                        source-layer={layer.sourceLayer}
                         minzoom={layer.minZoom}
                         paint={hint === 'line' ? {
                           'line-color': cat.color,
@@ -444,41 +512,11 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                       <Layer
                         id={`infra-${layer.id}-point`}
                         type="circle"
-                        source-layer={layer.sourceType === 'geojson' ? undefined : layer.sourceLayer}
+                        source-layer={layer.sourceLayer}
                         minzoom={layer.minZoom}
                         paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
                       />
                     )}
-                  </>
-                )
-
-                // ── GeoJSON source (live Overpass data) ─────────────────────────
-                if (layer.sourceType === 'geojson') {
-                  const data = liveInfraData[layer.id]
-                  if (!data) return null  // still loading; spinner shown below
-                  return (
-                    <Source
-                      key={layer.id}
-                      id={`infra-${layer.id}`}
-                      type="geojson"
-                      data={data}
-                      attribution={layer.attribution}
-                    >
-                      {subLayers}
-                    </Source>
-                  )
-                }
-
-                // ── PMTiles source (default) ────────────────────────────────────
-                return (
-                  <Source
-                    key={layer.id}
-                    id={`infra-${layer.id}`}
-                    type="vector"
-                    url={`pmtiles://${window.location.origin}${layer.tilesUrl}`}
-                    attribution={layer.attribution}
-                  >
-                    {subLayers}
                   </Source>
                 )
               })
