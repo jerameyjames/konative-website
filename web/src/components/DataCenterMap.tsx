@@ -49,7 +49,7 @@ const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] =
   { key: 'land-use',    label: 'Industrial Land Use', color: '#b45309' },
   { key: 'power',       label: 'Power',              color: '#eab308' },
   { key: 'gas',         label: 'Gas',                color: '#f97316' },
-  { key: 'fiber',       label: 'Fiber',              color: '#a855f7' },
+  { key: 'fiber',       label: 'Fiber',              color: '#2dd4bf' },
   { key: 'water',       label: 'Water',              color: '#38bdf8' },
   { key: 'climate',     label: 'Climate',            color: '#94a3b8' },
   { key: 'rail',        label: 'Rail',               color: '#22c55e' },
@@ -325,9 +325,11 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
               .filter(() => infraEnabled[cat])
               .map(l => `infra-${l.id}-fill`)
           )),
-          ...infraLayersByCategory['fiber']
-            .filter(() => infraEnabled['fiber'])
-            .map(l => `infra-${l.id}-line`),
+          ...(['fiber', 'gas', 'power', 'water', 'rail'] as LayerCategory[]).flatMap(cat =>
+            infraLayersByCategory[cat]
+              .filter(() => infraEnabled[cat])
+              .map(l => `infra-${l.id}-line`)
+          ),
         ]}
         onMouseMove={backgroundMode ? undefined : onMove}
         onMouseLeave={backgroundMode ? undefined : () => { setHover(null) }}
@@ -829,7 +831,7 @@ function HoverCard({ props: p, layerId, infraCategory }: { props: Record<string,
           {name}
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginBottom: operator ? 4 : 0 }}>
-          <span style={{ color: '#a855f7', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Fiber</span>
+          <span style={{ color: '#2dd4bf', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Fiber</span>
           {cableType && <span style={{ color: '#555', fontSize: 10 }}>{cableType}</span>}
           {ref && <span style={{ color: '#777', fontSize: 10 }}>{ref}</span>}
         </div>
@@ -838,6 +840,108 @@ function HoverCard({ props: p, layerId, infraCategory }: { props: Record<string,
           <div style={{ color: '#777', fontSize: 10, marginBottom: 3 }}>
             <span style={{ fontWeight: 600 }}>{capacity}</span> capacity
           </div>
+        )}
+        <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>OpenStreetMap</div>
+      </div>
+    )
+  }
+
+  if (infraCategory === 'gas') {
+    const name = str(p.name || p.operator || 'Gas Pipeline')
+    const operator = str(p.operator || p['operator:short'] || '')
+    const substance = str(p.substance || p.content || '')
+    const diameter = str(p.diameter || p['pipeline:diameter'] || '')
+    const pressure = str(p.pressure || p['pipeline:pressure'] || '')
+    return (
+      <div style={{ fontSize: 12, color: '#0C2046', minWidth: 180, maxWidth: 260 }}>
+        <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: 4 }}>
+          {name}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginBottom: operator ? 4 : 0 }}>
+          <span style={{ color: '#f97316', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Gas Pipeline</span>
+          {substance && <span style={{ color: '#555', fontSize: 10 }}>{substance}</span>}
+        </div>
+        {operator && <div style={{ color: '#555', fontSize: 11, marginBottom: 4 }}>{operator}</div>}
+        {(diameter || pressure) && (
+          <div style={{ color: '#777', fontSize: 10, marginBottom: 3 }}>
+            {diameter && <span style={{ marginRight: 8 }}>⌀ {diameter}</span>}
+            {pressure && <span>{pressure} pressure</span>}
+          </div>
+        )}
+        <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>BC Energy Regulator</div>
+      </div>
+    )
+  }
+
+  if (infraCategory === 'power') {
+    const name = str(p.name || p.operator || 'Power Line')
+    const operator = str(p.operator || '')
+    const voltage = str(p.voltage || '')
+    const cables = str(p.cables || '')
+    const circuits = str(p.circuits || '')
+    const ref = str(p.ref || '')
+    return (
+      <div style={{ fontSize: 12, color: '#0C2046', minWidth: 180, maxWidth: 260 }}>
+        <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: 4 }}>
+          {name}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginBottom: operator ? 4 : 0 }}>
+          <span style={{ color: '#eab308', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Power Line</span>
+          {voltage && <span style={{ color: '#555', fontSize: 10 }}>{voltage} V</span>}
+          {ref && <span style={{ color: '#777', fontSize: 10 }}>{ref}</span>}
+        </div>
+        {operator && <div style={{ color: '#555', fontSize: 11, marginBottom: 4 }}>{operator}</div>}
+        {(cables || circuits) && (
+          <div style={{ color: '#777', fontSize: 10, marginBottom: 3 }}>
+            {cables && <span style={{ marginRight: 8 }}>{cables} cables</span>}
+            {circuits && <span>{circuits} circuits</span>}
+          </div>
+        )}
+        <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>OpenStreetMap</div>
+      </div>
+    )
+  }
+
+  if (infraCategory === 'water') {
+    const name = str(p.name || p.operator || 'Water Infrastructure')
+    const operator = str(p.operator || '')
+    const waterType = str(p.waterway || p.water || p.type || '')
+    const width = str(p.width || '')
+    return (
+      <div style={{ fontSize: 12, color: '#0C2046', minWidth: 180, maxWidth: 260 }}>
+        <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: 4 }}>
+          {name}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginBottom: operator ? 4 : 0 }}>
+          <span style={{ color: '#38bdf8', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Water</span>
+          {waterType && <span style={{ color: '#555', fontSize: 10 }}>{waterType}</span>}
+          {width && <span style={{ color: '#777', fontSize: 10 }}>{width}m wide</span>}
+        </div>
+        {operator && <div style={{ color: '#555', fontSize: 11, marginBottom: 4 }}>{operator}</div>}
+        <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>OpenStreetMap</div>
+      </div>
+    )
+  }
+
+  if (infraCategory === 'rail') {
+    const name = str(p.name || p.operator || 'Rail Line')
+    const operator = str(p.operator || '')
+    const usage = str(p.usage || p.service || '')
+    const maxspeed = str(p.maxspeed || '')
+    const electrified = str(p.electrified || '')
+    return (
+      <div style={{ fontSize: 12, color: '#0C2046', minWidth: 180, maxWidth: 260 }}>
+        <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: 4 }}>
+          {name}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginBottom: operator ? 4 : 0 }}>
+          <span style={{ color: '#22c55e', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Rail</span>
+          {usage && <span style={{ color: '#555', fontSize: 10 }}>{usage}</span>}
+          {electrified && electrified !== 'no' && <span style={{ color: '#777', fontSize: 10 }}>electrified</span>}
+        </div>
+        {operator && <div style={{ color: '#555', fontSize: 11, marginBottom: 4 }}>{operator}</div>}
+        {maxspeed && (
+          <div style={{ color: '#777', fontSize: 10, marginBottom: 3 }}>max {maxspeed} km/h</div>
         )}
         <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>OpenStreetMap</div>
       </div>
