@@ -36,6 +36,7 @@
     "tiles:sync": "node -e \"const{cpSync}=require('fs');cpSync('../tiles/v1','public/tiles/v1',{recursive:true,force:true});console.log('tiles synced');\""
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.51.0",
     "@anthropic-ai/sdk": "^0.91.1",
     "@builder.io/react": "^9.3.0",
     "@builder.io/sdk": "^6.3.0",
