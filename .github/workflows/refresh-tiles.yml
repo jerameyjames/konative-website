@@ -14,7 +14,8 @@ name: Refresh static PMTiles
 #   R2_SECRET_ACCESS_KEY    – R2 API token secret
 #   R2_BUCKET_NAME          – bucket name, e.g. "konative-tiles"
 #   R2_PUBLIC_URL           – public bucket URL, e.g. "https://pub-abc123.r2.dev"
-#   GH_PAT                  – GitHub PAT with repo write scope (to push manifest updates)
+#
+# No GH_PAT needed — uses the built-in GITHUB_TOKEN with contents:write.
 
 on:
   schedule:
@@ -36,6 +37,10 @@ on:
           - indigenous
           - wri-aqueduct
           - all
+
+# Allow workflow jobs to push manifest updates back to main
+permissions:
+  contents: write
 
 # ── Shared env ────────────────────────────────────────────────────────────────
 env:
@@ -59,7 +64,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install tools
         run: |
@@ -138,7 +143,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install tools
         run: |
@@ -288,7 +293,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install tools
         run: |
@@ -384,7 +389,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install tools
         run: |
@@ -504,7 +509,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install tools
         run: |
