@@ -5,6 +5,7 @@ import { capacityRequest } from "./capacityRequest";
 import { dataCenterProject } from "./dataCenterProject";
 import { contactInquiry } from "./contactInquiry";
 import { deal } from "./deal";
+import { governor } from "./governor";
 import { ingestionRun } from "./ingestionRun";
 import { investorProfile } from "./investorProfile";
 import { landSubmission } from "./landSubmission";
@@ -25,6 +26,7 @@ import { theme } from "./theme";
 export const schemaTypes: SchemaTypeDefinition[] = [
   // Data infrastructure
   dataCenterProject,
+  governor,
   // Lead capture
   landSubmission,
   investorProfile,
