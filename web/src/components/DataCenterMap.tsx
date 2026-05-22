@@ -108,6 +108,18 @@ function colourFeature(f: Feature): Feature {
 
 // ── component ─────────────────────────────────────────────────────────────────
 
+// R2 bucket lacks CORS headers — rewrite absolute R2 URLs to the same-origin
+// tile proxy so the browser can load PMTiles without CORS failures.
+const R2_CDN = 'https://pub-70584c42a8ad4fb1a38f5273a1665067.r2.dev/'
+const TILE_PROXY = '/api/v1/tiles/'
+function resolveTileUrl(tilesUrl: string): string {
+  if (tilesUrl.startsWith(R2_CDN)) {
+    return `pmtiles://${window.location.origin}${TILE_PROXY}${tilesUrl.slice(R2_CDN.length)}`
+  }
+  if (tilesUrl.startsWith('http')) return `pmtiles://${tilesUrl}`
+  return `pmtiles://${window.location.origin}${tilesUrl}`
+}
+
 // Register the pmtiles:// protocol once for the page lifetime.
 let _pmtilesProtocolRegistered = false
 function ensurePMTilesProtocol() {
@@ -482,13 +494,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                     key={layer.id}
                     id={`infra-${layer.id}`}
                     type="vector"
-                    url={
-                      // Support both relative paths (/tiles/v1/…) and absolute CDN
-                      // URLs (https://…) so tiles can be served from R2 or /public/.
-                      layer.tilesUrl.startsWith('http')
-                        ? `pmtiles://${layer.tilesUrl}`
-                        : `pmtiles://${window.location.origin}${layer.tilesUrl}`
-                    }
+                    url={resolveTileUrl(layer.tilesUrl)}
                     attribution={layer.attribution}
                   >
                     {showFill && (
