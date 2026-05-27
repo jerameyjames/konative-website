@@ -36,3 +36,5 @@ Use this format for all providers:
 2. Open Project Settings -> Database.
 3. Copy connection string (session/pooling URI) with SSL enabled.
 4. Set `DATABASE_URI` in Vercel + `.env.local`.
+
+For the live **konative-intel** project, review Security Advisor findings and remediation in [supabase-security.md](./supabase-security.md). CI runs `supabase db lint` weekly when `SUPABASE_ACCESS_TOKEN` is configured in GitHub.

@@ -72,6 +72,7 @@ returns table (
 )
 language sql
 stable
+set search_path = public, pg_temp
 as $$
   with center as (
     select st_setsrid(st_makepoint(p_lng, p_lat), 4326)::geography as geog
