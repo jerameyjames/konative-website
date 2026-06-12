@@ -14,7 +14,7 @@ export const operatorsSeed: AudiencePage = {
     headline: "Power-qualified sites your site selection team has not seen.",
     subhead:
       "The sites that check your boxes — available grid capacity, large contiguous acreage, fiber proximity, and a clean permitting path — are not being surfaced by your standard broker relationships. They are held by tribal nations, rural landowners, and Canadian First Nations who have never received a credible approach. Konative is the sourcing partner with the relationships and the deal architecture to change that.",
-    primaryCta: { label: "Share your site requirements", href: "#cta" },
+    primaryCta: { label: "Share your site requirements", href: "/call" },
   },
   whyNow: {
     title: "Why now",
@@ -110,6 +110,6 @@ export const operatorsSeed: AudiencePage = {
     headline: "Tell us what you need. We will tell you what we have.",
     subhead:
       "Share your MW, footprint, geography, and timeline. We match against current pipeline and respond within two business days.",
-    primaryCta: { label: "Share your site requirements", href: "#cta" },
+    primaryCta: { label: "Share your site requirements", href: "/call" },
   },
 };

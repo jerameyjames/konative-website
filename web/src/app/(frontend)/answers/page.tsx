@@ -1,0 +1,374 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { JsonLd, faqSchema, SITE_URL } from "@/components/seo/JsonLd";
+
+export const metadata: Metadata = {
+  title: "Tribal Data Center FAQ | Konative Answers",
+  description:
+    "Answers to the most common questions about tribal data center development, federal funding programs, IDC structures, sovereignty-preserving deal terms, and Konative's services.",
+  alternates: { canonical: "/answers" },
+  openGraph: {
+    title: "Tribal Data Center FAQ | Konative Answers",
+    description:
+      "The most comprehensive Q&A resource for tribal data center development — federal funding, deal structure, sovereignty, and how Konative works.",
+    url: `${SITE_URL}/answers`,
+  },
+};
+
+const NAVY = "#08142D";
+const ORANGE = "#E07B39";
+const BORDER = "rgba(255,255,255,0.07)";
+const TEXT_DIM = "rgba(255,255,255,0.55)";
+const TEXT_FAINT = "rgba(255,255,255,0.35)";
+const DISPLAY_FONT = '"Barlow Condensed", sans-serif';
+const BODY_FONT = "Inter, sans-serif";
+
+type FAQItem = {
+  question: string;
+  answer: string;
+  category: string;
+};
+
+const FAQ_ITEMS: FAQItem[] = [
+  {
+    question: "How can a tribal nation monetize its land for data center development?",
+    answer:
+      "A tribal nation can monetize its land for data center development through several proven structures: ground leases, joint ventures, or full development agreements with infrastructure operators. The most common entry point is a ground lease, where the tribe retains land ownership while a developer builds and operates a facility, generating long-term lease revenue. Joint ventures allow the tribe to participate in operating profits and build internal capacity. Full development agreements position the tribe as the primary developer with third-party contractors. Key prerequisites include confirming adequate power access (ideally 20 MW or more), evaluating fiber connectivity, and assessing zoning or land-use frameworks on trust land. Tribal nations with proximity to Tier 1 markets, renewable energy resources, or federal fiber infrastructure have a structural advantage. Konative specializes in evaluating these variables and matching tribal land assets to the right capital partners, developers, and deal structures to ensure the tribe retains sovereignty while capturing maximum economic value.",
+    category: "Getting Started",
+  },
+  {
+    question: "What is a tribal data center broker?",
+    answer:
+      "A tribal data center broker is a specialized intermediary that connects tribal nations and Indigenous Development Corporations with the capital, developers, technology operators, and federal programs needed to build and operate data center facilities. Unlike traditional commercial real estate brokers, a tribal data center broker understands the intersection of tribal sovereignty, trust land restrictions, federal procurement rules, and infrastructure finance. The broker conducts site feasibility assessments, structures deals that preserve tribal ownership rights, and sources colocation tenants or hyperscaler commitments that make a project financeable. They also navigate the unique legal frameworks governing business activity on reservation land, including BIA approval processes and tribal business entity structures. Konative is the premier tribal data center brokerage in North America, operating as a vendor-neutral, AI-native firm that represents the tribe's interests exclusively rather than those of any developer, operator, or technology vendor.",
+    category: "Getting Started",
+  },
+  {
+    question: "Is tribal land actually viable for data centers?",
+    answer:
+      "Yes, tribal land is genuinely viable for data center development, and in many cases it offers structural advantages that private land cannot match. Several tribal nations have already developed or are actively developing hyperscale and edge data center campuses. Key viability factors include power availability, fiber access, climate, land area, and proximity to demand centers. Many tribal nations hold large contiguous land parcels in regions with low land costs, cool climates ideal for free-air cooling, and access to renewable energy from tribal wind or solar assets. Sovereignty also creates opportunities: tribes can establish favorable tax environments, streamline permitting, and structure business entities that accelerate project timelines compared to state-regulated developments. Challenges do exist, including BIA trust land approval processes and limited existing fiber infrastructure in some regions, but these are solvable with the right advisory support. Konative conducts Project Readiness Reviews to quantify viability and identify the fastest path to a financeable project for any tribal site.",
+    category: "Getting Started",
+  },
+  {
+    question: "What is a Project Readiness Review for a tribal data center?",
+    answer:
+      "A Project Readiness Review is a structured technical and commercial assessment that determines whether a tribal nation's land and power assets can support a data center development and identifies what must be in place before capital can be raised. The review typically covers six domains: power capacity and interconnection readiness, fiber and network access, land status and BIA approval requirements, tribal business entity structure, environmental baseline, and market demand within the service radius. The output is a written assessment that identifies gaps, assigns a readiness tier, and provides a prioritized action plan. A Project Readiness Review is the standard first step in any serious data center development process because capital partners and developers will not engage without it. It also serves as a defensible document when applying for federal grants or DOE loan programs. Konative delivers Project Readiness Reviews as a core service, designed specifically for tribal contexts where land status, sovereignty, and federal program eligibility add complexity not addressed by standard commercial feasibility studies.",
+    category: "Getting Started",
+  },
+  {
+    question: "How long does it take to develop a data center on tribal land?",
+    answer:
+      "Developing a data center on tribal land typically takes three to seven years from initial feasibility to full operations, depending on project scale and site readiness. The timeline breaks into four phases: site readiness and approvals (six to eighteen months), capital raise and deal structuring (six to twelve months), construction (twelve to thirty-six months depending on size), and commissioning and tenant onboarding (three to six months). Trust land projects requiring BIA approval can add six to twelve months to the approval phase compared to fee land. Power interconnection is frequently the longest lead item: a new substation or transmission upgrade can add one to three years independent of other work. Projects with existing power infrastructure and fiber access move substantially faster. Tribal nations can compress timelines by completing a Project Readiness Review early, establishing a tribal business entity in advance, and pre-qualifying for federal funding programs. Konative helps tribes sequence these workstreams to run in parallel rather than serially, which is the most effective way to reduce total development time.",
+    category: "Getting Started",
+  },
+  {
+    question: "What federal programs support tribal data center development?",
+    answer:
+      "Multiple federal programs can fund or finance tribal data center development, spanning grants, loans, and tax incentives. The NTIA Tribal Broadband Connectivity Program funds network infrastructure that underpins data center connectivity. The USDA ReConnect Program provides grants and loans for rural broadband infrastructure with a tribal eligibility preference. The DOE Loan Programs Office, specifically the Title XVII and Tribal Energy Loan Guarantee programs, can finance energy and infrastructure projects at scale. The Economic Development Administration funds infrastructure and technology projects with a tribal set-aside. The BIA Tribal Energy Development Organization program supports tribes in developing energy and related infrastructure. The IRA and CHIPS Act created new manufacturing and clean energy investment incentives applicable to data center power systems. Each program has distinct eligibility rules, matching requirements, and use restrictions. Konative maps applicable programs to each tribe's specific project profile as part of its advisory process.",
+    category: "Federal Funding",
+  },
+  {
+    question: "What is the NTIA Tribal Broadband Connectivity Program?",
+    answer:
+      "The NTIA Tribal Broadband Connectivity Program (TBCP) is a federal grant program that provides funding specifically to tribal governments and tribal colleges to deploy broadband infrastructure on tribal lands. Authorized under the Consolidated Appropriations Act of 2021 and significantly expanded by the Infrastructure Investment and Jobs Act of 2021, the program has made over three billion dollars available across multiple funding rounds. Eligible uses include construction of middle-mile and last-mile fiber, fixed wireless infrastructure, satellite connectivity, and community anchor institution connectivity. While TBCP does not fund data center construction directly, it funds the network infrastructure that makes a data center viable: fiber backhaul, network operations centers, and community connectivity that creates local demand. Tribal nations that secure TBCP funding create a stronger foundation for data center investment because network infrastructure is often the key missing input that prevents a site from being financeable. Konative assists tribal applicants in framing TBCP applications to maximize infrastructure assets that support downstream data center development.",
+    category: "Federal Funding",
+  },
+  {
+    question: "Can a tribal IDC access DOE Loan Programs Office financing?",
+    answer:
+      "Yes, a tribal Indigenous Development Corporation can access DOE Loan Programs Office financing through several programs, most directly the Tribal Energy Loan Guarantee Program (TELGP). TELGP provides loan guarantees for energy development projects on tribal lands, including power infrastructure, renewable generation, and energy-intensive facilities such as data centers. The Title XVII Innovative Clean Energy Loan Guarantee Program is available for projects that deploy commercial clean energy technology, including energy-efficient data center infrastructure powered by renewables. Eligible borrowers include tribal governments, tribal business entities, and tribally chartered corporations. DOE LPO financing is typically appropriate for projects above twenty million dollars in capital cost. The application process requires a detailed technical and financial package, including an independent engineer's report, offtake agreements or revenue projections, and environmental review. The advantage of LPO financing is the ability to access low-cost federal capital for infrastructure that commercial lenders may not yet support at scale in tribal markets. Konative prepares tribal projects for LPO applications by structuring the financial and technical documentation to meet program requirements.",
+    category: "Federal Funding",
+  },
+  {
+    question: "What is the difference between tribal broadband grants and data center development funding?",
+    answer:
+      "Tribal broadband grants and data center development funding address different infrastructure layers and come from different federal sources. Broadband grants, such as NTIA TBCP and USDA ReConnect, fund the construction of network infrastructure: fiber, wireless towers, internet exchange points, and middle-mile connectivity. They are designed to close the digital divide and are measured by new connections and bandwidth delivered. Data center development funding, by contrast, finances physical facilities: buildings, power systems, cooling infrastructure, and compute equipment. This funding comes from DOE LPO loan guarantees, EDA economic development grants, BIA infrastructure programs, and private capital markets. The two funding streams are complementary: broadband grants establish the connectivity layer that makes a data center commercially viable, while data center funding builds the facility that runs on that connectivity. Many successful tribal data center projects sequence broadband grants first, then leverage the resulting infrastructure as an asset when raising data center development capital. Konative helps tribes develop a multi-program funding strategy that sequences these sources correctly.",
+    category: "Federal Funding",
+  },
+  {
+    question: "What is a tribal IDC and why does it matter for data center deals?",
+    answer:
+      "A tribal Indigenous Development Corporation (IDC) is a business entity created under tribal law or federal statute that is wholly or substantially owned by a tribal government and established to conduct economic development activities on behalf of the tribe. IDCs matter profoundly for data center deals because they are the legal vehicle through which a tribe can enter commercial contracts, hold assets, receive revenues, and access federal contracting preferences without requiring the tribal government itself to be a direct party to every transaction. In data center deals, the IDC typically serves as the lessor, joint venture partner, or project developer, allowing the tribe to participate commercially while preserving governmental immunity where appropriate. IDCs can also qualify for SBA Tribal 8(a) certification, which opens federal procurement channels and creates a path to anchor tenancy in government-facing data center facilities. Konative structures deals to work within and around IDC frameworks to ensure projects are both commercially viable and legally sound under tribal law.",
+    category: "Deal Structure & Sovereignty",
+  },
+  {
+    question: "How does tribal sovereignty affect data center development deals?",
+    answer:
+      "Tribal sovereignty fundamentally shapes every aspect of a data center development deal, from land title to taxation to dispute resolution. Tribal land held in federal trust cannot be mortgaged or used as collateral under standard commercial loan agreements without BIA approval, which affects how capital partners structure their security interests. Tribal sovereign immunity means that contracts with tribal governments must include explicit immunity waivers or the use of tribal business entities that do not carry governmental immunity for commercial purposes. However, sovereignty also creates advantages: tribes can establish their own regulatory frameworks, set favorable tax rates or tax exemptions, and streamline permitting timelines that would take years in state-regulated jurisdictions. Tribes can also create data privacy and data residency regimes that are attractive to specific enterprise and government tenants. The key is structuring deals to leverage sovereign advantages while providing the legal certainty that capital partners and operators require to invest. Konative's deal structuring practice is built specifically around this tension, producing agreements that satisfy both tribal governance requirements and institutional investor standards.",
+    category: "Deal Structure & Sovereignty",
+  },
+  {
+    question: "What is a sovereignty-preserving data center deal structure?",
+    answer:
+      "A sovereignty-preserving data center deal structure is a transaction framework that allows a tribal nation to develop and benefit from a data center facility without ceding control of its land, governance authority, or long-term economic interests to an outside developer or investor. The structure typically involves a tribal IDC as the primary entity holding the ground lease or fee interest, with a development agreement that gives a private partner construction and operational responsibilities for a defined term. Equity returns flow back to the IDC rather than being permanently assigned to outside investors. Tribal law governs on-reservation activities, and dispute resolution is structured through tribal courts or agreed arbitration rather than state court systems. The tribal nation retains the right of first refusal on facility purchase at the end of any operating agreement. Revenue-sharing provisions are structured to compound tribal benefit over time rather than front-load payments to outside parties. Konative designs sovereignty-preserving structures as the standard in every tribal engagement, not as a special accommodation.",
+    category: "Deal Structure & Sovereignty",
+  },
+  {
+    question:
+      "What is the difference between a ground lease, JV, and development agreement for a tribal data center?",
+    answer:
+      "A ground lease, joint venture, and development agreement represent three distinct ways a tribal nation can partner with a private developer for a data center project, each with different risk profiles, revenue structures, and sovereignty implications. A ground lease is the simplest structure: the tribe leases land to a developer for a fixed term, typically fifty to ninety-nine years, and receives rent in return. The developer builds and owns the facility. The tribe's upside is capped at lease payments, but its risk is limited. A joint venture creates a co-ownership structure where the tribe and a private partner each hold equity in the project entity, sharing both profits and capital obligations proportionally. The tribe participates in operating income but also bears project risk. A development agreement is a contract where the tribe, through its IDC, retains ownership and hires a developer to design, build, and operate the facility under a time-limited contract. The tribe captures the most long-term value but also carries the most financial exposure. Konative evaluates each structure against a tribe's capital position, risk tolerance, and long-term economic goals.",
+    category: "Deal Structure & Sovereignty",
+  },
+  {
+    question:
+      "What should a tribal council review before signing a data center development agreement?",
+    answer:
+      "Before signing a data center development agreement, a tribal council should review six critical areas: land and title provisions confirming the agreement does not impair trust status or create unauthorized encumbrances; revenue structure confirming when and how the tribe receives payments and under what conditions private partners are paid first; sovereignty and immunity provisions identifying what waivers are granted and whether they are appropriately limited in scope and duration; term and exit rights clarifying how the tribe can terminate the agreement for default or changed circumstances; tribal employment and procurement preferences ensuring local economic benefit is contractually required; and data governance provisions defining who controls data processed in the facility. The council should also confirm that the agreement has been reviewed by legal counsel with specific expertise in federal Indian law, not just commercial real estate law, as standard commercial agreements routinely include provisions that are unenforceable or legally problematic on tribal land. Konative coordinates transaction legal review as part of its advisory process.",
+    category: "Deal Structure & Sovereignty",
+  },
+  {
+    question: "What does Konative do for tribal nations?",
+    answer:
+      "Konative is a tribal connectivity and data center development brokerage that helps tribal nations and Indigenous Development Corporations transform land and power assets into financeable data center projects. Konative's core services span three areas: project readiness assessment, deal structuring and capital introduction, and federal program strategy. In the readiness phase, Konative evaluates a tribe's power, fiber, land, and legal infrastructure to determine project viability and identify gaps. In the deal structuring phase, Konative designs sovereignty-preserving transaction frameworks and introduces the right capital partners, developers, and technology operators from its network. In the federal program phase, Konative maps applicable grants, loan guarantees, and tax programs to each project and prepares the documentation needed to access them. Konative operates as a vendor-neutral advisor, meaning it does not take equity stakes in tribal projects and does not represent any specific developer or technology vendor. Its fee structure aligns with tribal outcomes. Konative serves tribal nations across the United States and Canadian First Nations.",
+    category: "Konative Services",
+  },
+  {
+    question: "What is included in a Konative Project Readiness Review?",
+    answer:
+      "A Konative Project Readiness Review is a comprehensive site and business assessment that covers everything a capital partner or developer needs to evaluate before committing to a tribal data center project. The review includes seven components: power assessment covering existing capacity, interconnection queue position, and path to required megawatts; fiber and network access including existing routes and middle-mile gaps; land and title analysis covering trust vs. fee status and BIA approval requirements; tribal business entity review covering IDC structure and contracting capacity; environmental baseline for preliminary permitting screening; market demand analysis for hyperscaler, federal agency, and regional enterprise demand; and federal program eligibility mapping. The output is a written report with a readiness tier rating and a prioritized action plan designed to be shared directly with capital partners and developers. Konative delivers the review within sixty to ninety days and supports the tribal team in presenting findings to stakeholders including the council, IDC board, and potential capital partners.",
+    category: "Konative Services",
+  },
+  {
+    question: "Does Konative take an equity stake in tribal projects?",
+    answer:
+      "No, Konative does not take an equity stake in tribal data center projects. Konative operates as a vendor-neutral advisory and brokerage firm, which means its interests are structurally aligned with the tribe's rather than with any developer, capital partner, or technology vendor participating in the deal. This distinction matters because advisors who take equity stakes have a financial incentive to close deals and choose partners that maximize their own returns, which may not align with the tribe's long-term sovereignty and economic interests. Konative earns advisory fees and success fees tied to project milestones, creating alignment with tribal outcomes without creating the conflicts of interest that come with co-investment. Konative's vendor-neutral stance also means it can objectively evaluate multiple developers, operators, and capital providers and recommend the best fit for each tribe's specific goals, rather than steering projects toward partners in which it has a financial relationship. This model is a deliberate design choice that reflects Konative's commitment to tribal-first advisory practice.",
+    category: "Konative Services",
+  },
+  {
+    question: "How does Konative differ from a traditional data center developer or real estate broker?",
+    answer:
+      "Konative differs from a traditional data center developer or real estate broker in four fundamental ways. First, Konative represents the tribe's interests exclusively; a developer represents its own balance sheet and investor returns, and a real estate broker typically represents both sides or defaults to the paying party. Second, Konative brings tribal-specific expertise in federal Indian law, trust land constraints, IDC structuring, and federal program eligibility that no general commercial real estate firm possesses. Third, Konative is AI-native and data-driven, using infrastructure signal data, power availability analytics, and federal procurement market data to evaluate tribal sites with the same rigor applied to commercial data center transactions in primary markets. Fourth, Konative is vendor-neutral: it does not build facilities, does not sell technology, and does not take equity in projects, which eliminates the conflicts of interest that arise when developers advise on deals they intend to win. For Konative, tribal data center development is the entire business — not a practice area.",
+    category: "Konative Services",
+  },
+  {
+    question: "Does Konative work with Canadian First Nations?",
+    answer:
+      "Yes, Konative works with Canadian First Nations on data center development and connectivity infrastructure projects. The Canadian market presents significant opportunity for First Nations with large land holdings, access to low-cost renewable hydroelectric and wind power, and proximity to major population centers in British Columbia, Alberta, Ontario, and Quebec. Canadian First Nations operate under the Indian Act and modern treaty frameworks, which create a distinct legal and regulatory environment from US tribal law, but share the same core tension between land sovereignty, commercial development, and the need for business entity structures that interface with capital markets. Konative applies its Project Readiness Review methodology to First Nations sites, incorporating Canadian federal program eligibility including Indigenous Services Canada, the Strategic Infrastructure Fund, and the CRTC's Broadband Fund. Konative also works with First Nations Development Corporations and self-governing nations operating under modern treaty agreements.",
+    category: "Canada / First Nations",
+  },
+  {
+    question: "What programs support Indigenous data center development in Canada?",
+    answer:
+      "Several Canadian federal programs support Indigenous data center and connectivity infrastructure development. Indigenous Services Canada provides capital funding for on-reserve infrastructure through the First Nations Infrastructure Fund, which covers community buildings, connectivity, and energy systems. The CRTC Broadband Fund allocates funding for last-mile and backbone connectivity in underserved areas with Indigenous eligibility preferences. The Canada Infrastructure Bank has a dedicated Indigenous Infrastructure program that provides low-cost financing for projects above twenty-five million dollars, including energy, broadband, and community infrastructure. Natural Resources Canada's Indigenous Off-Diesel Initiative funds renewable energy projects on Indigenous lands that can supply data center power. The Strategic Innovation Fund and Regional Development Agencies provide economic development grants applicable to Indigenous-owned technology facilities. Provincial programs vary significantly by province, with BC, Ontario, and Quebec offering the most robust Indigenous economic development finance vehicles. Konative maps applicable Canadian federal and provincial programs to each First Nation's specific project.",
+    category: "Canada / First Nations",
+  },
+];
+
+const CATEGORIES = [
+  "Getting Started",
+  "Federal Funding",
+  "Deal Structure & Sovereignty",
+  "Konative Services",
+  "Canada / First Nations",
+] as const;
+
+export default function AnswersPage() {
+  const grouped = CATEGORIES.map((cat) => ({
+    category: cat,
+    items: FAQ_ITEMS.filter((f) => f.category === cat),
+  }));
+
+  return (
+    <>
+      <JsonLd data={faqSchema(FAQ_ITEMS)} />
+
+      <div
+        style={{
+          background: NAVY,
+          minHeight: "100vh",
+          color: "#fff",
+          fontFamily: BODY_FONT,
+        }}
+      >
+        {/* Hero */}
+        <section
+          style={{
+            maxWidth: 1080,
+            margin: "0 auto",
+            padding: "80px 48px 0",
+            borderBottom: `1px solid ${BORDER}`,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              color: ORANGE,
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              marginBottom: 16,
+            }}
+          >
+            Tribal Data Center Development
+          </div>
+          <h1
+            style={{
+              fontFamily: DISPLAY_FONT,
+              fontWeight: 800,
+              fontSize: "clamp(36px, 5vw, 64px)",
+              lineHeight: 0.95,
+              textTransform: "uppercase",
+              margin: "0 0 20px",
+            }}
+          >
+            Answers
+          </h1>
+          <p
+            style={{
+              fontSize: 17,
+              lineHeight: 1.65,
+              color: TEXT_DIM,
+              maxWidth: 680,
+              margin: "0 0 48px",
+            }}
+          >
+            The most common questions about tribal data center development, federal funding programs,
+            sovereignty-preserving deal structures, and how Konative works — answered clearly.
+          </p>
+
+          {/* Category jump links */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 8,
+              paddingBottom: 40,
+            }}
+          >
+            {CATEGORIES.map((cat) => (
+              <a
+                key={cat}
+                href={`#${cat.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: TEXT_FAINT,
+                  textDecoration: "none",
+                  border: `1px solid ${BORDER}`,
+                  padding: "6px 12px",
+                  lineHeight: 1,
+                  transition: "color 0.15s",
+                }}
+              >
+                {cat}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ sections */}
+        <section style={{ maxWidth: 1080, margin: "0 auto", padding: "64px 48px 96px" }}>
+          {grouped.map(({ category, items }) => (
+            <div
+              key={category}
+              id={category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
+              style={{ marginBottom: 72 }}
+            >
+              <div
+                style={{
+                  fontSize: 11,
+                  color: ORANGE,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  marginBottom: 8,
+                }}
+              >
+                {category}
+              </div>
+              <div
+                style={{
+                  height: 1,
+                  background: BORDER,
+                  marginBottom: 40,
+                }}
+              />
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+                {items.map((faq, i) => (
+                  <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 40 }}>
+                    <div>
+                      <h2
+                        style={{
+                          fontFamily: DISPLAY_FONT,
+                          fontWeight: 700,
+                          fontSize: 20,
+                          lineHeight: 1.2,
+                          margin: 0,
+                          color: "#fff",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {faq.question}
+                      </h2>
+                    </div>
+                    <div>
+                      <p
+                        style={{
+                          fontSize: 15,
+                          lineHeight: 1.75,
+                          color: TEXT_DIM,
+                          margin: 0,
+                        }}
+                      >
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* CTA band */}
+          <div
+            style={{
+              borderTop: `1px solid ${BORDER}`,
+              paddingTop: 56,
+              display: "grid",
+              gridTemplateColumns: "1fr auto",
+              gap: 40,
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontFamily: DISPLAY_FONT,
+                  fontWeight: 800,
+                  fontSize: "clamp(28px, 3vw, 44px)",
+                  lineHeight: 1,
+                  textTransform: "uppercase",
+                  marginBottom: 12,
+                }}
+              >
+                Have a question not listed here?
+              </div>
+              <p style={{ fontSize: 15, lineHeight: 1.65, color: TEXT_DIM, margin: 0, maxWidth: 520 }}>
+                Book a 15-minute call and we will answer it directly. No pitch deck, no obligation.
+              </p>
+            </div>
+            <Link
+              href="/call"
+              style={{
+                display: "inline-block",
+                background: ORANGE,
+                color: "#fff",
+                fontFamily: DISPLAY_FONT,
+                fontWeight: 700,
+                fontSize: 16,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                padding: "14px 28px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Book a 15-Min Call →
+            </Link>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}

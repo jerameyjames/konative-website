@@ -15,7 +15,7 @@ export const tribesSeed: AudiencePage = {
       "You already have what the AI buildout needs. Konative is how you put it to work.",
     subhead:
       "Land and interconnect rights are the two scarcest assets in North American data center development. Konative is the development partner that turns them into a credible, financeable project — on terms that preserve sovereignty and serve your nation.",
-    primaryCta: { label: "Request a Project Readiness Review", href: "#cta" },
+    primaryCta: { label: "Request a Project Readiness Review", href: "/call" },
   },
   whyNow: {
     title: "Why now",
@@ -120,6 +120,6 @@ export const tribesSeed: AudiencePage = {
     headline: "Ready to talk through a real project?",
     subhead:
       "Tell us about the land, the energy posture, and what the council has authorized so far. We'll come back with a fit assessment and a path.",
-    primaryCta: { label: "Request a Project Readiness Review", href: "#cta" },
+    primaryCta: { label: "Request a Project Readiness Review", href: "/call" },
   },
 };

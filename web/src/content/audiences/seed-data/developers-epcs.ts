@@ -14,7 +14,7 @@ export const developersEpcsSeed: AudiencePage = {
     headline: "The sites your pipeline is missing are in markets your team is not calling.",
     subhead:
       "Tribal nations, indigenous development corporations, and Canadian First Nations control land and power access that your standard site origination process will never reach. Cold outreach to these communities does not work. Konative is the introduction and structuring partner that opens those relationships — and keeps them open through close.",
-    primaryCta: { label: "Discuss your pipeline needs", href: "#cta" },
+    primaryCta: { label: "Discuss your pipeline needs", href: "/call" },
   },
   whyNow: {
     title: "Why now",
@@ -110,6 +110,6 @@ export const developersEpcsSeed: AudiencePage = {
     headline: "Your next project may be in a market you have not called yet.",
     subhead:
       "Tell us your development criteria. We will tell you whether we have pipeline that fits.",
-    primaryCta: { label: "Discuss your pipeline needs", href: "#cta" },
+    primaryCta: { label: "Discuss your pipeline needs", href: "/call" },
   },
 };

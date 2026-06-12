@@ -14,7 +14,7 @@ export const advisorsSeed: AudiencePage = {
     headline: "You know who needs this. We make it easy to introduce them.",
     subhead:
       "If you work with tribal nations, investors, landowners, or utilities thinking about data center development, Konative is the partner you can stand behind. We pay you on closed introductions, give you the materials to make the pitch, and treat you like a partner — not a tipster.",
-    primaryCta: { label: "Apply to the ambassador program", href: "#cta" },
+    primaryCta: { label: "Apply to the ambassador program", href: "/call" },
   },
   whyNow: {
     title: "Why now",
@@ -100,6 +100,6 @@ export const advisorsSeed: AudiencePage = {
     headline: "Ready to introduce someone?",
     subhead:
       "Tell us who you typically work with. We'll set up a 30-minute onboarding and get you the materials to start.",
-    primaryCta: { label: "Apply to the ambassador program", href: "#cta" },
+    primaryCta: { label: "Apply to the ambassador program", href: "/call" },
   },
 };

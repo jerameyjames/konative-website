@@ -14,7 +14,7 @@ export const landownersSeed: AudiencePage = {
     headline: "Developers want land with power. You may have exactly what they need.",
     subhead:
       "Data center operators are paying record ground lease rates for land near transmission infrastructure, fiber routes, and available grid capacity. Most landowners do not know whether their property qualifies — or how to avoid leaving millions on the table in the negotiation. Konative is the advisor who works for you, not the developer.",
-    primaryCta: { label: "Get a land assessment", href: "#cta" },
+    primaryCta: { label: "Get a land assessment", href: "/call" },
   },
   whyNow: {
     title: "Why now",
@@ -110,6 +110,6 @@ export const landownersSeed: AudiencePage = {
     headline: "Not sure if your land qualifies? That is exactly what we find out.",
     subhead:
       "A one-week desk assessment gives you a clear answer before you spend time talking to developers.",
-    primaryCta: { label: "Get a land assessment", href: "#cta" },
+    primaryCta: { label: "Get a land assessment", href: "/call" },
   },
 };

@@ -14,7 +14,7 @@ export const utilitiesSeed: AudiencePage = {
     headline: "Available capacity is your most valuable asset right now.",
     subhead:
       "Data center operators are paying premium rates for predictable, large-block load — and they are spending millions trying to find utilities with the capacity, grid stability, and permitting flexibility to support them. If your service territory has available transmission capacity, Konative is the partner that puts you in front of the right operators before your competitors do.",
-    primaryCta: { label: "Discuss your capacity position", href: "#cta" },
+    primaryCta: { label: "Discuss your capacity position", href: "/call" },
   },
   whyNow: {
     title: "Why now",
@@ -110,6 +110,6 @@ export const utilitiesSeed: AudiencePage = {
     headline: "Available capacity does not market itself.",
     subhead:
       "Tell us about your service territory. We will tell you whether there is an operator opportunity worth pursuing.",
-    primaryCta: { label: "Discuss your capacity position", href: "#cta" },
+    primaryCta: { label: "Discuss your capacity position", href: "/call" },
   },
 };

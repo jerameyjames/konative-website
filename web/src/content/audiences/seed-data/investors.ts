@@ -14,7 +14,7 @@ export const investorsSeed: AudiencePage = {
     headline: "The deal flow your competitors are not seeing.",
     subhead:
       "The highest-yield data center sites in North America are not on LoopNet. They are held by tribal nations, rural landowners, and Canadian First Nations who have never been approached correctly. Konative is the origination and structuring partner that brings you qualified, investment-ready opportunities from markets that institutional capital has systematically missed.",
-    primaryCta: { label: "Request deal flow access", href: "#cta" },
+    primaryCta: { label: "Request deal flow access", href: "/call" },
   },
   whyNow: {
     title: "Why now",
@@ -110,6 +110,6 @@ export const investorsSeed: AudiencePage = {
     headline: "Ready to see what we are sourcing?",
     subhead:
       "Tell us your deployment criteria. We will share relevant opportunities as they qualify.",
-    primaryCta: { label: "Request deal flow access", href: "#cta" },
+    primaryCta: { label: "Request deal flow access", href: "/call" },
   },
 };
