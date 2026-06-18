@@ -7,7 +7,7 @@ verified before production activation.
 ## Required n8n environment variables
 
 - `KONATIVE_INTAKE_TOKEN`: a new random secret used only for this webhook
-- `TWENTY_API_KEY`: the existing Twenty workspace API key
+- `TWENTY_API_TOKEN` (preferred) or `TWENTY_API_KEY`: the existing Twenty workspace API credential
 - `TWENTY_API_URL`: the existing Twenty GraphQL base URL
 
 ## Required Vercel environment variables
