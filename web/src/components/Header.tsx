@@ -5,11 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
-  { label: "Tribal", url: "/tribal" },
-  { label: "Datacenters", url: "/datacenters" },
-  { label: "Map", url: "/map" },
-  { label: "Intelligence", url: "/intelligence" },
   { label: "Brokerage", url: "/connectivity" },
+  { label: "Data Centers", url: "/data-center-connectivity" },
+  { label: "Tribal & Rural", url: "/tribal" },
+  { label: "Intelligence", url: "/intelligence" },
+  { label: "Map", url: "/map" },
   { label: "Insights", url: "/news" },
 ];
 
@@ -223,7 +223,7 @@ export default function Header() {
               onMouseEnter={() => setCtaHovered(true)}
               onMouseLeave={() => setCtaHovered(false)}
             >
-              Request Access
+              Get Options
             </Link>
           )}
 

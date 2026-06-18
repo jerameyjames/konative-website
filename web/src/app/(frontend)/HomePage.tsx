@@ -114,19 +114,12 @@ function GhostBtn({ children, href = '#', large, dark, style: sx = {} }: {
 
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 function Hero() {
-  const [health, setHealth] = useState<{ routeCount: number; marketCount: number; capacityBrokered: string; latency: string } | null>(null)
-  useEffect(() => {
-    fetch('/api/v1/health').then(r => r.ok ? r.json() : null).then(d => d && setHealth(d)).catch(() => {})
-  }, [])
-
-  const routeCount = health?.routeCount ?? 847
-  const marketCount = health?.marketCount ?? 12
-  const [, r1] = useCountUp(routeCount)
+  const [, r1] = useCountUp(100)
   const [, r2] = useCountUp(2)
   const statsData = [
-    { ref: r1, display: String(routeCount), label: 'Signals + Routes Analyzed' },
+    { ref: r1, display: '100+', label: 'Suppliers through Avant' },
     { ref: r2, display: '2', label: 'Core Verticals' },
-    { ref: null, display: '100+', label: 'Supplier Portfolio' },
+    { ref: null, display: 'US + CA', label: 'Market Intelligence' },
     { ref: null, display: '$0', label: 'Buyer Advisory Cost' },
   ]
 
@@ -164,7 +157,7 @@ function Hero() {
             Konative is the connectivity intelligence brokerage for Tribal enterprises and the data centers powering AI. We combine sovereignty-aware advisory, Avant&apos;s supplier portfolio, and a live infrastructure map to source fiber, transport, internet, cloud on-ramps, and resilient networks before the market sees the RFP.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 64 }}>
-            <PrimaryBtn href="/contact" large>Request Connectivity Strategy</PrimaryBtn>
+            <PrimaryBtn href="/contact" large>Get Connectivity Options</PrimaryBtn>
             <GhostBtn href="/tribal" large>Explore Tribal Enterprise →</GhostBtn>
           </div>
         </div>
@@ -188,21 +181,14 @@ function Hero() {
 
 // ─── TICKER ───────────────────────────────────────────────────────────────────
 const TICKER_FALLBACK = [
-  { route: 'ASH→NYC', metric: 'Dark fiber', value: '+2 routes', direction: 'up' },
-  { route: 'DAL→ATL', metric: 'Wavelength 400G', value: '−6.2%', direction: 'down' },
-  { route: 'SJC→SEA', metric: 'Colocation', value: '3 quotes', direction: 'up' },
-  { route: 'CHI→TOR', metric: 'Cross-border IP', value: 'Live', direction: 'up' },
-  { route: 'LAX→PHX', metric: 'Backhaul', value: '+1.8%', direction: 'up' },
-  { route: 'YYZ→MTL', metric: 'Dark fiber', value: '−4.0%', direction: 'down' },
-  { route: 'MIA→ATL', metric: 'Wavelength 100G', value: '5 quotes', direction: 'up' },
-  { route: 'DEN→SLC', metric: 'Colocation', value: 'New', direction: 'up' },
+  { route: 'ENTERPRISE', metric: 'Internet · SD-WAN · Voice', value: 'SOURCE', direction: 'up' },
+  { route: 'DATACENTER', metric: 'Dark fiber · Waves · DCI', value: 'DESIGN', direction: 'up' },
+  { route: 'TRIBAL', metric: 'Government · Gaming · Health', value: 'ADVISE', direction: 'up' },
+  { route: 'CLOUD', metric: 'On-ramps · Colocation · Security', value: 'PROCURE', direction: 'up' },
 ]
 
 function Ticker() {
-  const [items, setItems] = useState(TICKER_FALLBACK)
-  useEffect(() => {
-    fetch('/api/v1/market/ticker').then(r => r.ok ? r.json() : null).then(d => d?.length && setItems(d)).catch(() => {})
-  }, [])
+  const items = TICKER_FALLBACK
   const row = [...items, ...items]
   return (
     <div style={{ position: 'relative', zIndex: 2, background: DARK, borderTop: `1px solid ${RED}`, overflow: 'hidden', maxWidth: '100vw', contain: 'paint layout' }}>
@@ -217,7 +203,7 @@ function Ticker() {
       <div style={{ display: 'flex', alignItems: 'stretch' }}>
         <div style={{ background: RED, color: '#fff', fontFamily: BODY, fontWeight: 700, fontSize: 10.5, letterSpacing: '0.16em', textTransform: 'uppercase', padding: '0 18px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff', marginRight: 8, display: 'inline-block' }} />
-          Live Market
+          What we broker
         </div>
         <div style={{ overflow: 'hidden', flex: 1 }}>
           <div className="kn-ticker-track">
@@ -315,10 +301,10 @@ function FeatureCards() {
 // ─── MARKET INTEL ─────────────────────────────────────────────────────────────
 type Signal = { id: string; tag: string; title: string; meta: string; time: string; delta: string; direction: 'up' | 'down' }
 const SIGNALS_FALLBACK: Signal[] = [
-  { id: '1', tag: 'Pricing', title: '400G wavelength rates compress 6.2% on the Dallas–Atlanta corridor', meta: 'Market Signal', time: '14m ago', delta: '−6.2%', direction: 'down' },
-  { id: '2', tag: 'Capacity', title: 'Two new dark fiber routes light between Ashburn and metro NYC', meta: 'Inventory', time: '1h ago', delta: '+2', direction: 'up' },
-  { id: '3', tag: 'Cross-Border', title: 'Chicago–Toronto IP transit inventory returns to market after 9-month gap', meta: 'Coverage', time: '3h ago', delta: 'Live', direction: 'up' },
-  { id: '4', tag: 'Colocation', title: 'Phoenix colo absorption accelerates as AI tenants pre-lease 2027 capacity', meta: 'Demand', time: '5h ago', delta: '+18%', direction: 'up' },
+  { id: '1', tag: 'Funding', title: 'Tribal broadband awards identify organizations moving from funded infrastructure to operational network needs', meta: 'Award intelligence', time: 'current research', delta: 'TBCP', direction: 'up' },
+  { id: '2', tag: 'Datacenters', title: 'New campuses create recurring demand for diverse transport, dark fiber, wavelengths, and cloud access', meta: 'Demand signal', time: 'US + Canada', delta: 'DCI', direction: 'up' },
+  { id: '3', tag: 'Rural', title: 'Middle-mile and last-mile builds create enterprise opportunities beyond the original grant-funded network', meta: 'Market development', time: 'Tribal + rural', delta: 'FIBER', direction: 'up' },
+  { id: '4', tag: 'Portfolio', title: 'Internet opens the account; managed network, voice, cloud, mobility, and security deepen recurring revenue', meta: 'Avant portfolio', time: 'lifecycle', delta: 'MRC', direction: 'up' },
 ]
 
 function SignalRow({ s, last }: { s: Signal; last: boolean }) {
@@ -362,10 +348,7 @@ function NewsletterForm() {
 }
 
 function MarketIntel() {
-  const [signals, setSignals] = useState<Signal[]>(SIGNALS_FALLBACK)
-  useEffect(() => {
-    fetch('/api/v1/content?limit=4').then(r => r.ok ? r.json() : null).then(d => d?.length && setSignals(d)).catch(() => {})
-  }, [])
+  const signals = SIGNALS_FALLBACK
   return (
     <section style={{ background: SURFACE, padding: '100px 32px', borderTop: `1px solid ${DIVIDER}`, borderBottom: `1px solid ${DIVIDER}` }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: 72 }}>
@@ -387,7 +370,7 @@ function MarketIntel() {
             <h3 style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 28, textTransform: 'uppercase', color: '#fff', marginBottom: 14, lineHeight: 1.02 }}>Connectivity demand, in your inbox</h3>
             <p style={{ fontFamily: BODY, fontSize: 13.5, lineHeight: 1.6, color: 'rgba(255,255,255,0.55)', marginBottom: 22 }}>Weekly signals on Tribal enterprise needs, datacenter demand, supplier movement, and infrastructure corridors worth acting on.</p>
             <NewsletterForm />
-            <div style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 14 }}>12 markets · 14 carriers · updated live</div>
+            <div style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 14 }}>Source-backed research · practical buying guidance</div>
           </div>
         </div>
       </div>
@@ -422,7 +405,7 @@ function CoverageMapSection() {
               </div>
             ))}
           </div>
-          <div style={{ fontFamily: MONO, position: 'absolute', top: 18, right: 22, fontSize: 11, color: 'rgba(17,17,17,0.48)', background: 'rgba(255,255,255,0.86)', border: `1px solid ${DIVIDER}`, padding: '8px 12px', zIndex: 3 }}>US + Canada · live data product</div>
+          <div style={{ fontFamily: MONO, position: 'absolute', top: 18, right: 22, fontSize: 11, color: 'rgba(17,17,17,0.48)', background: 'rgba(255,255,255,0.86)', border: `1px solid ${DIVIDER}`, padding: '8px 12px', zIndex: 3 }}>US + Canada · infrastructure intelligence</div>
           <div style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 3 }}>
             <Link href="/map" style={{ fontFamily: BODY, fontWeight: 600, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', background: 'rgba(200,0,31,0.85)', color: '#fff', padding: '10px 18px', textDecoration: 'none', display: 'inline-block', borderRadius: 2 }}>
               Open Full Map →
@@ -481,7 +464,7 @@ function MarketsTable() {
               Live across <span style={{ color: RED }}>12 metro</span> markets.
             </h2>
           </div>
-          <div style={{ fontFamily: MONO, fontSize: 13, color: MUTED }}>508 active routes · updated 14m ago</div>
+          <div style={{ fontFamily: MONO, fontSize: 13, color: MUTED }}>Infrastructure research by market</div>
         </div>
         <div className="kn-fade-up" style={{ background: '#fff', border: `1px solid ${DIVIDER}` }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 135px), 1fr))', gap: 12, padding: '14px 28px', borderBottom: `1px solid ${DIVIDER}`, background: SURFACE }}>
@@ -565,7 +548,7 @@ function CTASection() {
         <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 4, background: RED }} />
         <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 60, alignItems: 'center', padding: '64px 56px' }}>
           <div className="kn-fade-up">
-            <Eyebrow>Request Access</Eyebrow>
+            <Eyebrow>Start with one requirement</Eyebrow>
             <h2 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 'clamp(40px,5.5vw,72px)', lineHeight: 0.9, textTransform: 'uppercase', color: TEXT, marginBottom: 20 }}>
               Bring the tribe, site, or network <span style={{ color: RED }}>requirement</span>.
             </h2>
@@ -576,15 +559,15 @@ function CTASection() {
           <div className="kn-fade-up" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'flex', gap: 40, marginBottom: 14 }}>
               <div>
-                <div style={{ fontFamily: MONO, fontSize: 40, fontWeight: 600, color: TEXT }}>24h</div>
-                <div style={{ fontFamily: BODY, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9CA3AF', marginTop: 4 }}>First Readout</div>
+                <div style={{ fontFamily: MONO, fontSize: 40, fontWeight: 600, color: TEXT }}>1</div>
+                <div style={{ fontFamily: BODY, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9CA3AF', marginTop: 4 }}>Point of Contact</div>
               </div>
               <div>
                 <div style={{ fontFamily: MONO, fontSize: 40, fontWeight: 600, color: TEXT }}>$0</div>
                 <div style={{ fontFamily: BODY, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9CA3AF', marginTop: 4 }}>Cost to Buyers</div>
               </div>
             </div>
-            <PrimaryBtn href="/contact" large style={{ width: '100%', textAlign: 'center' }}>Request Connectivity Strategy</PrimaryBtn>
+            <PrimaryBtn href="/contact" large style={{ width: '100%', textAlign: 'center' }}>Get Connectivity Options</PrimaryBtn>
             <GhostBtn href="/tribal" large style={{ width: '100%', textAlign: 'center' }}>Explore Tribal Enterprise</GhostBtn>
           </div>
         </div>
@@ -609,7 +592,6 @@ export default function HomePage() {
       <FeatureCards />
       <MarketIntel />
       <CoverageMapSection />
-      <MarketsTable />
       <WhoWeServe />
       <StatsBand />
       <CTASection />
