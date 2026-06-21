@@ -5,9 +5,9 @@ import { withSentryConfig } from "@sentry/nextjs";
 
 /** Parent of `web/` — must match Vercel `outputFileTracingRoot` when Root Directory is `web`. */
 const webDir = path.dirname(fileURLToPath(import.meta.url));
-const monorepoRoot = path.resolve(webDir, "..");
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   async redirects() {
     return [
       { source: "/powered-land", destination: "/data-center-connectivity", permanent: true },
@@ -23,11 +23,8 @@ const nextConfig: NextConfig = {
     ];
   },
   allowedDevOrigins: ["127.0.0.1"],
-  /** Tracing includes monorepo root so Vercel serverless output matches local builds when app lives in `web/`. */
-  outputFileTracingRoot: monorepoRoot,
-  turbopack: {
-    root: monorepoRoot,
-  },
+  /** Scope tracing to the app dir so OpenNext finds standalone at .next/standalone/.next (Cloudflare/OpenNext target). */
+  outputFileTracingRoot: webDir,
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io", pathname: "/**" },
