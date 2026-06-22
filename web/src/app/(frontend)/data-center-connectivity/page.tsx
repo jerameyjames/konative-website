@@ -352,7 +352,36 @@ export default function DataCenterConnectivityPage() {
           </div>
         </PitchSection>
 
-        {/* Section 5: FAQ */}
+        {/* Section 5: Proprietary proof trackers */}
+        <PitchSection eyebrow="Proprietary Intelligence" heading="Live trackers behind our connectivity work" background="#F9FAFB">
+          <p style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 720, marginBottom: 36 }}>
+            Konative maintains proprietary trackers that surface where data-center demand is forming, stalling, or shifting — the intelligence layer that informs every sourcing engagement.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
+            <div style={bridgeCardBase}>
+              <div style={bridgeNumStyle}>01</div>
+              <h3 style={bridgeTitleStyle}>Stalled &amp; blocked projects</h3>
+              <p style={bridgeDescStyle}>
+                Live tracker of stalled, canceled, paused, and blocked data-center projects in NV, WV, FL, and OK — with governor-level context for outreach. Where projects die is where connectivity demand disappears; knowing the map is part of every route-diversity assessment.
+              </p>
+              <Link href="/governors" style={bridgeCtaStyle}>
+                View the stalled-project tracker →
+              </Link>
+            </div>
+            <div style={bridgeCardBase}>
+              <div style={bridgeNumStyle}>02</div>
+              <h3 style={bridgeTitleStyle}>Canada DC market</h3>
+              <p style={bridgeDescStyle}>
+                Quebec, Ontario, Alberta, and BC provincial analysis — power markets, hyperscaler builds, First Nations partnerships, and the federal Sovereign AI Compute Strategy. Canada is an active sourcing market for cross-border connectivity and land plays.
+              </p>
+              <Link href="/canada" style={bridgeCtaStyle}>
+                Explore the Canada market →
+              </Link>
+            </div>
+          </div>
+        </PitchSection>
+
+        {/* Section 6: FAQ */}
         <PitchSection eyebrow="Common Questions" heading="FAQ" background="#F9FAFB">
           <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
             {FAQ_ITEMS.map((faq, i) => (
