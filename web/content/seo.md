@@ -101,6 +101,10 @@ analysis than any traditional brokerage. We work for our clients, not the carrie
 - **Meta title:** Tribal Data Center Opportunity Map | Konative
 - **Meta description:** An interactive map of tribal data center opportunity signals, federal broadband awards, and infrastructure projects across North America.
 
+### /data-center-connectivity
+- **Meta title:** Data Center Connectivity Broker | Transport, Dark Fiber & Interconnection | Konative
+- **Meta description:** Konative is a vendor-neutral data-center connectivity broker — an Avant sub-agent sourcing transport, dark fiber, cross-connects, colocation, and cloud on-ramps into your facility from 100+ carriers across North America. No cost to you.
+
 ### /connectivity
 - **Meta title:** Connectivity Broker | Vendor-Neutral Internet, Fiber & Network Brokerage | Konative
 - **Meta description:** Konative is a vendor-neutral connectivity broker — an Avant sub-agent sourcing internet, fiber, dark fiber, transport, cloud on-ramps, UCaaS, SASE, mobility, colocation, and data-center interconnection from 100+ suppliers at no cost to you.
