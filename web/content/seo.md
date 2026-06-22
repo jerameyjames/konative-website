@@ -57,8 +57,13 @@ analysis than any traditional brokerage. We work for our clients, not the carrie
 - **Meta description:** Power-qualified, fiber-ready data center sites in tribal and indigenous markets across North America. Pre-qualified land, established community relationships, deal structures ready for operator review.
 
 ### /tribal
-- **Meta title:** Tribal Enterprise Connectivity | Konative
+- **Meta title:** Tribal Enterprise Connectivity | Sovereignty-Aware Brokerage | Konative
 - **Meta description:** Sovereignty-aware, vendor-neutral connectivity brokerage for Tribal gaming, government, healthcare, and education. Internet, SD-WAN, voice, transport, and security — sourced from 100+ suppliers at no cost to your enterprise.
+- **Canonical:** /tribal
+- **Sections:** Hero · What we broker (8 services) · Why Konative · Proof & Data (Awards + Index) · FAQ (8 Q&A) · CTA
+- **JSON-LD:** Service (tribalConnectivityServiceSchema) + FAQPage + BreadcrumbList
+- **Primary CTA:** /call · **Secondary CTA:** /contact
+- **Proof links:** /tribal/awards (live) · /tribal/index (<!-- VERIFY: ships Wave 2 -->)
 
 <!-- VERIFY: route may be retired — /readiness-audit → /contact?projectType=data_center (permanent redirect in next.config.ts) -->
 ### /readiness-audit
