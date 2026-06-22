@@ -42,11 +42,25 @@ export const organizationSchema: JsonLdObject = {
   ],
   areaServed: ["United States", "Canada"],
   knowsAbout: [
-    "Tribal data center development",
-    "Indigenous connectivity brokerage",
-    "Data center site selection",
-    "Tribal land infrastructure",
+    // --- Connectivity-first terms (lead) ---
+    "Tribal connectivity brokerage",
+    "Rural enterprise connectivity brokerage",
+    "Data-center connectivity brokerage",
+    "Fiber and transport connectivity",
+    "Interconnection and cross-connects",
+    "Colocation connectivity brokerage",
+    "Cloud connectivity brokerage",
+    "Managed connectivity services",
+    "Vendor-neutral connectivity brokerage",
+    "SD-WAN brokerage",
     "Internet connectivity brokerage",
+    "Indigenous connectivity brokerage",
+    // --- Supporting terms ---
+    "Tribal data center development",
+    "Data center site selection",
+    "Powered land brokerage",
+    "Interconnection queue management",
+    "Tribal land infrastructure",
     "Sovereign-compatible deal structures",
     "IDC governance for data center projects",
     "Federal tribal broadband programs",
@@ -54,12 +68,8 @@ export const organizationSchema: JsonLdObject = {
     "DOE Loan Programs Office tribal projects",
     "Indigenous Development Corporation infrastructure",
     "Build-to-suit data centers",
-    "SD-WAN brokerage",
-    "Fiber and transport connectivity",
     "Tribal enterprise internet services",
     "North American data center markets",
-    "Powered land brokerage",
-    "Interconnection rights",
     "Rural data center development",
     "First Nations data center Canada",
   ],
@@ -75,6 +85,32 @@ export const websiteSchema: JsonLdObject = {
   url: SITE_URL,
   publisher: { "@id": `${SITE_URL}/#organization` },
   inLanguage: "en-US",
+};
+
+// --- Canonical service schemas (connectivity-first) ---
+
+export const tribalConnectivityServiceSchema: JsonLdObject = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Tribal & rural enterprise connectivity brokerage",
+  description:
+    "Vendor-neutral connectivity brokerage for tribal nations, Indigenous Development Corporations, and rural enterprises. Konative sources internet, SD-WAN, fiber, transport, and managed connectivity from 100+ suppliers at no cost to the client across the US and Canada.",
+  url: `${SITE_URL}/tribal`,
+  serviceType: "Connectivity Brokerage",
+  areaServed: ["United States", "Canada"],
+  provider: { "@id": `${SITE_URL}/#organization` },
+};
+
+export const dataCenterConnectivityServiceSchema: JsonLdObject = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Data-center connectivity brokerage",
+  description:
+    "Vendor-neutral brokerage for data center connectivity requirements — fiber transport, cross-connects, colocation, cloud on-ramps, and interconnection — sourced from carriers and providers across North America.",
+  url: `${SITE_URL}/data-center-connectivity`,
+  serviceType: "Connectivity Brokerage",
+  areaServed: ["United States", "Canada"],
+  provider: { "@id": `${SITE_URL}/#organization` },
 };
 
 export function articleSchema(args: {

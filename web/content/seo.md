@@ -16,34 +16,42 @@ analysis than any traditional brokerage. We work for our clients, not the carrie
 - **Meta title:** Konative | The Tribal Connectivity & Data Center Brokerage
 - **Meta description:** Tribal nations, enterprises, and landowners across North America use Konative to source, structure, and close internet connectivity and data center deals. Vendor-neutral. AI-native. No cost to you.
 
+<!-- VERIFY: route may be retired — /for → / (permanent redirect in next.config.ts) -->
 ### /for (Audience Hub)
 - **Meta title:** Konative — Find Your Page | Tribal · Investors · Utilities · Advisors
 - **Meta description:** Konative serves tribal nations, investors, landowners, utilities, developers, operators, and advisors. Each page is written for your situation and ends with a direct line to the team.
 
+<!-- VERIFY: route may be retired — /for/tribes → /tribal (permanent redirect in next.config.ts) -->
 ### /for/tribes
 - **Meta title:** Konative for Tribal Nations | Land + Power → Data Center Development
 - **Meta description:** Tribal nations and IDCs hold the two scarcest assets in the AI buildout — land and power. Konative is the development partner that converts them into a financeable, sovereignty-preserving data center project. US and Canada.
 
+<!-- VERIFY: route may be retired — /for/advisors → /connectivity (permanent redirect via /for/:path* in next.config.ts) -->
 ### /for/advisors
 - **Meta title:** Konative for Advisors | Ambassador & Referral Partner Program
 - **Meta description:** If you work with tribal nations, investors, or infrastructure stakeholders, Konative pays referral fees on closed introductions, gives you co-branded materials, and treats you as a partner.
 
+<!-- VERIFY: route may be retired — /for/investors → /connectivity (permanent redirect via /for/:path* in next.config.ts) -->
 ### /for/investors
 - **Meta title:** Konative for Investors | Tribal and Indigenous Data Center Deal Flow
 - **Meta description:** The highest-yield data center sites in North America are in tribal and indigenous markets that institutional capital hasn't reached. Konative is the origination and structuring partner that surfaces and qualifies them.
 
+<!-- VERIFY: route may be retired — /for/landowners → /connectivity (permanent redirect via /for/:path* in next.config.ts) -->
 ### /for/landowners
 - **Meta title:** Konative for Landowners | Data Center Land Assessment
 - **Meta description:** Find out if your land qualifies for data center development — and what that's actually worth. Konative works for you, not the developer.
 
+<!-- VERIFY: route may be retired — /for/utilities → /connectivity (permanent redirect via /for/:path* in next.config.ts) -->
 ### /for/utilities
 - **Meta title:** Konative for Utilities | Attract Data Center Load Growth
 - **Meta description:** Electric utilities with available capacity are sitting on the best load-growth opportunity in a generation. Konative connects you to the data center operators actively seeking power.
 
+<!-- VERIFY: route may be retired — /for/developers-epcs → /connectivity (permanent redirect via /for/:path* in next.config.ts) -->
 ### /for/developers-epcs
 - **Meta title:** Konative for Developers & EPCs | Indigenous and Canadian Site Pipeline
 - **Meta description:** Tribal nations and Canadian First Nations control sites your standard origination process will never reach. Konative is the introduction and structuring partner that opens those relationships.
 
+<!-- VERIFY: route may be retired — /for/operators → /connectivity (permanent redirect via /for/:path* in next.config.ts) -->
 ### /for/operators
 - **Meta title:** Konative for Data Center Operators | Power-Qualified Tribal and Indigenous Sites
 - **Meta description:** Power-qualified, fiber-ready data center sites in tribal and indigenous markets across North America. Pre-qualified land, established community relationships, deal structures ready for operator review.
@@ -52,6 +60,7 @@ analysis than any traditional brokerage. We work for our clients, not the carrie
 - **Meta title:** Tribal Enterprise Connectivity | Konative
 - **Meta description:** Sovereignty-aware, vendor-neutral connectivity brokerage for Tribal gaming, government, healthcare, and education. Internet, SD-WAN, voice, transport, and security — sourced from 100+ suppliers at no cost to your enterprise.
 
+<!-- VERIFY: route may be retired — /readiness-audit → /contact?projectType=data_center (permanent redirect in next.config.ts) -->
 ### /readiness-audit
 - **Meta title:** Project Readiness Review | Konative Tribal Data Center Assessment
 - **Meta description:** Konative's 60–90 day Project Readiness Review takes a tribal land opportunity to a decision-grade brief — site path, power path, capital structure, sovereignty review, risk register, and go/no-go recommendation.
