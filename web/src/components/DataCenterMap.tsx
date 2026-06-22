@@ -112,6 +112,10 @@ interface Props {
   layerData?: LayerData
   counts?: MapCounts
   backgroundMode?: boolean
+  /** Initial map center as [longitude, latitude]. Defaults to [-96, 45] (North America). */
+  initialCenter?: [number, number]
+  /** Initial map zoom level. Defaults to 3.2. */
+  initialZoom?: number
 }
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -161,7 +165,7 @@ function ensurePMTilesProtocol() {
   _pmtilesProtocolRegistered = true
 }
 
-export default function DataCenterMap({ layerData: propData, counts: propCounts, backgroundMode }: Props) {
+export default function DataCenterMap({ layerData: propData, counts: propCounts, backgroundMode, initialCenter, initialZoom }: Props) {
   const mapRef = useRef<MapRef | null>(null)
   const [layerData, setLayerData] = useState<LayerData | null>(propData ?? null)
   const [counts, setCounts]       = useState<MapCounts | null>(propCounts ?? null)
@@ -396,7 +400,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: backgroundMode ? 'none' : undefined }}>
       <Map
         ref={mapRef}
-        initialViewState={{ longitude: -96, latitude: 45, zoom: 3.2 }}
+        initialViewState={{ longitude: initialCenter?.[0] ?? -96, latitude: initialCenter?.[1] ?? 45, zoom: initialZoom ?? 3.2 }}
         mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         interactiveLayerIds={backgroundMode ? [] : [
           'dc-bubbles',
