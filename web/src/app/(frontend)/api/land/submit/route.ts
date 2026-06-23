@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     schemaType: "landSubmission",
     zodSchema: landFullSchema,
     payload: body,
-    emailSubject: `New land submission: ${b?.acreage ?? "?"}ac in ${b?.county ?? "?"}, ${b?.state ?? "?"} from ${b?.name ?? "unknown"}`,
+    emailSubject: `New Land Inquiry: ${b?.name ?? "Unknown"} in ${b?.county ?? "Unknown"}, ${b?.state ?? "Unknown"}`,
   });
 
   if (!result.ok) {
