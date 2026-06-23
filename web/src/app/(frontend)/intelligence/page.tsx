@@ -53,6 +53,27 @@ const sections = [
     headline: "Research tied to a buying or sourcing decision",
     summary: "Briefings on fiber, carrier supply, funded programs, interconnection, rural infrastructure, cloud, security, and network procurement.",
   },
+  {
+    href: "/governors",
+    label: "Stalled-Project Tracker",
+    eyebrow: "Proprietary Tracker",
+    headline: "Stalled & blocked data-center projects — live map",
+    summary: "Governor-level context for stalled, canceled, paused, and blocked data-center projects in NV, WV, FL, and OK. Konative's proprietary signal layer for where demand is locked up.",
+  },
+  {
+    href: "/tribal/index",
+    label: "Tribal Index",
+    eyebrow: "Proprietary Tracker",
+    headline: "Tribal & First Nations DC project index",
+    summary: "Searchable index of Tribal and First Nations data-center projects across the US and Canada — partner structures, land type, opportunity class, and current status.",
+  },
+  {
+    href: "/map",
+    label: "Infrastructure Map",
+    eyebrow: "Proprietary Data",
+    headline: "North American power, transmission & interconnection map",
+    summary: "Konative's proprietary infrastructure map covering North American power, transmission, interconnection, and indigenous-lands layers — the data engine behind every connectivity feasibility check.",
+  },
 ];
 
 const metrics = [
