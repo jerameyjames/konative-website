@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
       { source: "/for", destination: "/", permanent: true },
       { source: "/for/tribes", destination: "/tribal", permanent: true },
       { source: "/for/:path*", destination: "/connectivity", permanent: true },
+      // /admin has no page route — redirect to Sanity Studio to prevent catch-all 500.
+      { source: "/admin", destination: "/studio", permanent: false },
+      { source: "/admin/:path*", destination: "/studio", permanent: false },
     ];
   },
   allowedDevOrigins: ["127.0.0.1"],
