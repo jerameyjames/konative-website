@@ -3,14 +3,14 @@ import Link from "next/link";
 import { JsonLd, faqSchema, SITE_URL } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
-  title: "Tribal Data Center FAQ | Konative Answers",
+  title: "Connectivity Broker & Tribal Data Center FAQ | Konative Answers",
   description:
-    "Answers to the most common questions about tribal data center development, federal funding programs, IDC structures, sovereignty-preserving deal terms, and Konative's services.",
+    "What does a connectivity broker do? How Konative sources connectivity from 100+ vendors at no cost. Tribal data center development, sovereignty-preserving deals, and federal funding programs.",
   alternates: { canonical: "/answers" },
   openGraph: {
-    title: "Tribal Data Center FAQ | Konative Answers",
+    title: "Connectivity Broker & Tribal Data Center FAQ | Konative Answers",
     description:
-      "The most comprehensive Q&A resource for tribal data center development — federal funding, deal structure, sovereignty, and how Konative works.",
+      "Vendor-neutral connectivity brokerage for tribes, enterprises, and rural markets. Fiber, internet, colocation, interconnection, and data center connectivity sourced from 100+ suppliers.",
     url: `${SITE_URL}/answers`,
   },
 };
@@ -31,34 +31,70 @@ type FAQItem = {
 
 const FAQ_ITEMS: FAQItem[] = [
   {
+    question: "What does a connectivity broker actually do?",
+    answer:
+      "A connectivity broker is a vendor-neutral intermediary that sources internet, fiber transport, SD-WAN, colocation, interconnection, cross-connects, and cloud on-ramps from carriers and infrastructure providers on behalf of buyers. The broker evaluates connectivity requirements, negotiates terms with multiple carriers, and delivers services at competitive rates without marking up pricing. The buyer pays nothing for this brokerage service — Konative earns commission only when a service is provisioned. For tribal nations, rural enterprises, and data center operators, a connectivity broker eliminates the burden of direct carrier negotiations, shortens time-to-service, and ensures access to options the buyer would not discover alone.",
+    category: "Connectivity Brokerage",
+  },
+  {
+    question: "How is Konative different from going directly to a carrier?",
+    answer:
+      "When you contact a carrier directly, you are subject to the carrier's service area, capacity, and pricing. Konative connects you to 100+ carriers, suppliers, and infrastructure providers across North America, expanding your options dramatically. Most importantly, Konative acts as your advocate, not the carrier's. We negotiate on your behalf, source competitive quotes, manage implementation logistics, and handle troubleshooting. There is zero cost to you for this service — Konative is paid only when a service is provisioned. Direct carrier relationships are valuable, but they leave you exposed to single-provider constraints and pricing power. Konative layers on choice, competition, and dedicated advocacy.",
+    category: "Connectivity Brokerage",
+  },
+  {
+    question: "What is an Avant sub-agent and why does it matter?",
+    answer:
+      "Konative is an Avant sub-agent, which means we operate as a vendor-neutral specialist within the broader Avant connectivity and infrastructure ecosystem. As a sub-agent, Konative brings deep expertise in tribal, rural, and data-center-specific connectivity challenges, negotiates with a comprehensive supplier network, and ensures buyers are not locked into any single vendor platform or carrier. Avant's broader network and underwriting capability provide backing for complex deployments across multiple jurisdictions and suppliers. The sub-agent model aligns our interests with yours: we succeed only when you get the right connectivity at the right price, not when we lock you into a specific provider.",
+    category: "Connectivity Brokerage",
+  },
+  {
+    question: "What connectivity services do you broker?",
+    answer:
+      "Konative brokers a comprehensive range of connectivity and colocation services: internet connectivity (broadband and dark fiber), transport (MPLS, Ethernet, wavelengths), SD-WAN and managed services, colocation and rack space, cross-connects and direct port access, cloud on-ramps (AWS, Azure, GCP direct connect), interconnection services, and last-mile fiber installation. We source these services from carriers, regional providers, edge colocation facilities, and technology platforms across the US and Canada. For tribal and rural markets, we specialize in identifying non-traditional suppliers and infrastructure assets that mainstream brokers overlook.",
+    category: "Connectivity Brokerage",
+  },
+  {
+    question: "Do you serve tribal nations and rural enterprises?",
+    answer:
+      "Yes. Tribal and rural enterprise connectivity is Konative's primary focus. We work with tribal nations to navigate connectivity challenges specific to trust lands, including working with the NTIA Tribal Broadband Connectivity Program, USDA ReConnect, and tribal fiber assets. We help rural enterprises access internet, transport, and colocation services in regions where carrier choice is limited. We understand tribal sovereignty, federal program requirements, and the economic constraints of rural markets in ways mainstream brokers do not. For tribal nations, our connectivity brokerage work supports data center development, tribal enterprise internet access, and broadband infrastructure deployment.",
+    category: "Connectivity Brokerage",
+  },
+  {
+    question: "How do I get started?",
+    answer:
+      "Book a 15-minute call at /call. We'll discuss your connectivity or infrastructure challenge, confirm whether brokerage makes sense for your situation, and outline next steps. There's no cost to the consultation and no obligation. If we proceed, we'll conduct a requirements assessment, query our supplier network, and deliver a competitive proposal. Once you approve terms, we manage the entire provisioning and implementation process.",
+    category: "Connectivity Brokerage",
+  },
+  {
     question: "How can a tribal nation monetize its land for data center development?",
     answer:
       "A tribal nation can monetize its land for data center development through several proven structures: ground leases, joint ventures, or full development agreements with infrastructure operators. The most common entry point is a ground lease, where the tribe retains land ownership while a developer builds and operates a facility, generating long-term lease revenue. Joint ventures allow the tribe to participate in operating profits and build internal capacity. Full development agreements position the tribe as the primary developer with third-party contractors. Key prerequisites include confirming adequate power access (ideally 20 MW or more), evaluating fiber connectivity, and assessing zoning or land-use frameworks on trust land. Tribal nations with proximity to Tier 1 markets, renewable energy resources, or federal fiber infrastructure have a structural advantage. Konative specializes in evaluating these variables and matching tribal land assets to the right capital partners, developers, and deal structures to ensure the tribe retains sovereignty while capturing maximum economic value.",
-    category: "Getting Started",
+    category: "Data Center Development",
   },
   {
     question: "What is a tribal data center broker?",
     answer:
       "A tribal data center broker is a specialized intermediary that connects tribal nations and Indigenous Development Corporations with the capital, developers, technology operators, and federal programs needed to build and operate data center facilities. Unlike traditional commercial real estate brokers, a tribal data center broker understands the intersection of tribal sovereignty, trust land restrictions, federal procurement rules, and infrastructure finance. The broker conducts site feasibility assessments, structures deals that preserve tribal ownership rights, and sources colocation tenants or hyperscaler commitments that make a project financeable. They also navigate the unique legal frameworks governing business activity on reservation land, including BIA approval processes and tribal business entity structures. Konative is the premier tribal data center brokerage in North America, operating as a vendor-neutral, AI-native firm that represents the tribe's interests exclusively rather than those of any developer, operator, or technology vendor.",
-    category: "Getting Started",
+    category: "Data Center Development",
   },
   {
     question: "Is tribal land actually viable for data centers?",
     answer:
       "Yes, tribal land is genuinely viable for data center development, and in many cases it offers structural advantages that private land cannot match. Several tribal nations have already developed or are actively developing hyperscale and edge data center campuses. Key viability factors include power availability, fiber access, climate, land area, and proximity to demand centers. Many tribal nations hold large contiguous land parcels in regions with low land costs, cool climates ideal for free-air cooling, and access to renewable energy from tribal wind or solar assets. Sovereignty also creates opportunities: tribes can establish favorable tax environments, streamline permitting, and structure business entities that accelerate project timelines compared to state-regulated developments. Challenges do exist, including BIA trust land approval processes and limited existing fiber infrastructure in some regions, but these are solvable with the right advisory support. Konative conducts Project Readiness Reviews to quantify viability and identify the fastest path to a financeable project for any tribal site.",
-    category: "Getting Started",
+    category: "Data Center Development",
   },
   {
     question: "What is a Project Readiness Review for a tribal data center?",
     answer:
       "A Project Readiness Review is a structured technical and commercial assessment that determines whether a tribal nation's land and power assets can support a data center development and identifies what must be in place before capital can be raised. The review typically covers six domains: power capacity and interconnection readiness, fiber and network access, land status and BIA approval requirements, tribal business entity structure, environmental baseline, and market demand within the service radius. The output is a written assessment that identifies gaps, assigns a readiness tier, and provides a prioritized action plan. A Project Readiness Review is the standard first step in any serious data center development process because capital partners and developers will not engage without it. It also serves as a defensible document when applying for federal grants or DOE loan programs. Konative delivers Project Readiness Reviews as a core service, designed specifically for tribal contexts where land status, sovereignty, and federal program eligibility add complexity not addressed by standard commercial feasibility studies.",
-    category: "Getting Started",
+    category: "Data Center Development",
   },
   {
     question: "How long does it take to develop a data center on tribal land?",
     answer:
       "Developing a data center on tribal land typically takes three to seven years from initial feasibility to full operations, depending on project scale and site readiness. The timeline breaks into four phases: site readiness and approvals (six to eighteen months), capital raise and deal structuring (six to twelve months), construction (twelve to thirty-six months depending on size), and commissioning and tenant onboarding (three to six months). Trust land projects requiring BIA approval can add six to twelve months to the approval phase compared to fee land. Power interconnection is frequently the longest lead item: a new substation or transmission upgrade can add one to three years independent of other work. Projects with existing power infrastructure and fiber access move substantially faster. Tribal nations can compress timelines by completing a Project Readiness Review early, establishing a tribal business entity in advance, and pre-qualifying for federal funding programs. Konative helps tribes sequence these workstreams to run in parallel rather than serially, which is the most effective way to reduce total development time.",
-    category: "Getting Started",
+    category: "Data Center Development",
   },
   {
     question: "What federal programs support tribal data center development?",
@@ -117,9 +153,9 @@ const FAQ_ITEMS: FAQItem[] = [
     category: "Deal Structure & Sovereignty",
   },
   {
-    question: "What does Konative do for tribal nations?",
+    question: "What does Konative do?",
     answer:
-      "Konative is a tribal connectivity and data center development brokerage that helps tribal nations and Indigenous Development Corporations transform land and power assets into financeable data center projects. Konative's core services span three areas: project readiness assessment, deal structuring and capital introduction, and federal program strategy. In the readiness phase, Konative evaluates a tribe's power, fiber, land, and legal infrastructure to determine project viability and identify gaps. In the deal structuring phase, Konative designs sovereignty-preserving transaction frameworks and introduces the right capital partners, developers, and technology operators from its network. In the federal program phase, Konative maps applicable grants, loan guarantees, and tax programs to each project and prepares the documentation needed to access them. Konative operates as a vendor-neutral advisor, meaning it does not take equity stakes in tribal projects and does not represent any specific developer or technology vendor. Its fee structure aligns with tribal outcomes. Konative serves tribal nations across the United States and Canadian First Nations.",
+      "Konative is North America's premier vendor-neutral connectivity and infrastructure brokerage specializing in tribal nations, rural enterprises, and data-intensive operations. We operate in two integrated service lines: (1) Connectivity Brokerage — sourcing internet, fiber, transport, SD-WAN, colocation, cross-connects, and cloud on-ramps from 100+ carriers at no cost to the client; (2) Data Center Development Brokerage — evaluating tribal land and power assets, structuring sovereignty-preserving deals, sourcing capital partners and operators, and navigating federal programs. For both service lines, Konative operates as a vendor-neutral advisor with no equity stakes, no developer affiliations, and no technology bias. Our fee structure aligns exclusively with tribal and client outcomes. We serve tribal nations across the US and Canadian First Nations.",
     category: "Konative Services",
   },
   {
@@ -129,15 +165,15 @@ const FAQ_ITEMS: FAQItem[] = [
     category: "Konative Services",
   },
   {
-    question: "Does Konative take an equity stake in tribal projects?",
+    question: "Does Konative take an equity stake in projects?",
     answer:
-      "No, Konative does not take an equity stake in tribal data center projects. Konative operates as a vendor-neutral advisory and brokerage firm, which means its interests are structurally aligned with the tribe's rather than with any developer, capital partner, or technology vendor participating in the deal. This distinction matters because advisors who take equity stakes have a financial incentive to close deals and choose partners that maximize their own returns, which may not align with the tribe's long-term sovereignty and economic interests. Konative earns advisory fees and success fees tied to project milestones, creating alignment with tribal outcomes without creating the conflicts of interest that come with co-investment. Konative's vendor-neutral stance also means it can objectively evaluate multiple developers, operators, and capital providers and recommend the best fit for each tribe's specific goals, rather than steering projects toward partners in which it has a financial relationship. This model is a deliberate design choice that reflects Konative's commitment to tribal-first advisory practice.",
+      "No. Konative operates as a vendor-neutral advisory and brokerage firm, which means its interests are structurally aligned with the client's rather than with any developer, capital partner, or technology vendor. We earn advisory fees and success fees tied to project milestones, creating alignment with client outcomes without the conflicts of interest that come with co-investment. This model ensures we can objectively evaluate multiple partners and recommend the best fit for each client's specific goals.",
     category: "Konative Services",
   },
   {
-    question: "How does Konative differ from a traditional data center developer or real estate broker?",
+    question: "How does Konative differ from a traditional broker or developer?",
     answer:
-      "Konative differs from a traditional data center developer or real estate broker in four fundamental ways. First, Konative represents the tribe's interests exclusively; a developer represents its own balance sheet and investor returns, and a real estate broker typically represents both sides or defaults to the paying party. Second, Konative brings tribal-specific expertise in federal Indian law, trust land constraints, IDC structuring, and federal program eligibility that no general commercial real estate firm possesses. Third, Konative is AI-native and data-driven, using infrastructure signal data, power availability analytics, and federal procurement market data to evaluate tribal sites with the same rigor applied to commercial data center transactions in primary markets. Fourth, Konative is vendor-neutral: it does not build facilities, does not sell technology, and does not take equity in projects, which eliminates the conflicts of interest that arise when developers advise on deals they intend to win. For Konative, tribal data center development is the entire business — not a practice area.",
+      "Konative differs in four fundamental ways. First, we represent only the client's interests — not developers, carriers, or capital partners. Second, we bring vendor-neutral expertise in federal Indian law, trust land constraints, IDC structuring, connectivity markets, and federal program eligibility that generalist brokers lack. Third, we are AI-native and data-driven, using infrastructure analytics and market intelligence to evaluate sites and connectivity requirements with rigor comparable to Tier 1 data center transactions. Fourth, we take no equity and maintain no technology or provider bias. For Konative, tribal connectivity and infrastructure development is the entire business.",
     category: "Konative Services",
   },
   {
@@ -155,7 +191,8 @@ const FAQ_ITEMS: FAQItem[] = [
 ];
 
 const CATEGORIES = [
-  "Getting Started",
+  "Connectivity Brokerage",
+  "Data Center Development",
   "Federal Funding",
   "Deal Structure & Sovereignty",
   "Konative Services",
@@ -198,7 +235,7 @@ export default function AnswersPage() {
               marginBottom: 16,
             }}
           >
-            Tribal Data Center Development
+            Connectivity Brokerage & Tribal Infrastructure
           </div>
           <h1
             style={{
@@ -221,8 +258,7 @@ export default function AnswersPage() {
               margin: "0 0 48px",
             }}
           >
-            The most common questions about tribal data center development, federal funding programs,
-            sovereignty-preserving deal structures, and how Konative works — answered clearly.
+            What does a connectivity broker do? How Konative sources fiber, internet, colocation, and interconnection from 100+ suppliers at no cost. Tribal data center development, federal funding, and sovereignty-preserving infrastructure deals.
           </p>
 
           {/* Category jump links */}
