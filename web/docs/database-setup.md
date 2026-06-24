@@ -36,3 +36,5 @@ Use this format for all providers:
 2. Open Project Settings -> Database.
 3. Copy connection string (session/pooling URI) with SSL enabled.
 4. Set `DATABASE_URI` in Vercel + `.env.local`.
+
+For the live **konative-intel** project, review Security Advisor findings and remediation in [supabase-security.md](./supabase-security.md). CI loads the Supabase CLI token from GCP Secret Manager (`spokanewire`); bootstrap with `./scripts/sync-gcp-secrets-to-github.sh` from the repo root.
